@@ -86,7 +86,7 @@ export default function QuotePage() {
               </div>
               <h1 className="text-2xl font-bold" data-testid="text-quote-success">Quote Generated!</h1>
               <p className="text-muted-foreground">
-                Your AI-powered quote has been generated. Check your email for the full estimate and a link to view your PDF quote.
+                Your quote has been generated. Check your email for the full estimate and a link to view your PDF quote.
               </p>
               <div className="mt-2 flex items-center gap-2 rounded-md bg-muted p-3 text-sm">
                 <FileText className="h-4 w-4 text-primary" />
@@ -122,7 +122,7 @@ export default function QuotePage() {
               Get Your Free Quote
             </motion.h1>
             <motion.p variants={fadeUp} className="mt-3 max-w-2xl text-muted-foreground">
-              Fill out the form and our AI will generate a detailed estimate for your project in minutes.
+              Fill out the form and we'll generate a detailed estimate for your project in minutes.
             </motion.p>
           </motion.div>
         </div>
@@ -283,7 +283,7 @@ export default function QuotePage() {
                   <div className="space-y-4">
                     {[
                       { icon: FileText, title: "1. Submit Details", desc: "Tell us about your project" },
-                      { icon: Zap, title: "2. AI Analysis", desc: "Our AI generates your estimate" },
+                      { icon: Zap, title: "2. Quick Review", desc: "We generate your estimate" },
                       { icon: Clock, title: "3. Get Quote", desc: "Receive PDF quote via email" },
                     ].map((step) => (
                       <div key={step.title} className="flex items-start gap-3">

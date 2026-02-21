@@ -349,15 +349,15 @@ export default function BookingPage() {
                     <div className="flex items-start gap-3 text-sm">
                       <Phone className="mt-0.5 h-4 w-4 shrink-0 text-primary" />
                       <div>
-                        <p className="font-medium">(555) 123-4567</p>
+                        <p className="font-medium">+1 (510) 706-8246</p>
                         <p className="text-muted-foreground">Call for same-day service</p>
                       </div>
                     </div>
                     <div className="flex items-start gap-3 text-sm">
                       <MapPin className="mt-0.5 h-4 w-4 shrink-0 text-primary" />
                       <div>
-                        <p className="font-medium">Los Angeles, CA</p>
-                        <p className="text-muted-foreground">Serving Greater LA Area</p>
+                        <p className="font-medium">San Francisco Bay Area</p>
+                        <p className="text-muted-foreground">Serving the Bay Area</p>
                       </div>
                     </div>
                   </div>

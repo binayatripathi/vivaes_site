@@ -77,8 +77,9 @@ export default function Home() {
               variants={fadeUp}
               className="text-lg leading-relaxed text-white/80 sm:text-xl"
             >
-              24/7 AI-powered quotes and booking for residential and commercial
+              24/7 quotes and booking for residential and commercial
               electrical, solar installations, EV chargers, and more.
+              Serving the San Francisco Bay Area.
             </motion.p>
 
             <motion.div variants={fadeUp} className="flex flex-wrap gap-3 pt-2">
@@ -100,7 +101,7 @@ export default function Home() {
                   Book Now
                 </Button>
               </Link>
-              <a href="tel:5551234567">
+              <a href="tel:+15107068246">
                 <Button
                   size="lg"
                   variant="outline"
@@ -140,18 +141,29 @@ export default function Home() {
                 return (
                   <motion.div key={service.slug} variants={fadeUp}>
                     <Link href={`/services/${service.slug}`}>
-                      <Card className="group cursor-pointer overflow-visible transition-all duration-200 hover-elevate" data-testid={`card-service-${service.slug}`}>
-                        <CardContent className="p-6">
-                          <div className="mb-4 flex h-12 w-12 items-center justify-center rounded-md bg-primary/10">
-                            <Icon className="h-6 w-6 text-primary" />
+                      <Card className="group cursor-pointer overflow-hidden transition-all duration-200 hover-elevate" data-testid={`card-service-${service.slug}`}>
+                        <CardContent className="p-0">
+                          <div className="aspect-video w-full overflow-hidden">
+                            <img
+                              src={service.image}
+                              alt={service.title}
+                              className="h-full w-full object-cover"
+                            />
                           </div>
-                          <h3 className="mb-2 text-lg font-semibold">{service.title}</h3>
-                          <p className="text-sm text-muted-foreground">
-                            {service.shortDescription}
-                          </p>
-                          <div className="mt-4 flex items-center text-sm font-medium text-primary">
-                            Learn more
-                            <ArrowRight className="ml-1 h-3 w-3 transition-transform group-hover:translate-x-1" />
+                          <div className="p-5">
+                            <div className="mb-2 flex items-center gap-2">
+                              <div className="flex h-8 w-8 items-center justify-center rounded-md bg-primary/10">
+                                <Icon className="h-4 w-4 text-primary" />
+                              </div>
+                              <h3 className="text-lg font-semibold">{service.title}</h3>
+                            </div>
+                            <p className="text-sm text-muted-foreground">
+                              {service.shortDescription}
+                            </p>
+                            <div className="mt-3 flex items-center text-sm font-medium text-primary">
+                              Learn more
+                              <ArrowRight className="ml-1 h-3 w-3 transition-transform group-hover:translate-x-1" />
+                            </div>
                           </div>
                         </CardContent>
                       </Card>
@@ -255,7 +267,7 @@ export default function Home() {
               Ready to Get Started?
             </motion.h2>
             <motion.p variants={fadeUp} className="mx-auto max-w-xl text-lg text-white/80">
-              Get your free AI-powered quote in minutes or book an appointment with our team.
+              Get your free quote in minutes or book an appointment with our team.
             </motion.p>
             <motion.div variants={fadeUp} className="flex flex-wrap items-center justify-center gap-3">
               <Button

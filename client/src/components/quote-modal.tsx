@@ -94,7 +94,7 @@ export function QuoteModal({ open, onOpenChange, preselectedService }: QuoteModa
             <DialogHeader>
               <DialogTitle className="text-xl" data-testid="text-quote-success">Quote Request Submitted!</DialogTitle>
               <DialogDescription className="mt-2">
-                We've received your request and our AI system is generating your quote now.
+                We've received your request and are generating your quote now.
                 Check your email for the estimate and a link to view your PDF quote.
               </DialogDescription>
             </DialogHeader>
@@ -107,7 +107,7 @@ export function QuoteModal({ open, onOpenChange, preselectedService }: QuoteModa
             <DialogHeader>
               <DialogTitle>Get Your Free Quote</DialogTitle>
               <DialogDescription>
-                Fill out the form below and our AI will generate an instant estimate for you.
+                Fill out the form below and we'll generate an instant estimate for you.
               </DialogDescription>
             </DialogHeader>
             <Form {...form}>

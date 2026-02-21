@@ -100,7 +100,7 @@ export default function AboutPage() {
             </motion.h1>
             <motion.p variants={fadeUp} className="mt-3 max-w-3xl text-muted-foreground">
               We're a team of union-trained electrical and solar professionals dedicated to delivering
-              exceptional service to residential and commercial customers throughout the Greater Los Angeles area.
+              exceptional service to residential and commercial customers throughout the San Francisco Bay Area.
             </motion.p>
           </motion.div>
         </div>
@@ -120,7 +120,7 @@ export default function AboutPage() {
               <div className="space-y-4 text-muted-foreground">
                 <p>
                   Founded with a mission to bring top-quality electrical and solar services to the community,
-                  Viva Electric & Solar has grown into one of the most trusted names in the Greater LA area.
+                  Viva Electric & Solar has grown into one of the most trusted names in the San Francisco Bay Area.
                   Our team of IBEW-trained electricians brings decades of combined experience to every project.
                 </p>
                 <p>
@@ -130,8 +130,8 @@ export default function AboutPage() {
                   of the future.
                 </p>
                 <p>
-                  Our commitment to using AI-powered tools for quoting and scheduling means you get faster,
-                  more accurate service without sacrificing the personal touch. Every estimate is reviewed by
+                  Our commitment to fast, 24/7 quoting and scheduling means you get responsive
+                  service without sacrificing the personal touch. Every estimate is reviewed by
                   our experienced team before it reaches you.
                 </p>
               </div>
@@ -305,7 +305,7 @@ export default function AboutPage() {
                       <div className="flex items-start gap-3 text-sm">
                         <Phone className="mt-0.5 h-4 w-4 shrink-0 text-primary" />
                         <div>
-                          <p className="font-medium">(555) 123-4567</p>
+                          <p className="font-medium">+1 (510) 706-8246</p>
                           <p className="text-muted-foreground">Mon-Sat, 8am-5pm</p>
                         </div>
                       </div>
@@ -319,8 +319,8 @@ export default function AboutPage() {
                       <div className="flex items-start gap-3 text-sm">
                         <MapPin className="mt-0.5 h-4 w-4 shrink-0 text-primary" />
                         <div>
-                          <p className="font-medium">Los Angeles, CA</p>
-                          <p className="text-muted-foreground">Serving Greater LA Area</p>
+                          <p className="font-medium">San Francisco Bay Area</p>
+                          <p className="text-muted-foreground">Serving the Bay Area</p>
                         </div>
                       </div>
                       <div className="flex items-start gap-3 text-sm">

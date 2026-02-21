@@ -213,7 +213,7 @@ export function ServiceDetailPage() {
                 <CardContent className="space-y-4 p-6">
                   <h3 className="text-lg font-semibold">Get a Free Quote</h3>
                   <p className="text-sm text-muted-foreground">
-                    Our AI generates instant estimates. Get your personalized quote in minutes.
+                    Get your personalized quote in minutes. Available 24/7.
                   </p>
                   <Button
                     className="w-full"
@@ -228,7 +228,7 @@ export function ServiceDetailPage() {
                     </Button>
                   </Link>
                   <div className="rounded-md bg-muted p-3 text-center text-sm text-muted-foreground">
-                    Or call us at <span className="font-medium text-foreground">(555) 123-4567</span>
+                    Or call us at <span className="font-medium text-foreground">+1 (510) 706-8246</span>
                   </div>
                 </CardContent>
               </Card>

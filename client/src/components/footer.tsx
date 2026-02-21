@@ -45,7 +45,7 @@ export function Footer() {
             <div className="flex flex-col gap-3">
               <div className="flex items-center gap-2 text-sm text-muted-foreground" data-testid="text-footer-phone">
                 <Phone className="h-4 w-4 shrink-0" />
-                <span>(555) 123-4567</span>
+                <span>+1 (510) 706-8246</span>
               </div>
               <div className="flex items-center gap-2 text-sm text-muted-foreground" data-testid="text-footer-email">
                 <Mail className="h-4 w-4 shrink-0" />
@@ -53,7 +53,7 @@ export function Footer() {
               </div>
               <div className="flex items-center gap-2 text-sm text-muted-foreground" data-testid="text-footer-address">
                 <MapPin className="h-4 w-4 shrink-0" />
-                <span>Los Angeles, CA</span>
+                <span>San Francisco Bay Area</span>
               </div>
             </div>
           </div>
@@ -64,7 +64,7 @@ export function Footer() {
             &copy; {new Date().getFullYear()} Viva Electric & Solar. All rights reserved.
           </p>
           <p className="text-xs text-muted-foreground" data-testid="text-footer-powered">
-            Powered by <span className="font-medium">VivaClaw AI</span> &mdash; 24/7 Automation
+            Powered by <span className="font-medium">VivaClaw</span> &mdash; 24/7 Service
           </p>
         </div>
       </div>
