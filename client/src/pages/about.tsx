@@ -312,7 +312,7 @@ export default function AboutPage() {
                       <div className="flex items-start gap-3 text-sm">
                         <Mail className="mt-0.5 h-4 w-4 shrink-0 text-primary" />
                         <div>
-                          <p className="font-medium">info@vivaes.net</p>
+                          <p className="font-medium">vivaes.sf@gmail.com</p>
                           <p className="text-muted-foreground">We reply within 24 hours</p>
                         </div>
                       </div>

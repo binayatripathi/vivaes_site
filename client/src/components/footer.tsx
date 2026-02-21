@@ -49,7 +49,7 @@ export function Footer() {
               </div>
               <div className="flex items-center gap-2 text-sm text-muted-foreground" data-testid="text-footer-email">
                 <Mail className="h-4 w-4 shrink-0" />
-                <span>info@vivaes.net</span>
+                <span>vivaes.sf@gmail.com</span>
               </div>
               <div className="flex items-center gap-2 text-sm text-muted-foreground" data-testid="text-footer-address">
                 <MapPin className="h-4 w-4 shrink-0" />
