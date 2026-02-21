@@ -11,6 +11,7 @@ import { ServicesListPage, ServiceDetailPage } from "@/pages/services";
 import QuotePage from "@/pages/quote";
 import BookingPage from "@/pages/booking";
 import AboutPage from "@/pages/about";
+import { FloatingChatButton } from "@/components/quote-chatbot";
 import NotFound from "@/pages/not-found";
 
 function Router() {
@@ -39,6 +40,7 @@ function App() {
             </main>
             <Footer />
           </div>
+          <FloatingChatButton />
           <Toaster />
         </ThemeProvider>
       </TooltipProvider>

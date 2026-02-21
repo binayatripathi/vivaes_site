@@ -23,7 +23,7 @@ export async function registerRoutes(
           "X-Claw-Token": CLAW_TOKEN,
           "X-Claw-Type": type,
         },
-        body: JSON.stringify({ type, ...payload }),
+        body: JSON.stringify({ type, ...(payload as Record<string, unknown>) }),
       });
 
       if (!res.ok) {
@@ -41,7 +41,7 @@ export async function registerRoutes(
     try {
       const data = quoteRequestSchema.parse(req.body);
       await forwardToWebhook("quote", { service: data.serviceType, details: data.details, customer: { name: data.name, email: data.email, phone: data.phone, zip: data.zip } });
-      res.json({ success: true, message: "Quote request received. Check your email for the estimate." });
+      res.json({ success: true, message: "Quote request received successfully." });
     } catch (err: any) {
       res.status(400).json({ error: err.message || "Invalid request" });
     }

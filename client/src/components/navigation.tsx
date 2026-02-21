@@ -8,7 +8,7 @@ import { Menu, X, Sun, Moon, Zap } from "lucide-react";
 const navLinks = [
   { href: "/", label: "Home" },
   { href: "/services", label: "Services" },
-  { href: "/quote", label: "Get Quote" },
+  { href: "/quote", label: "Instant Quote" },
   { href: "/booking", label: "Book Now" },
   { href: "/about", label: "About" },
 ];
@@ -69,7 +69,7 @@ export function Navigation() {
 
           <Link href="/quote" className="hidden sm:block">
             <Button size="sm" data-testid="button-nav-quote">
-              Get Instant Quote
+              Instant Quote
             </Button>
           </Link>
 
@@ -106,7 +106,7 @@ export function Navigation() {
                 <div className="mt-4 px-4">
                   <Link href="/quote" onClick={() => setMobileOpen(false)}>
                     <Button className="w-full" data-testid="button-mobile-quote">
-                      Get Instant Quote
+                      Instant Quote
                     </Button>
                   </Link>
                 </div>

@@ -111,7 +111,7 @@ export default function BookingPage() {
               </div>
               <h1 className="text-2xl font-bold" data-testid="text-booking-success">Appointment Booked!</h1>
               <p className="text-muted-foreground">
-                We've received your booking request. You'll receive a confirmation email shortly with all the details.
+                Your appointment has been confirmed! Our team will reach out to finalize the details.
               </p>
               <Button
                 className="mt-4"

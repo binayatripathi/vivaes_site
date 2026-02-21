@@ -64,6 +64,85 @@ export const quoteRequestSchema = z.object({
 
 export type QuoteRequest = z.infer<typeof quoteRequestSchema>;
 
+export const propertyTypes = ["Residential", "Commercial", "Industrial"] as const;
+export const projectSizes = ["Small", "Medium", "Large"] as const;
+export const urgencyLevels = ["Standard (2-4 weeks)", "Priority (1-2 weeks)", "Emergency (ASAP)"] as const;
+
+export interface QuoteEstimate {
+  serviceTitle: string;
+  propertyType: string;
+  projectSize: string;
+  urgency: string;
+  basePrice: number;
+  laborCost: number;
+  materialsCost: number;
+  permitFees: number;
+  subtotal: number;
+  discount: number;
+  total: number;
+  estimateRange: { low: number; high: number };
+  timeline: string;
+  notes: string[];
+}
+
+export const servicePricing: Record<string, { base: number; labor: number; materials: number; permit: number; timeline: string }> = {
+  "solar-storage": { base: 8000, labor: 4000, materials: 12000, permit: 800, timeline: "2-4 weeks" },
+  "ev-chargers": { base: 1200, labor: 800, materials: 1500, permit: 200, timeline: "1-2 days" },
+  "panel-upgrades": { base: 2000, labor: 1500, materials: 2500, permit: 400, timeline: "1-2 days" },
+  "lighting-retrofits": { base: 1500, labor: 1000, materials: 2000, permit: 150, timeline: "1-3 days" },
+  "general-electrical": { base: 500, labor: 400, materials: 300, permit: 100, timeline: "1 day" },
+  "commercial": { base: 10000, labor: 6000, materials: 15000, permit: 1200, timeline: "4-8 weeks" },
+};
+
+export function generateQuoteEstimate(
+  serviceSlug: string,
+  propertyType: string,
+  projectSize: string,
+  urgency: string,
+): QuoteEstimate {
+  const pricing = servicePricing[serviceSlug] || servicePricing["general-electrical"];
+  const service = servicesList.find(s => s.slug === serviceSlug);
+
+  const propertyMultiplier = propertyType === "Commercial" ? 1.4 : propertyType === "Industrial" ? 1.8 : 1.0;
+  const sizeMultiplier = projectSize === "Medium" ? 1.5 : projectSize === "Large" ? 2.5 : 1.0;
+  const urgencyMultiplier = urgency.includes("Priority") ? 1.2 : urgency.includes("Emergency") ? 1.5 : 1.0;
+
+  const basePrice = Math.round(pricing.base * propertyMultiplier * sizeMultiplier);
+  const laborCost = Math.round(pricing.labor * propertyMultiplier * sizeMultiplier * urgencyMultiplier);
+  const materialsCost = Math.round(pricing.materials * sizeMultiplier);
+  const permitFees = Math.round(pricing.permit * propertyMultiplier);
+
+  const subtotal = basePrice + laborCost + materialsCost + permitFees;
+  const discount = projectSize === "Large" ? Math.round(subtotal * 0.05) : 0;
+  const total = subtotal - discount;
+
+  const notes: string[] = [
+    "Free on-site consultation included",
+    "All work performed by union-trained, licensed electricians",
+    "Full warranty on labor and materials",
+  ];
+  if (discount > 0) notes.push("5% volume discount applied");
+  if (urgency.includes("Emergency")) notes.push("Emergency surcharge included for expedited service");
+  if (propertyType === "Commercial") notes.push("Commercial-grade equipment and materials");
+
+  return {
+    serviceTitle: service?.title || "Electrical Service",
+    propertyType,
+    projectSize,
+    urgency,
+    basePrice,
+    laborCost,
+    materialsCost,
+    permitFees,
+    subtotal,
+    discount,
+    total,
+    estimateRange: { low: Math.round(total * 0.85), high: Math.round(total * 1.15) },
+    timeline: pricing.timeline,
+    notes,
+  };
+}
+
 export const contactFormSchema = z.object({
   name: z.string().min(2, "Name must be at least 2 characters"),
   email: z.string().email("Please enter a valid email"),

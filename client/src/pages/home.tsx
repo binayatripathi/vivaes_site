@@ -9,7 +9,7 @@ import { servicesList, testimonials } from "@shared/schema";
 import {
   Sun, Zap, CircuitBoard, Lightbulb, Wrench, Building2,
   Shield, Award, Clock, Star, ChevronLeft, ChevronRight,
-  ArrowRight, Phone,
+  ArrowRight, Phone, MessageCircle,
 } from "lucide-react";
 
 const iconMap: Record<string, typeof Sun> = {
@@ -89,7 +89,7 @@ export default function Home() {
                 data-testid="button-hero-quote"
               >
                 Get Instant Quote
-                <ArrowRight className="ml-2 h-4 w-4" />
+                <MessageCircle className="ml-2 h-4 w-4" />
               </Button>
               <Link href="/booking">
                 <Button
@@ -277,7 +277,7 @@ export default function Home() {
                 data-testid="button-cta-quote"
               >
                 Get Instant Quote
-                <ArrowRight className="ml-2 h-4 w-4" />
+                <MessageCircle className="ml-2 h-4 w-4" />
               </Button>
               <Link href="/booking">
                 <Button
