@@ -1,0 +1,17 @@
+Build a modern, fast, professional website for Viva Electric & Solar (vivaes.net) using Next.js 15 (App Router), Tailwind CSS, shadcn/ui components, and Framer Motion for subtle animations. Make it fully responsive, dark/light mode toggle (electric blue/orange accents matching current branding), SEO-optimized with Next SEO.
+
+Pages:
+- Home: Hero with "Union-Trained Electrical & Solar Pros – 24/7 AI Quotes & Booking", trust badges (union, licensed, insured), services grid (cards linking to /services/[slug]), testimonials carousel (placeholder), CTA "Get Instant Quote or Book Now".
+- Services: Dynamic list from array — Solar & Storage, EV Chargers, Panel Upgrades, Lighting Retrofits, General Electrical, Commercial. Each with detailed description, icons, "Get Quote" button that opens modal form.
+- Quote Estimator: Interactive form (zip, service type dropdown, details textarea, photos upload placeholder). On submit: POST webhook to your OpenClaw endpoint (e.g. https://your-claw.example.com/webhook/quote). Show loading, then "Quote generated — check email + view PDF".
+- Booking: Embed Calendly or custom slots (fetch availability from Claw API/webhook).
+- About + Contact: Current content + new AI Chat widget (simple iframe or Tally form that routes to Claw).
+
+Integrations:
+- Stripe: Add "Pay 50% Deposit" button on quotes using Stripe Checkout (use test mode first; create session server-side via API route that Claw can trigger).
+- Forms → OpenClaw: All quote/booking/contact forms POST JSON to Claw webhook (include business-specific header or token for multi-tenant). Example payload: {type: "quote", service: "...", details: "...", customer: {...}}
+- Make entire site a reusable template: Use env vars for business name, phones, colors, Claw webhook URL, Stripe keys. Comment code for easy duplication per client (e.g. "Change VIVA_* env vars").
+
+Performance: Image optimization, static export where possible, Vercel/Replit deploy ready. Add footer with "Powered by VivaClaw AI — 24/7 Automation".
+
+Output clean code, .env.example, README with "How to connect to your OpenClaw instance". Deploy button ready.
