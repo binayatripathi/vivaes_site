@@ -25,6 +25,10 @@ import {
 import { VapiCallButton } from "@/components/vapi-call-button";
 import aboutHeroImg from "@/assets/images/about-hero.jpg";
 import aboutTeamImg from "@/assets/images/about-team.jpg";
+import valueSafetyImg from "@/assets/images/value-safety.jpg";
+import valueUnionImg from "@/assets/images/value-union.jpg";
+import valueLicensedImg from "@/assets/images/value-licensed.jpg";
+import valueCuttingEdgeImg from "@/assets/images/value-cutting-edge.jpg";
 
 const fadeUp = {
   hidden: { opacity: 0, y: 24 },
@@ -40,21 +44,25 @@ const values = [
     icon: Shield,
     title: "Safety First",
     description: "Every job meets or exceeds NEC code standards. Our union-trained electricians prioritize safety above all else.",
+    image: valueSafetyImg,
   },
   {
     icon: Users,
     title: "Union Trained",
     description: "Our electricians complete rigorous apprenticeship programs, ensuring the highest skill level in the industry.",
+    image: valueUnionImg,
   },
   {
     icon: Award,
     title: "Licensed & Insured",
     description: "Fully licensed, bonded, and insured for your protection. We stand behind every project we complete.",
+    image: valueLicensedImg,
   },
   {
     icon: Zap,
     title: "Cutting Edge",
     description: "We stay current with the latest electrical and solar technologies to deliver the best solutions for our customers.",
+    image: valueCuttingEdgeImg,
   },
 ];
 
@@ -159,14 +167,24 @@ export default function AboutPage() {
 
             <motion.div variants={fadeUp}>
               <h2 className="mb-6 text-center text-2xl font-bold">Our Values</h2>
-              <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
+              <div className="grid grid-cols-1 gap-6 sm:grid-cols-2">
                 {values.map((v) => (
-                  <Card key={v.title} className="overflow-visible hover-elevate">
-                    <CardContent className="p-6 text-center">
-                      <div className="mx-auto mb-4 flex h-12 w-12 items-center justify-center rounded-full bg-primary/10">
-                        <v.icon className="h-6 w-6 text-primary" />
+                  <Card key={v.title} className="overflow-hidden hover-elevate">
+                    <div className="relative h-40 overflow-hidden">
+                      <img
+                        src={v.image}
+                        alt={v.title}
+                        className="h-full w-full object-cover"
+                      />
+                      <div className="absolute inset-0 bg-gradient-to-t from-background/90 to-transparent" />
+                      <div className="absolute bottom-3 left-4 flex items-center gap-2">
+                        <div className="flex h-9 w-9 items-center justify-center rounded-full bg-primary/90">
+                          <v.icon className="h-4 w-4 text-primary-foreground" />
+                        </div>
+                        <h3 className="font-semibold text-foreground">{v.title}</h3>
                       </div>
-                      <h3 className="mb-2 font-semibold">{v.title}</h3>
+                    </div>
+                    <CardContent className="p-4">
                       <p className="text-sm text-muted-foreground">{v.description}</p>
                     </CardContent>
                   </Card>

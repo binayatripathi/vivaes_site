@@ -1,6 +1,5 @@
 import { Link } from "wouter";
-import { Zap, Phone, Mail, MapPin, Headphones } from "lucide-react";
-import { VapiCallButton } from "@/components/vapi-call-button";
+import { Zap, Phone, Mail, MapPin } from "lucide-react";
 
 export function Footer() {
   return (
@@ -56,12 +55,6 @@ export function Footer() {
                 <MapPin className="h-4 w-4 shrink-0" />
                 <span>San Francisco Bay Area</span>
               </div>
-              <VapiCallButton
-                variant="outline"
-                size="sm"
-                label="Talk to Us 24/7"
-                className="mt-1 w-full justify-start"
-              />
             </div>
           </div>
         </div>
