@@ -58,7 +58,11 @@ export function VapiProvider({ children }: { children: React.ReactNode }) {
 
       vapiRef.current.on("error", (err: any) => {
         console.error("[Vapi] Error:", err);
-        const msg = err?.error?.message || err?.message || "Call failed. Please try again.";
+        let msg = "Call failed. Please try again.";
+        try {
+          const raw = err?.error?.message || err?.message;
+          msg = typeof raw === "string" ? raw : typeof raw === "object" ? JSON.stringify(raw) : msg;
+        } catch {}
         setErrorMsg(msg);
         setCallStatus("idle");
       });
@@ -89,7 +93,8 @@ export function VapiProvider({ children }: { children: React.ReactNode }) {
       await vapi.start(VAPI_ASSISTANT_ID);
     } catch (err: any) {
       console.error("[Vapi] Failed to start call:", err);
-      setErrorMsg(err?.message || "Could not connect. Please try again.");
+      const raw = err?.message;
+      setErrorMsg(typeof raw === "string" ? raw : "Could not connect. Please try again.");
       setCallStatus("idle");
     }
   }, [callStatus, getVapi]);
