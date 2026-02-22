@@ -1,6 +1,7 @@
 import type { Express } from "express";
 import { createServer, type Server } from "http";
 import { quoteRequestSchema, contactFormSchema, bookingRequestSchema } from "@shared/schema";
+import { sendQuoteNotification, sendContactNotification, sendBookingNotification } from "./email";
 
 export async function registerRoutes(
   httpServer: Server,
@@ -40,7 +41,17 @@ export async function registerRoutes(
   app.post("/api/quote", async (req, res) => {
     try {
       const data = quoteRequestSchema.parse(req.body);
+      const estimate = req.body.estimate;
       await forwardToWebhook("quote", { service: data.serviceType, details: data.details, customer: { name: data.name, email: data.email, phone: data.phone, zip: data.zip } });
+      sendQuoteNotification({
+        name: data.name,
+        email: data.email,
+        phone: data.phone,
+        zip: data.zip,
+        serviceType: data.serviceType,
+        details: data.details,
+        estimate,
+      });
       res.json({ success: true, message: "Quote request received successfully." });
     } catch (err: any) {
       res.status(400).json({ error: err.message || "Invalid request" });
@@ -51,6 +62,12 @@ export async function registerRoutes(
     try {
       const data = contactFormSchema.parse(req.body);
       await forwardToWebhook("contact", { customer: { name: data.name, email: data.email, phone: data.phone }, message: data.message });
+      sendContactNotification({
+        name: data.name,
+        email: data.email,
+        phone: data.phone,
+        message: data.message,
+      });
       res.json({ success: true, message: "Message received. We'll get back to you soon." });
     } catch (err: any) {
       res.status(400).json({ error: err.message || "Invalid request" });
@@ -61,6 +78,15 @@ export async function registerRoutes(
     try {
       const data = bookingRequestSchema.parse(req.body);
       await forwardToWebhook("booking", { service: data.serviceType, preferredDate: data.preferredDate, preferredTime: data.preferredTime, notes: data.notes, customer: { name: data.name, email: data.email, phone: data.phone } });
+      sendBookingNotification({
+        name: data.name,
+        email: data.email,
+        phone: data.phone,
+        serviceType: data.serviceType,
+        preferredDate: data.preferredDate,
+        preferredTime: data.preferredTime,
+        notes: data.notes,
+      });
       res.json({ success: true, message: "Booking confirmed. Check your email for details." });
     } catch (err: any) {
       res.status(400).json({ error: err.message || "Invalid request" });
