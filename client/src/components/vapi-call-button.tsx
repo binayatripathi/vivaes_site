@@ -90,7 +90,28 @@ export function VapiProvider({ children }: { children: React.ReactNode }) {
     setShowPanel(true);
 
     try {
-      await vapi.start(VAPI_ASSISTANT_ID);
+      await vapi.start(VAPI_ASSISTANT_ID, {
+        variableValues: {
+          businessName: "Viva Electric & Solar",
+          website: "vivaes.net",
+          phone: "+1 (510) 706-8246",
+          email: "vivaes.sf@gmail.com",
+          serviceArea: "San Francisco Bay Area",
+          services: "Solar & Storage, EV Chargers, Panel Upgrades, Lighting Retrofits, General Electrical, Commercial Electrical",
+          businessContext: [
+            "Viva Electric & Solar is a union-trained (IBEW) electrical and solar company serving the San Francisco Bay Area.",
+            "We are fully licensed, bonded, and insured.",
+            "Services: Solar panel installation and battery storage, EV charger installation (Level 2 and DC fast charging), Electrical panel upgrades (100A to 200A/400A), LED lighting retrofits, General electrical (repairs, rewiring, outlets, surge protection), Commercial electrical and solar.",
+            "We serve residential, commercial, and industrial customers.",
+            "Pricing: EV chargers start around $3,500, panel upgrades around $6,000, solar installations from $25,000+, lighting retrofits from $4,500, general electrical from $1,300.",
+            "We offer free on-site consultations and instant online quotes at vivaes.net/quote.",
+            "All work is performed by union-trained, licensed electricians.",
+            "Full warranty on labor and materials.",
+            "Available 24/7 for emergency service.",
+            "You can help callers with: general questions about our services, scheduling appointments, providing rough cost estimates, taking down their information for a callback, and answering questions about solar energy, EV charging, electrical safety, and permits.",
+          ].join(" "),
+        },
+      });
     } catch (err: any) {
       console.error("[Vapi] Failed to start call:", err);
       const raw = err?.message;
