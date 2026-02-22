@@ -15,6 +15,7 @@ interface VapiContextType {
   callStatus: CallStatus;
   isMuted: boolean;
   transcript: { role: string; text: string }[];
+  errorMsg: string | null;
   showPanel: boolean;
   startCall: () => void;
   endCall: () => void;
@@ -29,6 +30,7 @@ export function VapiProvider({ children }: { children: React.ReactNode }) {
   const [isMuted, setIsMuted] = useState(false);
   const [showPanel, setShowPanel] = useState(false);
   const [transcript, setTranscript] = useState<{ role: string; text: string }[]>([]);
+  const [errorMsg, setErrorMsg] = useState<string | null>(null);
   const vapiRef = useRef<Vapi | null>(null);
 
   const getVapi = useCallback(() => {
@@ -37,6 +39,7 @@ export function VapiProvider({ children }: { children: React.ReactNode }) {
 
       vapiRef.current.on("call-start", () => {
         setCallStatus("active");
+        setErrorMsg(null);
       });
 
       vapiRef.current.on("call-end", () => {
@@ -55,6 +58,8 @@ export function VapiProvider({ children }: { children: React.ReactNode }) {
 
       vapiRef.current.on("error", (err: any) => {
         console.error("[Vapi] Error:", err);
+        const msg = err?.error?.message || err?.message || "Call failed. Please try again.";
+        setErrorMsg(msg);
         setCallStatus("idle");
       });
     }
@@ -63,21 +68,28 @@ export function VapiProvider({ children }: { children: React.ReactNode }) {
 
   const startCall = useCallback(async () => {
     if (callStatus !== "idle") return;
+
+    try {
+      await navigator.mediaDevices.getUserMedia({ audio: true });
+    } catch {
+      setErrorMsg("Microphone access is required for voice calls. Please allow microphone access and try again.");
+      setShowPanel(true);
+      return;
+    }
+
     const vapi = getVapi();
     if (!vapi) return;
 
     setCallStatus("connecting");
     setTranscript([]);
+    setErrorMsg(null);
     setShowPanel(true);
 
     try {
-      if (VAPI_ASSISTANT_ID) {
-        await vapi.start(VAPI_ASSISTANT_ID);
-      } else {
-        await vapi.start();
-      }
-    } catch (err) {
+      await vapi.start(VAPI_ASSISTANT_ID);
+    } catch (err: any) {
       console.error("[Vapi] Failed to start call:", err);
+      setErrorMsg(err?.message || "Could not connect. Please try again.");
       setCallStatus("idle");
     }
   }, [callStatus, getVapi]);
@@ -89,6 +101,7 @@ export function VapiProvider({ children }: { children: React.ReactNode }) {
       vapi.stop();
     }
     setShowPanel(false);
+    setErrorMsg(null);
   }, []);
 
   const toggleMute = useCallback(() => {
@@ -110,7 +123,7 @@ export function VapiProvider({ children }: { children: React.ReactNode }) {
 
   return (
     <VapiContext.Provider
-      value={{ callStatus, isMuted, transcript, showPanel, startCall, endCall, toggleMute, setShowPanel }}
+      value={{ callStatus, isMuted, transcript, errorMsg, showPanel, startCall, endCall, toggleMute, setShowPanel }}
     >
       {children}
       <CallPanel />
@@ -177,7 +190,7 @@ export function VapiCallButton({
 }
 
 function CallPanel() {
-  const { showPanel, callStatus, isMuted, transcript, toggleMute, endCall, setShowPanel } = useVapi();
+  const { showPanel, callStatus, isMuted, transcript, errorMsg, toggleMute, endCall, setShowPanel } = useVapi();
   const scrollRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -223,7 +236,12 @@ function CallPanel() {
                 ref={scrollRef}
                 className="max-h-48 min-h-[80px] overflow-y-auto p-3 space-y-2"
               >
-                {transcript.length === 0 && (
+                {errorMsg && (
+                  <p className="text-center text-xs text-red-500 dark:text-red-400 py-4">
+                    {errorMsg}
+                  </p>
+                )}
+                {!errorMsg && transcript.length === 0 && (
                   <p className="text-center text-xs text-muted-foreground py-4">
                     {callStatus === "connecting"
                       ? "Setting up your call..."
