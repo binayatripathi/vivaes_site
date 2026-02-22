@@ -5,6 +5,7 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { QuoteModal } from "@/components/quote-modal";
+import { VapiCallButton } from "@/components/vapi-call-button";
 import { servicesList } from "@shared/schema";
 import {
   Sun, Zap, CircuitBoard, Lightbulb, Wrench, Building2,
@@ -227,9 +228,11 @@ export function ServiceDetailPage() {
                       Book Appointment
                     </Button>
                   </Link>
-                  <div className="rounded-md bg-muted p-3 text-center text-sm text-muted-foreground">
-                    Or call us at <span className="font-medium text-foreground">+1 (510) 706-8246</span>
-                  </div>
+                  <VapiCallButton
+                    variant="outline"
+                    className="w-full"
+                    label="Talk to Our Team 24/7"
+                  />
                 </CardContent>
               </Card>
             </motion.div>

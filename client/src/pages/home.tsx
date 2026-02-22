@@ -5,6 +5,7 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { QuoteModal } from "@/components/quote-modal";
+import { VapiCallButton } from "@/components/vapi-call-button";
 import { servicesList, testimonials } from "@shared/schema";
 import {
   Sun, Zap, CircuitBoard, Lightbulb, Wrench, Building2,
@@ -101,17 +102,12 @@ export default function Home() {
                   Book Now
                 </Button>
               </Link>
-              <a href="tel:+15107068246">
-                <Button
-                  size="lg"
-                  variant="outline"
-                  className="border-white/30 bg-white/10 text-white backdrop-blur-sm"
-                  data-testid="button-hero-call"
-                >
-                  <Phone className="mr-2 h-4 w-4" />
-                  Call Us
-                </Button>
-              </a>
+              <VapiCallButton
+                variant="hero"
+                size="lg"
+                label="Talk to Us 24/7"
+                className="border-white/30 bg-white/10 text-white backdrop-blur-sm hover:bg-white/20 hover:text-white dark:text-white dark:hover:bg-white/20"
+              />
             </motion.div>
           </motion.div>
         </div>
@@ -289,6 +285,12 @@ export default function Home() {
                   Book Now
                 </Button>
               </Link>
+              <VapiCallButton
+                variant="hero"
+                size="lg"
+                label="Talk to Us 24/7"
+                className="border-white/30 bg-white/10 text-white backdrop-blur-sm hover:bg-white/20 hover:text-white dark:text-white dark:hover:bg-white/20"
+              />
             </motion.div>
           </motion.div>
         </div>

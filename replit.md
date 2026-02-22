@@ -38,7 +38,16 @@ Professional website for Viva Electric & Solar (vivaes.net) - a union-trained el
 - Email: vivaes.sf@gmail.com
 - Service Area: San Francisco Bay Area
 
+## Vapi Voice Agent (24/7 Phone)
+- Uses @vapi-ai/web SDK for browser-based voice calls
+- VapiProvider context wraps entire app for shared call state
+- Single Vapi instance across all buttons (no duplicate sessions)
+- Call panel with real-time transcript, mute/unmute, end call
+- Integrated on: Home hero, Home CTA, Quote results, Services detail, About contact, Footer
+
 ## Environment Variables (Template)
+- `VITE_VAPI_PUBLIC_KEY` - Vapi public API key (frontend, required)
+- `VITE_VAPI_ASSISTANT_ID` - Vapi assistant ID (frontend, optional - uses default if not set)
 - `VIVA_BUSINESS_NAME` - Business name
 - `VIVA_PHONE` - Business phone
 - `VIVA_EMAIL` - Business email
@@ -50,6 +59,7 @@ Professional website for Viva Electric & Solar (vivaes.net) - a union-trained el
 - `shared/schema.ts` - Services data, form schemas, testimonials, pricing engine
 - `client/src/components/quote-chatbot.tsx` - Interactive chatbot quote system
 - `client/src/components/quote-modal.tsx` - Quote modal wrapper for chatbot
+- `client/src/components/vapi-call-button.tsx` - Vapi voice call button + provider + call panel
 - `client/src/components/navigation.tsx` - Top nav with dark/light toggle
 - `client/src/components/footer.tsx` - Site footer
 - `client/src/components/theme-provider.tsx` - Dark/light mode context

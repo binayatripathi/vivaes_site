@@ -12,6 +12,7 @@ import QuotePage from "@/pages/quote";
 import BookingPage from "@/pages/booking";
 import AboutPage from "@/pages/about";
 import { FloatingChatButton } from "@/components/quote-chatbot";
+import { VapiProvider } from "@/components/vapi-call-button";
 import NotFound from "@/pages/not-found";
 
 function Router() {
@@ -33,15 +34,17 @@ function App() {
     <QueryClientProvider client={queryClient}>
       <TooltipProvider>
         <ThemeProvider>
-          <div className="flex min-h-screen flex-col">
-            <Navigation />
-            <main className="flex-1">
-              <Router />
-            </main>
-            <Footer />
-          </div>
-          <FloatingChatButton />
-          <Toaster />
+          <VapiProvider>
+            <div className="flex min-h-screen flex-col">
+              <Navigation />
+              <main className="flex-1">
+                <Router />
+              </main>
+              <Footer />
+            </div>
+            <FloatingChatButton />
+            <Toaster />
+          </VapiProvider>
         </ThemeProvider>
       </TooltipProvider>
     </QueryClientProvider>

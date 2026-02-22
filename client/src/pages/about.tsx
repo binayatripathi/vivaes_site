@@ -22,6 +22,7 @@ import {
   Loader2, CheckCircle2, Shield, Users, Award, Zap,
   Phone, Mail, MapPin, Clock,
 } from "lucide-react";
+import { VapiCallButton } from "@/components/vapi-call-button";
 
 const fadeUp = {
   hidden: { opacity: 0, y: 24 },
@@ -330,6 +331,13 @@ export default function AboutPage() {
                           <p className="text-muted-foreground">Always available</p>
                         </div>
                       </div>
+                    </div>
+                    <div className="mt-4">
+                      <VapiCallButton
+                        variant="default"
+                        className="w-full"
+                        label="Talk to Us 24/7"
+                      />
                     </div>
                   </CardContent>
                 </Card>

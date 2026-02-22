@@ -17,6 +17,7 @@ import {
   Phone, Download, ArrowRight, RotateCcw,
 } from "lucide-react";
 import { Link } from "wouter";
+import { VapiCallButton } from "@/components/vapi-call-button";
 
 interface ChatMessage {
   id: string;
@@ -451,12 +452,11 @@ function QuoteResultCard({ quote, name }: { quote: QuoteEstimate; name: string }
               Book Your Appointment
             </Button>
           </Link>
-          <a href="tel:+15107068246">
-            <Button variant="outline" className="w-full" data-testid="button-quote-call">
-              <Phone className="mr-2 h-4 w-4" />
-              Call +1 (510) 706-8246
-            </Button>
-          </a>
+          <VapiCallButton
+            variant="outline"
+            className="w-full"
+            label="Talk to Our Team 24/7"
+          />
         </div>
 
         <p className="text-center text-[10px] text-muted-foreground">
