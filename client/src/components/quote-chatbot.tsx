@@ -472,7 +472,7 @@ export function FloatingChatButton() {
     <Link href="/quote">
       <Button
         size="lg"
-        className="fixed bottom-6 right-6 z-50 h-14 w-14 rounded-full shadow-lg"
+        className="fixed bottom-20 right-6 z-50 h-14 w-14 rounded-full shadow-lg"
         data-testid="button-floating-chat"
       >
         <MessageCircle className="h-6 w-6" />

@@ -23,6 +23,8 @@ import {
   Phone, Mail, MapPin, Clock,
 } from "lucide-react";
 import { VapiCallButton } from "@/components/vapi-call-button";
+import aboutHeroImg from "@/assets/images/about-hero.jpg";
+import aboutTeamImg from "@/assets/images/about-team.jpg";
 
 const fadeUp = {
   hidden: { opacity: 0, y: 24 },
@@ -89,17 +91,25 @@ export default function AboutPage() {
 
   return (
     <>
-      <section className="bg-card py-16">
-        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-          <motion.div initial="hidden" animate="visible" variants={stagger}>
+      <section className="relative overflow-hidden bg-card">
+        <div className="absolute inset-0">
+          <img
+            src={aboutHeroImg}
+            alt="Solar panel installation"
+            className="h-full w-full object-cover"
+          />
+          <div className="absolute inset-0 bg-gradient-to-r from-background/95 via-background/80 to-background/40 dark:from-background/95 dark:via-background/85 dark:to-background/50" />
+        </div>
+        <div className="relative mx-auto max-w-7xl px-4 py-20 sm:px-6 sm:py-28 lg:px-8">
+          <motion.div initial="hidden" animate="visible" variants={stagger} className="max-w-2xl">
             <motion.h1
               variants={fadeUp}
-              className="text-3xl font-bold tracking-tight sm:text-4xl"
+              className="text-3xl font-bold tracking-tight sm:text-5xl"
               data-testid="text-about-heading"
             >
               About Viva Electric & Solar
             </motion.h1>
-            <motion.p variants={fadeUp} className="mt-3 max-w-3xl text-muted-foreground">
+            <motion.p variants={fadeUp} className="mt-4 text-lg text-muted-foreground">
               We're a team of union-trained electrical and solar professionals dedicated to delivering
               exceptional service to residential and commercial customers throughout the San Francisco Bay Area.
             </motion.p>
@@ -116,25 +126,34 @@ export default function AboutPage() {
             variants={stagger}
             className="space-y-12"
           >
-            <motion.div variants={fadeUp} className="mx-auto max-w-3xl space-y-6">
-              <h2 className="text-2xl font-bold">Our Story</h2>
-              <div className="space-y-4 text-muted-foreground">
-                <p>
-                  Founded with a mission to bring top-quality electrical and solar services to the community,
-                  Viva Electric & Solar has grown into one of the most trusted names in the San Francisco Bay Area.
-                  Our team of IBEW-trained electricians brings decades of combined experience to every project.
-                </p>
-                <p>
-                  We believe that clean energy should be accessible to everyone. That's why we offer
-                  comprehensive solar installation and storage solutions alongside our full-service electrical work.
-                  From panel upgrades to EV charger installations, we're building the electrical infrastructure
-                  of the future.
-                </p>
-                <p>
-                  Our commitment to fast, 24/7 quoting and scheduling means you get responsive
-                  service without sacrificing the personal touch. Every estimate is reviewed by
-                  our experienced team before it reaches you.
-                </p>
+            <motion.div variants={fadeUp} className="grid grid-cols-1 items-center gap-10 lg:grid-cols-2">
+              <div className="space-y-6">
+                <h2 className="text-2xl font-bold">Our Story</h2>
+                <div className="space-y-4 text-muted-foreground">
+                  <p>
+                    Founded with a mission to bring top-quality electrical and solar services to the community,
+                    Viva Electric & Solar has grown into one of the most trusted names in the San Francisco Bay Area.
+                    Our team of IBEW-trained electricians brings decades of combined experience to every project.
+                  </p>
+                  <p>
+                    We believe that clean energy should be accessible to everyone. That's why we offer
+                    comprehensive solar installation and storage solutions alongside our full-service electrical work.
+                    From panel upgrades to EV charger installations, we're building the electrical infrastructure
+                    of the future.
+                  </p>
+                  <p>
+                    Our commitment to fast, 24/7 quoting and scheduling means you get responsive
+                    service without sacrificing the personal touch. Every estimate is reviewed by
+                    our experienced team before it reaches you.
+                  </p>
+                </div>
+              </div>
+              <div className="overflow-hidden rounded-md shadow-xl" data-testid="img-about-team">
+                <img
+                  src={aboutTeamImg}
+                  alt="Our team of electricians at work"
+                  className="h-full w-full object-cover"
+                />
               </div>
             </motion.div>
 
