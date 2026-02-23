@@ -51,4 +51,4 @@ VITE_VAPI_PUBLIC_KEY = "58a6b0af-128a-4504-a89a-e67f2bc68dae"
 VITE_VAPI_ASSISTANT_ID = "2bd90308-444f-4151-8fb2-4a8337728816"
 
 [agent]
-integrations = ["resend:1.0.0"]
+integrations = ["resend:1.0.0", "stripe:2.0.0"]
