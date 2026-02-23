@@ -16,8 +16,10 @@ Professional website for Viva Electric & Solar (vivaes.net) - a union-trained el
 - `/services` - Services list with images and quote buttons
 - `/services/:slug` - Individual service detail pages
 - `/quote` - Interactive chatbot quote assistant (instant pricing, no email wait)
-- `/booking` - Booking form with date/time selection
+- `/booking` - Booking form with date/time selection + consultation fee payment
 - `/about` - About page with company info, values, stats, and contact form
+- `/payment/success` - Payment success page with session details
+- `/payment/cancel` - Payment cancelled page
 
 ## Quote Chatbot System
 - Step-by-step conversational interface (service → property type → project size → urgency → details → contact info)
@@ -28,10 +30,27 @@ Professional website for Viva Electric & Solar (vivaes.net) - a union-trained el
 - Floating chat button on all pages for quick access
 
 ## API Routes
-- `POST /api/quote` - Submit quote request, forwards to OpenClaw webhook
-- `POST /api/contact` - Submit contact form, forwards to OpenClaw webhook
-- `POST /api/booking` - Submit booking request, forwards to OpenClaw webhook
-- `POST /api/stripe/create-checkout` - Stripe checkout (placeholder, needs Stripe setup)
+- `POST /api/quote` - Submit quote request, forwards to OpenClaw webhook + email notification
+- `POST /api/contact` - Submit contact form, forwards to OpenClaw webhook + email notification
+- `POST /api/booking` - Submit booking request, forwards to OpenClaw webhook + email notification
+- `POST /api/stripe/create-checkout` - Stripe checkout for deposits and consultation fees
+- `GET /api/stripe/session/:sessionId` - Retrieve checkout session details + trigger payment email
+- `GET /api/stripe/publishable-key` - Get Stripe publishable key for frontend
+- `POST /api/stripe/webhook` - Stripe webhook handler (registered before express.json())
+
+## Stripe Payment Integration
+- Stripe connected via Replit connector (handles API keys securely)
+- stripe-replit-sync for webhook processing and data sync
+- Two payment flows: 20% deposit from quote results, $75 consultation fee from booking
+- Checkout sessions use price_data for dynamic one-time amounts
+- Payment success/cancel pages with session retrieval
+- Email notifications sent on successful payment (to business + customer)
+
+## Email Notifications (Resend)
+- From: hello@storywonderbook.com
+- To: vivaes.sf@gmail.com (business notifications)
+- Customer confirmations sent to their email
+- Templates: Quote, Contact, Booking, Payment confirmation
 
 ## Contact Info
 - Phone: +1 (510) 706-8246
@@ -57,13 +76,18 @@ Professional website for Viva Electric & Solar (vivaes.net) - a union-trained el
 
 ## Key Files
 - `shared/schema.ts` - Services data, form schemas, testimonials, pricing engine
-- `client/src/components/quote-chatbot.tsx` - Interactive chatbot quote system
+- `client/src/components/quote-chatbot.tsx` - Interactive chatbot quote system with deposit payment
 - `client/src/components/quote-modal.tsx` - Quote modal wrapper for chatbot
 - `client/src/components/vapi-call-button.tsx` - Vapi voice call button + provider + call panel
 - `client/src/components/navigation.tsx` - Top nav with dark/light toggle
 - `client/src/components/footer.tsx` - Site footer
 - `client/src/components/theme-provider.tsx` - Dark/light mode context
-- `server/routes.ts` - API routes with webhook forwarding
+- `client/src/pages/payment-success.tsx` - Payment success page
+- `client/src/pages/payment-cancel.tsx` - Payment cancel page
+- `server/routes.ts` - API routes with webhook forwarding, Stripe checkout, email
+- `server/email.ts` - Resend email notification service
+- `server/stripeClient.ts` - Stripe client via Replit connector
+- `server/webhookHandlers.ts` - Stripe webhook processing
 
 ## Design
 - Electric blue primary color (hsl 217 91% 60%)

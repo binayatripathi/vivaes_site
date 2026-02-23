@@ -26,7 +26,7 @@ import {
 } from "@/components/ui/select";
 import { useToast } from "@/hooks/use-toast";
 import {
-  Loader2, CheckCircle2, Calendar, Clock, Phone, MapPin,
+  Loader2, CheckCircle2, Calendar, Clock, Phone, MapPin, CreditCard, Shield,
 } from "lucide-react";
 
 const fadeUp = {
@@ -64,7 +64,10 @@ function formatDate(dateStr: string): string {
 export default function BookingPage() {
   const { toast } = useToast();
   const [submitted, setSubmitted] = useState(false);
+  const [submittedData, setSubmittedData] = useState<BookingRequest | null>(null);
+  const [isPayLoading, setIsPayLoading] = useState(false);
   const availableDays = getNext14Days();
+  const CONSULTATION_FEE = 75;
 
   const form = useForm<BookingRequest>({
     resolver: zodResolver(bookingRequestSchema),
@@ -84,7 +87,8 @@ export default function BookingPage() {
       const res = await apiRequest("POST", "/api/booking", data);
       return res.json();
     },
-    onSuccess: () => {
+    onSuccess: (_result, variables) => {
+      setSubmittedData(variables);
       setSubmitted(true);
     },
     onError: (error: Error) => {
@@ -95,6 +99,29 @@ export default function BookingPage() {
       });
     },
   });
+
+  const handlePayConsultation = async () => {
+    if (!submittedData) return;
+    setIsPayLoading(true);
+    try {
+      const service = servicesList.find(s => s.slug === submittedData.serviceType);
+      const res = await apiRequest("POST", "/api/stripe/create-checkout", {
+        type: "consultation",
+        amount: CONSULTATION_FEE,
+        serviceName: service?.title || submittedData.serviceType,
+        customerName: submittedData.name,
+        customerEmail: submittedData.email,
+        customerPhone: submittedData.phone,
+      });
+      const data = await res.json();
+      if (data.url) {
+        window.location.href = data.url;
+      }
+    } catch (err) {
+      console.error("Payment error:", err);
+      setIsPayLoading(false);
+    }
+  };
 
   if (submitted) {
     return (
@@ -113,10 +140,39 @@ export default function BookingPage() {
               <p className="text-muted-foreground">
                 Your appointment has been confirmed! Our team will reach out to finalize the details.
               </p>
+
+              <div className="w-full rounded-lg border border-primary/20 bg-primary/5 p-4">
+                <div className="mb-2 flex items-center justify-between">
+                  <span className="text-sm font-medium">Skip the Wait</span>
+                  <span className="flex items-center gap-1 text-[10px] text-muted-foreground">
+                    <Shield className="h-3 w-3" />
+                    Secure checkout
+                  </span>
+                </div>
+                <p className="mb-3 text-xs text-muted-foreground">
+                  Pay your consultation fee now and get priority scheduling with a guaranteed time slot.
+                </p>
+                <Button
+                  className="w-full"
+                  onClick={handlePayConsultation}
+                  disabled={isPayLoading}
+                  data-testid="button-pay-consultation"
+                >
+                  {isPayLoading ? (
+                    <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                  ) : (
+                    <CreditCard className="mr-2 h-4 w-4" />
+                  )}
+                  Pay ${CONSULTATION_FEE} Consultation Fee
+                </Button>
+              </div>
+
               <Button
-                className="mt-4"
+                variant="outline"
+                className="mt-2 w-full"
                 onClick={() => {
                   setSubmitted(false);
+                  setSubmittedData(null);
                   form.reset();
                 }}
                 data-testid="button-new-booking"

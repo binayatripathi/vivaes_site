@@ -274,3 +274,70 @@ export async function sendBookingNotification(data: {
     console.error('[Email] Failed to send booking notification:', err);
   }
 }
+
+export async function sendPaymentNotification(data: {
+  customerName: string;
+  customerEmail: string;
+  amount: number;
+  serviceName: string;
+  type: string;
+}) {
+  try {
+    const resend = await getResendClient();
+    const fmtAmount = data.amount.toLocaleString("en-US", { style: "currency", currency: "USD", maximumFractionDigits: 2 });
+    const paymentLabel = data.type === "deposit" ? "Service Deposit" : "Consultation Fee";
+
+    await resend.emails.send({
+      from: `${BUSINESS_NAME} <${FROM_EMAIL}>`,
+      to: NOTIFY_EMAIL,
+      subject: `Payment Received - ${fmtAmount} from ${data.customerName}`,
+      html: `
+        <div style="font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; max-width: 600px; margin: 0 auto; background: #ffffff; border-radius: 8px; box-shadow: 0 1px 3px rgba(0,0,0,0.1);">
+          ${headerHtml('Payment Received')}
+          <div style="padding: 24px;">
+            <div style="background: #f0fdf4; border: 1px solid #bbf7d0; border-radius: 8px; padding: 16px; margin: 0 0 16px; text-align: center;">
+              <p style="color: #166534; font-size: 24px; font-weight: 700; margin: 0 0 4px;">${fmtAmount}</p>
+              <p style="color: #15803d; font-size: 14px; margin: 0;">${paymentLabel}</p>
+            </div>
+            <table style="width: 100%; border-collapse: collapse;">
+              ${rowHtml('Customer', data.customerName)}
+              ${rowHtml('Email', data.customerEmail)}
+              ${rowHtml('Service', data.serviceName)}
+              ${rowHtml('Payment Type', paymentLabel)}
+            </table>
+          </div>
+          ${footerHtml()}
+        </div>
+      `,
+    });
+
+    await resend.emails.send({
+      from: `${BUSINESS_NAME} <${FROM_EMAIL}>`,
+      to: data.customerEmail,
+      subject: `Payment Confirmation - ${BUSINESS_NAME}`,
+      html: `
+        <div style="font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; max-width: 600px; margin: 0 auto; background: #ffffff; border-radius: 8px; box-shadow: 0 1px 3px rgba(0,0,0,0.1);">
+          ${headerHtml('Payment Confirmed')}
+          <div style="padding: 24px;">
+            <p style="color: #1e293b; font-size: 16px; margin: 0 0 16px;">Hi ${data.customerName},</p>
+            <p style="color: #475569; font-size: 14px; line-height: 1.6; margin: 0 0 16px;">Your payment has been successfully processed. Here are your details:</p>
+            <div style="background: #f0fdf4; border: 1px solid #bbf7d0; border-radius: 8px; padding: 16px; margin: 0 0 16px; text-align: center;">
+              <p style="color: #166534; font-size: 24px; font-weight: 700; margin: 0 0 4px;">${fmtAmount}</p>
+              <p style="color: #15803d; font-size: 14px; margin: 0 0 8px;">${paymentLabel} - ${data.serviceName}</p>
+            </div>
+            <p style="color: #475569; font-size: 14px; line-height: 1.6; margin: 0 0 16px;">${data.type === "deposit" ? "Your deposit secures your service and locks in your pricing. Our team will reach out within 24 hours to schedule your project." : "Your consultation fee has been received. Our team will reach out to confirm your appointment details."}</p>
+            <div style="text-align: center; margin: 24px 0;">
+              <a href="tel:${BUSINESS_PHONE.replace(/[^+\d]/g, '')}" style="display: inline-block; background: #2563eb; color: #ffffff; padding: 12px 28px; border-radius: 6px; text-decoration: none; font-weight: 600; font-size: 14px;">Call Us: ${BUSINESS_PHONE}</a>
+            </div>
+            <p style="color: #475569; font-size: 14px; margin: 0;">Thank you for choosing ${BUSINESS_NAME}!<br><strong>The ${BUSINESS_NAME} Team</strong></p>
+          </div>
+          ${footerHtml()}
+        </div>
+      `,
+    });
+
+    console.log(`[Email] Payment notification sent for ${data.customerName}`);
+  } catch (err) {
+    console.error('[Email] Failed to send payment notification:', err);
+  }
+}

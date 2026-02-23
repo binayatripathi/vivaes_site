@@ -14,7 +14,7 @@ import {
 import { apiRequest } from "@/lib/queryClient";
 import {
   MessageCircle, Send, CheckCircle2, Zap, Calendar,
-  Phone, Download, ArrowRight, RotateCcw,
+  Phone, Download, ArrowRight, RotateCcw, CreditCard, Loader2, Shield,
 } from "lucide-react";
 import { Link } from "wouter";
 import { VapiCallButton } from "@/components/vapi-call-button";
@@ -278,7 +278,7 @@ export function QuoteChatbot({ preselectedService }: { preselectedService?: stri
             >
               <div className={`max-w-[85%] ${msg.type === "user" ? "" : ""}`}>
                 {msg.component === "quote-result" && quote ? (
-                  <QuoteResultCard quote={quote} name={answers.name} />
+                  <QuoteResultCard quote={quote} name={answers.name} email={answers.email} phone={answers.phone} />
                 ) : (
                   <div
                     className={`rounded-lg px-3 py-2 text-sm whitespace-pre-line ${
@@ -378,8 +378,31 @@ function getPlaceholder(step: ChatStep): string {
   }
 }
 
-function QuoteResultCard({ quote, name }: { quote: QuoteEstimate; name: string }) {
+function QuoteResultCard({ quote, name, email, phone }: { quote: QuoteEstimate; name: string; email: string; phone: string }) {
+  const [isPayLoading, setIsPayLoading] = useState(false);
   const fmt = (n: number) => n.toLocaleString("en-US", { style: "currency", currency: "USD", maximumFractionDigits: 0 });
+  const depositAmount = Math.round(quote.total * 0.2);
+
+  const handlePayDeposit = async () => {
+    setIsPayLoading(true);
+    try {
+      const res = await apiRequest("POST", "/api/stripe/create-checkout", {
+        type: "deposit",
+        amount: depositAmount,
+        serviceName: quote.serviceTitle,
+        customerName: name,
+        customerEmail: email,
+        customerPhone: phone,
+      });
+      const data = await res.json();
+      if (data.url) {
+        window.location.href = data.url;
+      }
+    } catch (err) {
+      console.error("Payment error:", err);
+      setIsPayLoading(false);
+    }
+  };
 
   return (
     <Card className="w-full border-primary/30" data-testid="card-quote-result">
@@ -445,9 +468,36 @@ function QuoteResultCard({ quote, name }: { quote: QuoteEstimate; name: string }
           ))}
         </div>
 
+        <div className="rounded-md border border-primary/20 bg-primary/5 p-3">
+          <div className="mb-2 flex items-center justify-between">
+            <span className="text-xs font-medium text-muted-foreground">Secure Your Service</span>
+            <span className="flex items-center gap-1 text-[10px] text-muted-foreground">
+              <Shield className="h-3 w-3" />
+              Secure checkout
+            </span>
+          </div>
+          <Button
+            className="w-full"
+            size="lg"
+            onClick={handlePayDeposit}
+            disabled={isPayLoading}
+            data-testid="button-pay-deposit"
+          >
+            {isPayLoading ? (
+              <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+            ) : (
+              <CreditCard className="mr-2 h-4 w-4" />
+            )}
+            Pay {fmt(depositAmount)} Deposit (20%)
+          </Button>
+          <p className="mt-1.5 text-center text-[10px] text-muted-foreground">
+            Lock in your price &amp; get priority scheduling
+          </p>
+        </div>
+
         <div className="flex flex-col gap-2 pt-1">
           <Link href="/booking">
-            <Button className="w-full" data-testid="button-quote-book">
+            <Button variant="outline" className="w-full" data-testid="button-quote-book">
               <Calendar className="mr-2 h-4 w-4" />
               Book Your Appointment
             </Button>

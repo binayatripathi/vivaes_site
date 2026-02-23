@@ -1,7 +1,23 @@
 import type { Express } from "express";
 import { createServer, type Server } from "http";
 import { quoteRequestSchema, contactFormSchema, bookingRequestSchema } from "@shared/schema";
-import { sendQuoteNotification, sendContactNotification, sendBookingNotification } from "./email";
+import { sendQuoteNotification, sendContactNotification, sendBookingNotification, sendPaymentNotification } from "./email";
+import { getUncachableStripeClient, getStripePublishableKey } from "./stripeClient";
+import { z } from "zod";
+
+const CONSULTATION_FEE = 75;
+
+const checkoutSchema = z.object({
+  type: z.enum(["deposit", "consultation"]),
+  amount: z.number().min(1),
+  serviceName: z.string().min(1),
+  customerName: z.string().min(1),
+  customerEmail: z.string().email(),
+  customerPhone: z.string().optional(),
+  description: z.string().optional(),
+});
+
+const notifiedSessions = new Set<string>();
 
 export async function registerRoutes(
   httpServer: Server,
@@ -93,8 +109,95 @@ export async function registerRoutes(
     }
   });
 
+  app.get("/api/stripe/publishable-key", async (_req, res) => {
+    try {
+      const publishableKey = await getStripePublishableKey();
+      res.json({ publishableKey });
+    } catch (err: any) {
+      res.status(500).json({ error: "Stripe not configured" });
+    }
+  });
+
   app.post("/api/stripe/create-checkout", async (req, res) => {
-    res.status(501).json({ error: "Stripe integration not configured yet. Connect your Stripe account to enable payments." });
+    try {
+      const data = checkoutSchema.parse(req.body);
+      const stripe = await getUncachableStripeClient();
+
+      const BUSINESS_NAME = process.env.VIVA_BUSINESS_NAME || "Viva Electric & Solar";
+      const finalAmount = data.type === "consultation" ? CONSULTATION_FEE : data.amount;
+      const amountInCents = Math.round(finalAmount * 100);
+
+      const depositPercent = data.type === "deposit" ? "20%" : "";
+      const description = data.type === "deposit"
+        ? `${depositPercent} deposit for ${data.serviceName} - ${BUSINESS_NAME}`
+        : `Consultation fee for ${data.serviceName} - ${BUSINESS_NAME}`;
+
+      const baseUrl = `https://${process.env.REPLIT_DOMAINS?.split(',')[0]}`;
+
+      const session = await stripe.checkout.sessions.create({
+        payment_method_types: ['card'],
+        mode: 'payment',
+        customer_email: data.customerEmail,
+        line_items: [
+          {
+            price_data: {
+              currency: 'usd',
+              unit_amount: amountInCents,
+              product_data: {
+                name: data.type === "deposit"
+                  ? `Service Deposit - ${data.serviceName}`
+                  : `Consultation Fee - ${data.serviceName}`,
+                description,
+              },
+            },
+            quantity: 1,
+          },
+        ],
+        metadata: {
+          type: data.type,
+          serviceName: data.serviceName,
+          customerName: data.customerName,
+          customerPhone: data.customerPhone || '',
+        },
+        success_url: `${baseUrl}/payment/success?session_id={CHECKOUT_SESSION_ID}`,
+        cancel_url: `${baseUrl}/payment/cancel`,
+      });
+
+      res.json({ url: session.url });
+    } catch (err: any) {
+      console.error('[Stripe] Checkout error:', err);
+      res.status(500).json({ error: err.message || "Failed to create checkout session" });
+    }
+  });
+
+  app.get("/api/stripe/session/:sessionId", async (req, res) => {
+    try {
+      const stripe = await getUncachableStripeClient();
+      const session = await stripe.checkout.sessions.retrieve(req.params.sessionId);
+      const responseData = {
+        status: session.payment_status,
+        customerEmail: session.customer_email,
+        amountTotal: session.amount_total ? session.amount_total / 100 : 0,
+        serviceName: session.metadata?.serviceName || '',
+        type: session.metadata?.type || '',
+        customerName: session.metadata?.customerName || '',
+      };
+
+      if (session.payment_status === 'paid' && session.customer_email && !notifiedSessions.has(req.params.sessionId)) {
+        notifiedSessions.add(req.params.sessionId);
+        sendPaymentNotification({
+          customerName: session.metadata?.customerName || 'Customer',
+          customerEmail: session.customer_email,
+          amount: responseData.amountTotal,
+          serviceName: responseData.serviceName,
+          type: responseData.type,
+        });
+      }
+
+      res.json(responseData);
+    } catch (err: any) {
+      res.status(500).json({ error: "Failed to retrieve session" });
+    }
   });
 
   return httpServer;

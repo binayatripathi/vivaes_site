@@ -11,6 +11,8 @@ import { ServicesListPage, ServiceDetailPage } from "@/pages/services";
 import QuotePage from "@/pages/quote";
 import BookingPage from "@/pages/booking";
 import AboutPage from "@/pages/about";
+import PaymentSuccessPage from "@/pages/payment-success";
+import PaymentCancelPage from "@/pages/payment-cancel";
 import { FloatingChatButton } from "@/components/quote-chatbot";
 import { VapiProvider } from "@/components/vapi-call-button";
 import NotFound from "@/pages/not-found";
@@ -24,6 +26,8 @@ function Router() {
       <Route path="/quote" component={QuotePage} />
       <Route path="/booking" component={BookingPage} />
       <Route path="/about" component={AboutPage} />
+      <Route path="/payment/success" component={PaymentSuccessPage} />
+      <Route path="/payment/cancel" component={PaymentCancelPage} />
       <Route component={NotFound} />
     </Switch>
   );
