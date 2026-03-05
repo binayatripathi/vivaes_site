@@ -405,7 +405,7 @@ export default function BookingPage() {
                     <div className="flex items-start gap-3 text-sm">
                       <Phone className="mt-0.5 h-4 w-4 shrink-0 text-primary" />
                       <div>
-                        <p className="font-medium">+1 (510) 706-8246</p>
+                        <p className="font-medium">+1 (510) 710-5745</p>
                         <p className="text-muted-foreground">Call for same-day service</p>
                       </div>
                     </div>

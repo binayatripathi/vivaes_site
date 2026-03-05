@@ -139,6 +139,11 @@ export function QuoteChatbot({ preselectedService }: { preselectedService?: stri
           "lighting-retrofits": "Small = 1-5 rooms, Medium = full home/small office, Large = warehouse/large commercial",
           "general-electrical": "Small = single repair, Medium = multiple repairs, Large = full rewiring",
           "commercial": "Small = single tenant, Medium = multi-tenant, Large = full building",
+          "battery-addon": "Small = 1 battery (5kWh), Medium = 2 batteries (10kWh), Large = 3+ batteries (15kWh+)",
+          "solar-battery-new": "Small = 1-10 panels + battery, Medium = 10-25 panels + battery, Large = 25+ panels + battery",
+          "reroofing-solar": "Small = 1-10 panels, Medium = 10-25 panels, Large = 25+ panels",
+          "electrification-assessment": "Small = single system, Medium = whole home, Large = multi-unit property",
+          "warehouse-commercial": "Small = under 10,000 sq ft, Medium = 10,000-50,000 sq ft, Large = 50,000+ sq ft",
         };
         const desc = sizeDescriptions[answers.service || preselectedService || ""] || "";
         await addBotMessage(

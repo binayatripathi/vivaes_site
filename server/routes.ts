@@ -123,7 +123,7 @@ export async function registerRoutes(
       const data = checkoutSchema.parse(req.body);
       const stripe = await getUncachableStripeClient();
 
-      const BUSINESS_NAME = process.env.VIVA_BUSINESS_NAME || "Viva Electric & Solar";
+      const BUSINESS_NAME = process.env.VIVA_BUSINESS_NAME || "Viva Electric & Solar Inc.";
       const finalAmount = data.type === "consultation" ? CONSULTATION_FEE : data.amount;
       const amountInCents = Math.round(finalAmount * 100);
 

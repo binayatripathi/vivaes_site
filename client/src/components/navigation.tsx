@@ -8,6 +8,8 @@ import { Menu, X, Sun, Moon, Zap } from "lucide-react";
 const navLinks = [
   { href: "/", label: "Home" },
   { href: "/services", label: "Services" },
+  { href: "/solar-storage", label: "Solar & Storage" },
+  { href: "/electrification", label: "Electrification" },
   { href: "/quote", label: "Instant Quote" },
   { href: "/booking", label: "Book Now" },
   { href: "/about", label: "About" },
@@ -31,7 +33,7 @@ export function Navigation() {
                 Viva Electric
               </span>
               <span className="text-[10px] font-medium uppercase tracking-widest text-muted-foreground">
-                & Solar
+                & Solar Inc.
               </span>
             </div>
           </div>

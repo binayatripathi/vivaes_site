@@ -40,8 +40,8 @@ export default function Home() {
       <section className="relative flex min-h-[85vh] items-center overflow-hidden" data-testid="section-hero">
         <div className="absolute inset-0">
           <img
-            src="/images/hero-bg.png"
-            alt="Solar panels at sunset"
+            src="https://images.unsplash.com/photo-1558618666-fcd25c85f82e?w=1600&q=80"
+            alt="Electrician working on residential electrical panel"
             className="h-full w-full object-cover"
           />
           <div className="absolute inset-0 bg-gradient-to-r from-black/80 via-black/60 to-black/40" />
@@ -71,7 +71,7 @@ export default function Home() {
               className="text-4xl font-bold leading-tight tracking-tight text-white sm:text-5xl lg:text-6xl"
               data-testid="text-hero-title"
             >
-              Union-Trained Electrical & Solar Pros
+              We Show Up. We Fix It. You Pay a Fair Price.
             </motion.h1>
 
             <motion.p
@@ -80,7 +80,7 @@ export default function Home() {
             >
               24/7 quotes and booking for residential and commercial
               electrical, solar installations, EV chargers, and more.
-              Serving the San Francisco Bay Area.
+              Serving the Bay Area and Central Valley.
             </motion.p>
 
             <motion.div variants={fadeUp} className="flex flex-wrap gap-3 pt-2">
@@ -132,7 +132,7 @@ export default function Home() {
             </motion.div>
 
             <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
-              {servicesList.map((service) => {
+              {servicesList.slice(0, 6).map((service) => {
                 const Icon = iconMap[service.icon] || Zap;
                 return (
                   <motion.div key={service.slug} variants={fadeUp}>

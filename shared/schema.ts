@@ -7,7 +7,7 @@ export const servicesList = [
     shortDescription: "Harness clean energy with premium solar panel installations and battery storage systems.",
     description: "Our union-trained solar technicians design and install high-efficiency photovoltaic systems for residential and commercial properties. We pair panels with cutting-edge battery storage solutions to maximize your energy independence and savings. From initial consultation to final inspection, we handle every detail with precision.",
     icon: "Sun",
-    image: "/images/service-solar.png",
+    image: "https://images.unsplash.com/photo-1509391366360-2e959784a276?w=800&q=80",
   },
   {
     slug: "ev-chargers",
@@ -15,7 +15,7 @@ export const servicesList = [
     shortDescription: "Level 2 and DC fast charging installations for homes and businesses.",
     description: "Stay ahead of the electric vehicle revolution with professionally installed charging stations. We install Level 2 home chargers, commercial fleet charging systems, and DC fast chargers. Our team handles permitting, electrical upgrades, and network configuration for a turnkey EV charging solution.",
     icon: "Zap",
-    image: "/images/service-ev.png",
+    image: "https://images.unsplash.com/photo-1593941707882-a5bba14938c7?w=800&q=80",
   },
   {
     slug: "panel-upgrades",
@@ -23,7 +23,7 @@ export const servicesList = [
     shortDescription: "Modernize your electrical panel to handle today's power demands safely.",
     description: "Outdated electrical panels can be a fire hazard and limit your home's capacity for modern appliances, EV chargers, and solar systems. Our licensed electricians upgrade panels from 100A to 200A or 400A, ensuring your system meets current code requirements and supports your growing electrical needs.",
     icon: "CircuitBoard",
-    image: "/images/service-panel.png",
+    image: "https://images.unsplash.com/photo-1621905252507-b35492cc74b4?w=800&q=80",
   },
   {
     slug: "lighting-retrofits",
@@ -31,7 +31,7 @@ export const servicesList = [
     shortDescription: "Upgrade to energy-efficient LED lighting and smart controls.",
     description: "Transform your space with modern LED lighting that cuts energy costs by up to 75%. We retrofit commercial offices, warehouses, parking structures, and residential properties with high-quality LED fixtures, smart controls, and daylight harvesting systems. Enjoy better light quality and significant utility savings.",
     icon: "Lightbulb",
-    image: "/images/service-lighting.png",
+    image: "https://images.unsplash.com/photo-1524484485831-a92ffc0de03f?w=800&q=80",
   },
   {
     slug: "general-electrical",
@@ -39,7 +39,7 @@ export const servicesList = [
     shortDescription: "Full-service electrical work from repairs to new construction wiring.",
     description: "From troubleshooting electrical issues to complete rewiring projects, our journeyman electricians handle it all. We provide code-compliant installations, repairs, and maintenance for residential and commercial properties. Services include outlet installation, circuit additions, surge protection, and safety inspections.",
     icon: "Wrench",
-    image: "/images/service-general.png",
+    image: "https://images.unsplash.com/photo-1621905251189-08b45d6a269e?w=800&q=80",
   },
   {
     slug: "commercial",
@@ -47,7 +47,47 @@ export const servicesList = [
     shortDescription: "Large-scale electrical and solar solutions for commercial properties.",
     description: "We specialize in commercial-grade electrical and solar installations that meet the demanding requirements of business operations. Our services include tenant improvements, new construction wiring, emergency power systems, data center infrastructure, and large-scale solar arrays with monitoring systems.",
     icon: "Building2",
-    image: "/images/service-commercial.png",
+    image: "https://images.unsplash.com/photo-1504307651254-35680f356dfd?w=800&q=80",
+  },
+  {
+    slug: "battery-addon",
+    title: "Battery Storage Add-On (Existing Solar)",
+    shortDescription: "Add battery storage to your existing solar system for energy independence.",
+    description: "Already have solar panels? Add a battery storage system to store excess energy and power your home during outages or peak rate hours. We install Enphase, Tesla Powerwall, FranklinWH, and other top brands. Maximize your existing solar investment with seamless integration.",
+    icon: "Battery",
+    image: "https://images.unsplash.com/photo-1558449028-b53a39d100fc?w=800&q=80",
+  },
+  {
+    slug: "solar-battery-new",
+    title: "Solar + Battery System (New)",
+    shortDescription: "Complete new solar panel and battery storage installation.",
+    description: "Go solar with a fully integrated solar panel and battery storage system from day one. We design, permit, and install complete photovoltaic systems paired with premium battery solutions for maximum energy independence and savings.",
+    icon: "Sun",
+    image: "https://images.unsplash.com/photo-1508514177221-188b1cf16e9d?w=800&q=80",
+  },
+  {
+    slug: "reroofing-solar",
+    title: "Re-Roofing + Panel Removal/Reinstall",
+    shortDescription: "Need a new roof? We remove and reinstall your solar panels safely.",
+    description: "When it's time for a new roof, your solar panels need professional removal and reinstallation. We carefully detach your panels, coordinate with your roofer, and reinstall everything to manufacturer specifications with updated wiring and optimized placement.",
+    icon: "Home",
+    image: "https://images.unsplash.com/photo-1513694203232-719a280e022f?w=800&q=80",
+  },
+  {
+    slug: "electrification-assessment",
+    title: "Electrification Assessment (Free)",
+    shortDescription: "Free assessment to plan your home's electrification journey.",
+    description: "Get a comprehensive, no-cost evaluation of your home's electrification potential. We assess your electrical panel, appliances, and energy usage to create a personalized roadmap for transitioning to all-electric. Includes rebate and incentive guidance for federal, state, and utility programs.",
+    icon: "ClipboardCheck",
+    image: "https://images.unsplash.com/photo-1460317442991-0ec209397118?w=800&q=80",
+  },
+  {
+    slug: "warehouse-commercial",
+    title: "Warehouse / Commercial Electrical",
+    shortDescription: "Heavy-duty electrical solutions for warehouses and commercial facilities.",
+    description: "Specialized electrical services for warehouses, distribution centers, and large commercial facilities. We handle 3-phase power installations, industrial lighting, high-amperage circuits, loading dock power, and facility-wide electrical infrastructure upgrades.",
+    icon: "Warehouse",
+    image: "https://images.unsplash.com/photo-1586528116311-ad8dd3c8310d?w=800&q=80",
   },
 ] as const;
 
@@ -92,6 +132,11 @@ export const servicePricing: Record<string, { base: number; labor: number; mater
   "lighting-retrofits": { base: 1500, labor: 1000, materials: 2000, permit: 150, timeline: "1-3 days" },
   "general-electrical": { base: 500, labor: 400, materials: 300, permit: 100, timeline: "1 day" },
   "commercial": { base: 10000, labor: 6000, materials: 15000, permit: 1200, timeline: "4-8 weeks" },
+  "battery-addon": { base: 4000, labor: 2000, materials: 8000, permit: 500, timeline: "1-2 weeks" },
+  "solar-battery-new": { base: 10000, labor: 5000, materials: 16000, permit: 1000, timeline: "3-6 weeks" },
+  "reroofing-solar": { base: 2500, labor: 2000, materials: 1500, permit: 400, timeline: "2-3 days" },
+  "electrification-assessment": { base: 0, labor: 0, materials: 0, permit: 0, timeline: "1-2 hours" },
+  "warehouse-commercial": { base: 12000, labor: 8000, materials: 18000, permit: 1500, timeline: "6-12 weeks" },
 };
 
 export function generateQuoteEstimate(
@@ -163,6 +208,24 @@ export const bookingRequestSchema = z.object({
 });
 
 export type BookingRequest = z.infer<typeof bookingRequestSchema>;
+
+export const serviceAreas = {
+  "SF / Peninsula": [
+    "San Francisco", "Daly City", "South San Francisco", "San Bruno",
+    "Millbrae", "Burlingame", "San Mateo", "Redwood City", "Palo Alto",
+  ],
+  "Alameda County (510)": [
+    "Oakland", "Berkeley", "Fremont", "Hayward", "San Leandro",
+    "Castro Valley", "Livermore", "Pleasanton", "Newark", "Union City",
+    "Alameda", "Emeryville",
+  ],
+  "San Joaquin Valley (209)": [
+    "Stockton", "Tracy", "Modesto", "Manteca", "Lodi",
+    "Turlock", "Merced", "Lathrop", "Ripon", "Escalon",
+  ],
+} as const;
+
+export type ServiceAreaRegion = keyof typeof serviceAreas;
 
 export const testimonials = [
   {

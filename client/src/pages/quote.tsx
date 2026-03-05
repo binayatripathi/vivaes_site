@@ -78,7 +78,7 @@ export default function QuotePage() {
                     <div>
                       <p className="text-sm font-medium">Prefer to Talk?</p>
                       <p className="text-xs text-muted-foreground">
-                        Call us at <a href="tel:+15107068246" className="font-medium text-foreground">+1 (510) 706-8246</a> for immediate assistance.
+                        Call us at <a href="tel:+15107105745" className="font-medium text-foreground">+1 (510) 710-5745</a> for immediate assistance.
                       </p>
                     </div>
                   </div>

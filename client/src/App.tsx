@@ -11,10 +11,12 @@ import { ServicesListPage, ServiceDetailPage } from "@/pages/services";
 import QuotePage from "@/pages/quote";
 import BookingPage from "@/pages/booking";
 import AboutPage from "@/pages/about";
+import SolarStoragePage from "@/pages/solar-storage";
 import PaymentSuccessPage from "@/pages/payment-success";
 import PaymentCancelPage from "@/pages/payment-cancel";
 import { FloatingChatButton } from "@/components/quote-chatbot";
 import { VapiProvider } from "@/components/vapi-call-button";
+import ElectrificationPage from "@/pages/electrification";
 import NotFound from "@/pages/not-found";
 
 function Router() {
@@ -25,7 +27,9 @@ function Router() {
       <Route path="/services/:slug" component={ServiceDetailPage} />
       <Route path="/quote" component={QuotePage} />
       <Route path="/booking" component={BookingPage} />
+      <Route path="/electrification" component={ElectrificationPage} />
       <Route path="/about" component={AboutPage} />
+      <Route path="/solar-storage" component={SolarStoragePage} />
       <Route path="/payment/success" component={PaymentSuccessPage} />
       <Route path="/payment/cancel" component={PaymentCancelPage} />
       <Route component={NotFound} />

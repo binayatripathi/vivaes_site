@@ -23,12 +23,14 @@ import {
   Phone, Mail, MapPin, Clock,
 } from "lucide-react";
 import { VapiCallButton } from "@/components/vapi-call-button";
-import aboutHeroImg from "@/assets/images/about-hero.jpg";
-import aboutTeamImg from "@/assets/images/about-team.jpg";
-import valueSafetyImg from "@/assets/images/value-safety.jpg";
-import valueUnionImg from "@/assets/images/value-union.jpg";
-import valueLicensedImg from "@/assets/images/value-licensed.jpg";
-import valueCuttingEdgeImg from "@/assets/images/value-cutting-edge.jpg";
+import { serviceAreas } from "@shared/schema";
+
+const aboutHeroImg = "https://images.unsplash.com/photo-1513694203232-719a280e022f?w=1600&q=80";
+const aboutTeamImg = "https://images.unsplash.com/photo-1504307651254-35680f356dfd?w=800&q=80";
+const valueSafetyImg = "https://images.unsplash.com/photo-1621905251189-08b45d6a269e?w=800&q=80";
+const valueUnionImg = "https://images.unsplash.com/photo-1581094794329-c8112a89af12?w=800&q=80";
+const valueLicensedImg = "https://images.unsplash.com/photo-1621905252507-b35492cc74b4?w=800&q=80";
+const valueCuttingEdgeImg = "https://images.unsplash.com/photo-1509391366360-2e959784a276?w=800&q=80";
 
 const fadeUp = {
   hidden: { opacity: 0, y: 24 },
@@ -115,11 +117,11 @@ export default function AboutPage() {
               className="text-3xl font-bold tracking-tight sm:text-5xl"
               data-testid="text-about-heading"
             >
-              About Viva Electric & Solar
+              About Viva Electric & Solar Inc.
             </motion.h1>
             <motion.p variants={fadeUp} className="mt-4 text-lg text-muted-foreground">
               We're a team of union-trained electrical and solar professionals dedicated to delivering
-              exceptional service to residential and commercial customers throughout the San Francisco Bay Area.
+              exceptional service to residential and commercial customers throughout the Bay Area and Central Valley.
             </motion.p>
           </motion.div>
         </div>
@@ -136,23 +138,23 @@ export default function AboutPage() {
           >
             <motion.div variants={fadeUp} className="grid grid-cols-1 items-center gap-10 lg:grid-cols-2">
               <div className="space-y-6">
-                <h2 className="text-2xl font-bold">Our Story</h2>
+                <h2 className="text-2xl font-bold">Meet Roberto</h2>
                 <div className="space-y-4 text-muted-foreground">
                   <p>
-                    Founded with a mission to bring top-quality electrical and solar services to the community,
-                    Viva Electric & Solar has grown into one of the most trusted names in the San Francisco Bay Area.
-                    Our team of IBEW-trained electricians brings decades of combined experience to every project.
+                    I'm Roberto. I've been doing electrical work for years — started as an apprentice, worked my way
+                    up through the union, and eventually decided to start my own company so I could do things
+                    the right way. No cutting corners, no surprise bills, no runaround.
                   </p>
                   <p>
-                    We believe that clean energy should be accessible to everyone. That's why we offer
-                    comprehensive solar installation and storage solutions alongside our full-service electrical work.
-                    From panel upgrades to EV charger installations, we're building the electrical infrastructure
-                    of the future.
+                    I grew up in the kind of neighborhood where people look out for each other. That's how I run
+                    Viva Electric & Solar Inc. When you call us, you're not getting a call center — you're getting
+                    a real person who's going to show up on time, explain what needs to happen, and charge you
+                    a fair price. Simple as that.
                   </p>
                   <p>
-                    Our commitment to fast, 24/7 quoting and scheduling means you get responsive
-                    service without sacrificing the personal touch. Every estimate is reviewed by
-                    our experienced team before it reaches you.
+                    Whether it's a panel upgrade, solar install, EV charger, or your lights flickering at 10pm —
+                    we handle it. We serve the Bay Area and the Central Valley because good, honest electrical
+                    work shouldn't be hard to find, no matter where you live.
                   </p>
                 </div>
               </div>
@@ -204,6 +206,23 @@ export default function AboutPage() {
                   <p className="mt-1 text-sm text-muted-foreground">{stat.label}</p>
                 </div>
               ))}
+            </motion.div>
+
+            <motion.div variants={fadeUp}>
+              <h2 className="mb-6 text-center text-2xl font-bold">Where We Work</h2>
+              <div className="grid grid-cols-1 gap-6 sm:grid-cols-3">
+                {(Object.entries(serviceAreas) as [string, readonly string[]][]).map(([region, cities]) => (
+                  <Card key={region} data-testid={`card-region-${region.replace(/[^a-zA-Z]/g, "").toLowerCase()}`}>
+                    <CardContent className="p-5">
+                      <div className="mb-2 flex items-center gap-2">
+                        <MapPin className="h-4 w-4 text-primary" />
+                        <h3 className="text-sm font-semibold">{region}</h3>
+                      </div>
+                      <p className="text-sm text-muted-foreground">{[...cities].join(", ")}</p>
+                    </CardContent>
+                  </Card>
+                ))}
+              </div>
             </motion.div>
           </motion.div>
         </div>
@@ -343,22 +362,22 @@ export default function AboutPage() {
                       <div className="flex items-start gap-3 text-sm">
                         <Phone className="mt-0.5 h-4 w-4 shrink-0 text-primary" />
                         <div>
-                          <p className="font-medium">+1 (510) 706-8246</p>
+                          <p className="font-medium">+1 (510) 710-5745</p>
                           <p className="text-muted-foreground">Mon-Sat, 8am-5pm</p>
                         </div>
                       </div>
                       <div className="flex items-start gap-3 text-sm">
                         <Mail className="mt-0.5 h-4 w-4 shrink-0 text-primary" />
                         <div>
-                          <p className="font-medium">vivaes.sf@gmail.com</p>
+                          <p className="font-medium">roberto@vivaes.net</p>
                           <p className="text-muted-foreground">We reply within 24 hours</p>
                         </div>
                       </div>
                       <div className="flex items-start gap-3 text-sm">
                         <MapPin className="mt-0.5 h-4 w-4 shrink-0 text-primary" />
                         <div>
-                          <p className="font-medium">San Francisco Bay Area</p>
-                          <p className="text-muted-foreground">Serving the Bay Area</p>
+                          <p className="font-medium">Bay Area & Central Valley</p>
+                          <p className="text-muted-foreground">Serving SF, Alameda County & San Joaquin Valley</p>
                         </div>
                       </div>
                       <div className="flex items-start gap-3 text-sm">

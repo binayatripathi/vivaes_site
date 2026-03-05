@@ -1,7 +1,7 @@
-# Viva Electric & Solar Website
+# Viva Electric & Solar Inc. Website
 
 ## Overview
-Professional website for Viva Electric & Solar (vivaes.net) - a union-trained electrical and solar company serving the San Francisco Bay Area. Built as a reusable template with configurable env vars for multi-client deployment.
+Professional website for Viva Electric & Solar Inc. (vivaes.net) - licensed electrical and solar contractor serving the Bay Area and Central Valley. CA License #1147947. Built as a reusable template with configurable env vars for multi-client deployment.
 
 ## Architecture
 - **Frontend**: React + Vite + Tailwind CSS + shadcn/ui + Framer Motion
@@ -12,14 +12,34 @@ Professional website for Viva Electric & Solar (vivaes.net) - a union-trained el
 - **Quote System**: Interactive chatbot-style quote assistant with instant pricing engine
 
 ## Pages
-- `/` - Home: Hero, trust badges, services grid with images, testimonials carousel, CTA
-- `/services` - Services list with images and quote buttons
+- `/` - Home: Hero ("We Show Up. We Fix It. You Pay a Fair Price."), services grid (top 6), testimonials, CTA
+- `/services` - All services list with images and quote buttons
 - `/services/:slug` - Individual service detail pages
+- `/solar-storage` - Solar & Battery Storage: brand logo grid (Enphase, Tesla Powerwall, FranklinWH, SolarEdge, Generac PWRcell), 3 service cards (battery add-on, re-roofing, health checks)
+- `/electrification` - Home Electrification: education section, rebates (IRA, HEEHRA, SGIP, PG&E/SMUD), 3-step roadmap, free assessment CTA
 - `/quote` - Interactive chatbot quote assistant (instant pricing, no email wait)
 - `/booking` - Booking form with date/time selection + consultation fee payment
-- `/about` - About page with company info, values, stats, and contact form
+- `/about` - About page with Roberto's bio, values, stats, service areas, contact form
 - `/payment/success` - Payment success page with session details
 - `/payment/cancel` - Payment cancelled page
+
+## Services (11 total)
+1. Solar & Storage
+2. EV Chargers
+3. Panel Upgrades
+4. Lighting Retrofits
+5. General Electrical
+6. Commercial
+7. Battery Storage Add-On (Existing Solar)
+8. Solar + Battery System (New)
+9. Re-Roofing + Panel Removal/Reinstall
+10. Electrification Assessment (Free)
+11. Warehouse / Commercial Electrical
+
+## Service Areas (3 regions)
+- **SF / Peninsula**: San Francisco, Daly City, South San Francisco, San Bruno, Millbrae, Burlingame, San Mateo, Redwood City, Palo Alto
+- **Alameda County (510)**: Oakland, Berkeley, Fremont, Hayward, San Leandro, Castro Valley, Livermore, Pleasanton, Newark, Union City, Alameda, Emeryville
+- **San Joaquin Valley (209)**: Stockton, Tracy, Modesto, Manteca, Lodi, Turlock, Merced, Lathrop, Ripon, Escalon
 
 ## Quote Chatbot System
 - Step-by-step conversational interface (service → property type → project size → urgency → details → contact info)
@@ -48,14 +68,15 @@ Professional website for Viva Electric & Solar (vivaes.net) - a union-trained el
 
 ## Email Notifications (Resend)
 - From: hello@storywonderbook.com
-- To: vivaes.sf@gmail.com (business notifications)
+- To: roberto@vivaes.net (business notifications)
 - Customer confirmations sent to their email
 - Templates: Quote, Contact, Booking, Payment confirmation
 
 ## Contact Info
-- Phone: +1 (510) 706-8246
-- Email: vivaes.sf@gmail.com
-- Service Area: San Francisco Bay Area
+- Phone: (510) 710-5745
+- Email: roberto@vivaes.net
+- Service Area: Bay Area & Central Valley
+- CA License: #1147947
 
 ## Vapi Voice Agent (24/7 Phone)
 - Uses @vapi-ai/web SDK for browser-based voice calls
@@ -75,12 +96,14 @@ Professional website for Viva Electric & Solar (vivaes.net) - a union-trained el
 - `VIVA_CLAW_TOKEN` - OpenClaw auth token
 
 ## Key Files
-- `shared/schema.ts` - Services data, form schemas, testimonials, pricing engine
+- `shared/schema.ts` - Services data, service areas, form schemas, testimonials, pricing engine
+- `client/src/pages/solar-storage.tsx` - Solar & Storage page with brand grid and service cards
+- `client/src/pages/electrification.tsx` - Electrification page with education, rebates, roadmap
 - `client/src/components/quote-chatbot.tsx` - Interactive chatbot quote system with deposit payment
 - `client/src/components/quote-modal.tsx` - Quote modal wrapper for chatbot
 - `client/src/components/vapi-call-button.tsx` - Vapi voice call button + provider + call panel
-- `client/src/components/navigation.tsx` - Top nav with dark/light toggle
-- `client/src/components/footer.tsx` - Site footer
+- `client/src/components/navigation.tsx` - Top nav with Solar & Storage + Electrification tabs
+- `client/src/components/footer.tsx` - Site footer with service areas
 - `client/src/components/theme-provider.tsx` - Dark/light mode context
 - `client/src/pages/payment-success.tsx` - Payment success page
 - `client/src/pages/payment-cancel.tsx` - Payment cancel page
@@ -88,6 +111,7 @@ Professional website for Viva Electric & Solar (vivaes.net) - a union-trained el
 - `server/email.ts` - Resend email notification service
 - `server/stripeClient.ts` - Stripe client via Replit connector
 - `server/webhookHandlers.ts` - Stripe webhook processing
+- `client/index.html` - Schema.org JSON-LD structured data
 
 ## Design
 - Electric blue primary color (hsl 217 91% 60%)
@@ -95,11 +119,14 @@ Professional website for Viva Electric & Solar (vivaes.net) - a union-trained el
 - Inter font family
 - Dark/light mode with class-based toggling
 - Framer Motion animations for scroll reveals
+- Real Unsplash photography (working-class Bay Area neighborhoods, real electricians)
 - No AI branding - uses "24/7" and "instant" messaging
 
 ## User Preferences
 - No AI mentions anywhere on the site
 - Instant quotes preferred over email-based flows
-- Phone: +1 (510) 706-8246
-- Email: vivaes.sf@gmail.com
-- Service area: San Francisco Bay Area
+- Warm, working-class tone (not corporate)
+- Hero tagline: "We Show Up. We Fix It. You Pay a Fair Price."
+- Phone: (510) 710-5745
+- Email: roberto@vivaes.net
+- Service area: Bay Area & Central Valley

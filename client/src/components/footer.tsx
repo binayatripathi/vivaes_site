@@ -1,5 +1,6 @@
 import { Link } from "wouter";
 import { Zap, Phone, Mail, MapPin } from "lucide-react";
+import { serviceAreas } from "@shared/schema";
 
 export function Footer() {
   return (
@@ -11,7 +12,7 @@ export function Footer() {
               <div className="flex h-8 w-8 items-center justify-center rounded-md bg-primary">
                 <Zap className="h-4 w-4 text-primary-foreground" />
               </div>
-              <span className="text-base font-bold" data-testid="text-footer-brand">Viva Electric & Solar</span>
+              <span className="text-base font-bold" data-testid="text-footer-brand">Viva Electric & Solar Inc.</span>
             </div>
             <p className="text-sm text-muted-foreground" data-testid="text-footer-tagline">
               Union-trained electrical and solar professionals serving residential and commercial customers 24/7.
@@ -45,23 +46,35 @@ export function Footer() {
             <div className="flex flex-col gap-3">
               <div className="flex items-center gap-2 text-sm text-muted-foreground" data-testid="text-footer-phone">
                 <Phone className="h-4 w-4 shrink-0" />
-                <span>+1 (510) 706-8246</span>
+                <span>+1 (510) 710-5745</span>
               </div>
               <div className="flex items-center gap-2 text-sm text-muted-foreground" data-testid="text-footer-email">
                 <Mail className="h-4 w-4 shrink-0" />
-                <span>vivaes.sf@gmail.com</span>
+                <span>roberto@vivaes.net</span>
               </div>
               <div className="flex items-center gap-2 text-sm text-muted-foreground" data-testid="text-footer-address">
                 <MapPin className="h-4 w-4 shrink-0" />
-                <span>San Francisco Bay Area</span>
+                <span>Bay Area & Central Valley</span>
               </div>
             </div>
           </div>
         </div>
 
-        <div className="mt-10 flex flex-col items-center justify-between gap-4 border-t pt-8 sm:flex-row">
+        <div className="mt-10 border-t pt-8">
+          <h4 className="mb-4 text-sm font-semibold">Service Areas</h4>
+          <div className="grid grid-cols-1 gap-6 sm:grid-cols-3">
+            {(Object.entries(serviceAreas) as [string, readonly string[]][]).map(([region, cities]) => (
+              <div key={region} data-testid={`text-footer-region-${region.replace(/[^a-zA-Z]/g, "").toLowerCase()}`}>
+                <p className="mb-1 text-xs font-semibold">{region}</p>
+                <p className="text-xs text-muted-foreground">{[...cities].join(", ")}</p>
+              </div>
+            ))}
+          </div>
+        </div>
+
+        <div className="mt-8 flex flex-col items-center justify-between gap-4 border-t pt-8 sm:flex-row">
           <p className="text-xs text-muted-foreground" data-testid="text-footer-copyright">
-            &copy; {new Date().getFullYear()} Viva Electric & Solar. All rights reserved.
+            &copy; {new Date().getFullYear()} Viva Electric & Solar Inc. All rights reserved. CA License #1147947
           </p>
           <p className="text-xs text-muted-foreground" data-testid="text-footer-powered">
             Powered by <span className="font-medium">VivaClaw</span> &mdash; 24/7 Service

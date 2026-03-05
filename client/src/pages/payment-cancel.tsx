@@ -30,10 +30,10 @@ export default function PaymentCancelPage() {
                   Get a New Quote
                 </Button>
               </Link>
-              <a href="tel:+15107068246">
+              <a href="tel:+15107105745">
                 <Button variant="outline" className="w-full" data-testid="button-call-us">
                   <Phone className="mr-2 h-4 w-4" />
-                  Call Us: +1 (510) 706-8246
+                  Call Us: +1 (510) 710-5745
                 </Button>
               </a>
               <Link href="/">

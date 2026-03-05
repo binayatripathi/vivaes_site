@@ -1,9 +1,9 @@
 import { Resend } from 'resend';
 
-const BUSINESS_NAME = process.env.VIVA_BUSINESS_NAME || "Viva Electric & Solar";
-const BUSINESS_PHONE = process.env.VIVA_PHONE || "+1 (510) 706-8246";
-const BUSINESS_EMAIL = process.env.VIVA_EMAIL || "vivaes.sf@gmail.com";
-const NOTIFY_EMAIL = "vivaes.sf@gmail.com";
+const BUSINESS_NAME = process.env.VIVA_BUSINESS_NAME || "Viva Electric & Solar Inc.";
+const BUSINESS_PHONE = process.env.VIVA_PHONE || "+1 (510) 710-5745";
+const BUSINESS_EMAIL = process.env.VIVA_EMAIL || "roberto@vivaes.net";
+const NOTIFY_EMAIL = "roberto@vivaes.net";
 const FROM_EMAIL = "hello@storywonderbook.com";
 
 let connectionSettings: any;
@@ -54,7 +54,7 @@ function footerHtml(): string {
   return `
     <div style="background: #f1f5f9; padding: 20px 24px; text-align: center; border-radius: 0 0 8px 8px; border-top: 1px solid #e2e8f0;">
       <p style="margin: 0 0 4px; color: #64748b; font-size: 13px;">${BUSINESS_NAME}</p>
-      <p style="margin: 0 0 4px; color: #64748b; font-size: 13px;">San Francisco Bay Area</p>
+      <p style="margin: 0 0 4px; color: #64748b; font-size: 13px;">Bay Area & Central Valley</p>
       <p style="margin: 0; color: #64748b; font-size: 13px;">${BUSINESS_PHONE} | ${BUSINESS_EMAIL}</p>
     </div>
   `;

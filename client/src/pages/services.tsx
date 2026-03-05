@@ -9,11 +9,13 @@ import { VapiCallButton } from "@/components/vapi-call-button";
 import { servicesList } from "@shared/schema";
 import {
   Sun, Zap, CircuitBoard, Lightbulb, Wrench, Building2,
+  Battery, Home, ClipboardCheck, Warehouse,
   ArrowRight, ArrowLeft, CheckCircle2,
 } from "lucide-react";
 
 const iconMap: Record<string, typeof Sun> = {
   Sun, Zap, CircuitBoard, Lightbulb, Wrench, Building2,
+  Battery, Home, ClipboardCheck, Warehouse,
 };
 
 const fadeUp = {
