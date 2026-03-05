@@ -1,0 +1,23 @@
+Here's the Replit prompt — copy this and paste it into your Replit Agent on the vivaes-revamp project:
+
+───
+
+I need you to update the Viva Electric & Solar website with the following changes. The business name throughout the entire site should be "Viva Electric & Solar Inc." — replace any instance of "Roberto's Electrical Services." The business phone number should be (510) 710-5745 everywhere — remove the old personal number. Keep the email roberto@vivaes.net and CA License #1147947.
+
+Service area: Add two regional groups. Group 1 — Alameda County (510): Oakland, Berkeley, Fremont, Hayward, San Leandro, Castro Valley, Livermore, Pleasanton, Newark, Union City, Alameda, Emeryville. Group 2 — San Joaquin Valley (209): Stockton, Tracy, Modesto, Manteca, Lodi, Turlock, Merced, Lathrop, Ripon, Escalon. Keep the existing SF/Peninsula cities too.
+
+New nav tab — "Solar & Storage": Add a section for battery storage. Show a clean logo grid (not a list) for these brands: Enphase, Tesla Powerwall, FranklinWH, SolarEdge, Generac PWRcell, and a "+ More" badge. Add three service cards: (1) Battery add-on to existing solar systems, (2) Re-roofing with panel removal and reinstallation, (3) System health checks & optimization.
+
+New nav tab — "Electrification": Education section. Headline: "What Is Home Electrification?" Plain-English explanation of going all-electric. Include available rebates: Federal IRA (30% tax credit), HEEHRA (up to $14,000), California SGIP, PG&E/SMUD rebates. Add a simple 3-step visual roadmap: Step 1 Panel Upgrade → Step 2 Solar + Battery → Step 3 Switch Appliances. CTA: "Get a free electrification assessment."
+
+Tone shift: Change the hero tagline from "Union-Trained. Built Different." to "We Show Up. We Fix It. You Pay a Fair Price." In the About section, rewrite Roberto's bio to sound like a neighbor, not a resume — warm, direct, working-class. Something like: "I'm Roberto. I've been doing electrical work for years — homes, commercial jobs, solar installs. I started Viva Electric because I kept seeing homeowners get overcharged or left waiting by big companies. I show up on time, I'm straight with you about what you need, and I charge a fair price."
+
+Photography: Replace all placeholder image boxes and hero backgrounds with real Unsplash photos. Use images of older Bay Area craftsman bungalows, 1950s tract homes, East Bay and Central Valley neighborhoods, actual electricians working on ladders and panels, solar on regular roofs — not luxury estates. The vibe is working-class, real neighborhoods, regular people.
+
+Quote form: Add these options to the Service Needed dropdown: Battery Storage Add-On (Existing Solar), Solar + Battery System (New), Re-Roofing + Panel Removal/Reinstall, Electrification Assessment (Free), Warehouse / Commercial Electrical.
+
+Keep all existing functionality — quote form, mobile responsive, schema.org structured data. Update the schema.org to reflect the new business name, phone number, and expanded service areas.
+
+───
+
+One reminder: Schedule the invoice to send tomorrow at 8am PT. Want me to set a reminder cron or just ping you manually at 7:45am PT?
