@@ -3,7 +3,8 @@ import { Link, useLocation } from "wouter";
 import { Button } from "@/components/ui/button";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import { useTheme } from "@/components/theme-provider";
-import { Menu, X, Sun, Moon, Zap } from "lucide-react";
+import { Menu, X, Sun, Moon } from "lucide-react";
+import vivaLogoPath from "@assets/viva-logo.png";
 
 const navLinks = [
   { href: "/", label: "Home" },
@@ -24,19 +25,12 @@ export function Navigation() {
     <header className="sticky top-0 z-50 w-full border-b border-border/40 bg-background/80 backdrop-blur-xl">
       <div className="mx-auto flex h-16 max-w-7xl items-center justify-between gap-4 px-4 sm:px-6 lg:px-8">
         <Link href="/" data-testid="link-home-logo">
-          <div className="flex items-center gap-2">
-            <div className="flex h-9 w-9 items-center justify-center rounded-md bg-primary">
-              <Zap className="h-5 w-5 text-primary-foreground" />
-            </div>
-            <div className="flex flex-col">
-              <span className="text-base font-bold leading-tight tracking-tight">
-                Viva Electric
-              </span>
-              <span className="text-[10px] font-medium uppercase tracking-widest text-muted-foreground">
-                & Solar Inc.
-              </span>
-            </div>
-          </div>
+          <img
+            src={vivaLogoPath}
+            alt="Viva Electric & Solar Inc."
+            className="h-10 w-auto"
+            data-testid="img-nav-logo"
+          />
         </Link>
 
         <nav className="hidden items-center gap-1 md:flex" data-testid="nav-desktop">

@@ -1,5 +1,6 @@
 import { Link } from "wouter";
-import { Zap, Phone, Mail, MapPin } from "lucide-react";
+import { Phone, Mail, MapPin } from "lucide-react";
+import vivaLogoPath from "@assets/viva-logo.png";
 import { serviceAreas } from "@shared/schema";
 
 export function Footer() {
@@ -9,10 +10,12 @@ export function Footer() {
         <div className="grid grid-cols-1 gap-8 sm:grid-cols-2 lg:grid-cols-4">
           <div className="space-y-4">
             <div className="flex items-center gap-2">
-              <div className="flex h-8 w-8 items-center justify-center rounded-md bg-primary">
-                <Zap className="h-4 w-4 text-primary-foreground" />
-              </div>
-              <span className="text-base font-bold" data-testid="text-footer-brand">Viva Electric & Solar Inc.</span>
+              <img
+                src={vivaLogoPath}
+                alt="Viva Electric & Solar Inc."
+                className="h-10 w-auto"
+                data-testid="img-footer-logo"
+              />
             </div>
             <p className="text-sm text-muted-foreground" data-testid="text-footer-tagline">
               Union-trained electrical and solar professionals serving residential and commercial customers 24/7.

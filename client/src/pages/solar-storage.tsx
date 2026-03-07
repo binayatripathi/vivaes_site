@@ -39,6 +39,7 @@ const serviceCards = [
       "Already have solar panels? Add a battery storage system to store excess energy, reduce your reliance on the grid, and keep the lights on during outages. We work with all major inverter brands for seamless integration.",
     icon: Battery,
     quoteService: "battery-addon",
+    image: "https://images.unsplash.com/photo-1558449028-b53a39d100fc?w=800&q=80",
   },
   {
     title: "Re-Roofing with Panel Removal & Reinstall",
@@ -46,6 +47,7 @@ const serviceCards = [
       "Need a new roof but have solar panels in the way? We safely remove your panels, coordinate with your roofer, and reinstall everything once the roof is done — fully tested and permitted.",
     icon: Wrench,
     quoteService: "reroofing-solar",
+    image: "https://images.unsplash.com/photo-1621905252507-b35492cc74b4?w=800&q=80",
   },
   {
     title: "System Health Checks & Optimization",
@@ -53,6 +55,7 @@ const serviceCards = [
       "Is your solar system performing at its best? We inspect panels, wiring, inverters, and monitoring systems to diagnose issues and optimize output. Includes a detailed performance report.",
     icon: Activity,
     quoteService: "solar-storage",
+    image: "https://images.unsplash.com/photo-1509391366360-2e959784a276?w=800&q=80",
   },
 ];
 
@@ -68,10 +71,16 @@ export default function SolarStoragePage() {
   return (
     <>
       <section
-        className="relative flex min-h-[50vh] items-center overflow-hidden bg-gradient-to-br from-primary/10 via-background to-background"
+        className="relative flex min-h-[50vh] items-center overflow-hidden"
         data-testid="section-solar-hero"
       >
-        <div className="mx-auto max-w-7xl px-4 py-20 sm:px-6 lg:px-8">
+        <img
+          src="https://images.unsplash.com/photo-1508514177221-188b1cf16e9d?w=1600&q=80"
+          alt="Solar panels on a residential roof"
+          className="absolute inset-0 h-full w-full object-cover"
+        />
+        <div className="absolute inset-0 bg-gradient-to-r from-black/70 via-black/50 to-black/30" />
+        <div className="relative z-10 mx-auto max-w-7xl px-4 py-20 sm:px-6 lg:px-8">
           <motion.div
             initial="hidden"
             animate="visible"
@@ -79,17 +88,17 @@ export default function SolarStoragePage() {
             className="max-w-2xl space-y-6"
           >
             <motion.div variants={fadeUp} className="flex flex-wrap gap-2">
-              <Badge variant="secondary">
+              <Badge variant="secondary" className="border border-white/20 bg-white/10 text-white backdrop-blur-sm">
                 <Sun className="mr-1 h-3 w-3" /> Solar Experts
               </Badge>
-              <Badge variant="secondary">
+              <Badge variant="secondary" className="border border-white/20 bg-white/10 text-white backdrop-blur-sm">
                 <ShieldCheck className="mr-1 h-3 w-3" /> Licensed & Insured
               </Badge>
             </motion.div>
 
             <motion.h1
               variants={fadeUp}
-              className="text-4xl font-bold leading-tight tracking-tight sm:text-5xl"
+              className="text-4xl font-bold leading-tight tracking-tight text-white sm:text-5xl"
               data-testid="text-solar-hero-title"
             >
               Solar & Battery Storage
@@ -97,7 +106,7 @@ export default function SolarStoragePage() {
 
             <motion.p
               variants={fadeUp}
-              className="text-lg leading-relaxed text-muted-foreground sm:text-xl"
+              className="text-lg leading-relaxed text-white/80 sm:text-xl"
             >
               Store your solar energy, keep the lights on during outages, and
               take control of your electricity costs with premium battery
@@ -114,7 +123,7 @@ export default function SolarStoragePage() {
                 <MessageCircle className="ml-2 h-4 w-4" />
               </Button>
               <Link href="/services/solar-storage">
-                <Button size="lg" variant="outline" data-testid="button-solar-hero-services">
+                <Button size="lg" variant="outline" className="border-white/30 bg-white/10 text-white backdrop-blur-sm" data-testid="button-solar-hero-services">
                   View Solar Services
                   <ArrowRight className="ml-2 h-4 w-4" />
                 </Button>
@@ -211,6 +220,13 @@ export default function SolarStoragePage() {
                       className="flex h-full flex-col overflow-visible hover-elevate"
                       data-testid={`card-solar-${card.title.toLowerCase().replace(/\s+/g, "-")}`}
                     >
+                      <div className="relative h-48 w-full overflow-hidden rounded-t-md">
+                        <img
+                          src={card.image}
+                          alt={card.title}
+                          className="h-full w-full object-cover"
+                        />
+                      </div>
                       <CardContent className="flex flex-1 flex-col p-6">
                         <div className="mb-4 flex h-12 w-12 items-center justify-center rounded-md bg-primary/10">
                           <Icon className="h-6 w-6 text-primary" />

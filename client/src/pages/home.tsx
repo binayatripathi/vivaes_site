@@ -7,11 +7,35 @@ import { Badge } from "@/components/ui/badge";
 import { QuoteModal } from "@/components/quote-modal";
 import { VapiCallButton } from "@/components/vapi-call-button";
 import { servicesList, testimonials } from "@shared/schema";
+import vivaLogoPath from "@assets/viva-logo.png";
 import {
   Sun, Zap, CircuitBoard, Lightbulb, Wrench, Building2,
   Shield, Award, Clock, Star, ChevronLeft, ChevronRight,
   ArrowRight, Phone, MessageCircle,
 } from "lucide-react";
+
+const whyVivaCards = [
+  {
+    title: "Union Trained Professionals",
+    description:
+      "Our electricians receive continuous training and follow strict safety standards, this translates to better workmanship, safer installations, and dependable results.",
+  },
+  {
+    title: "Focused Expertise",
+    description:
+      "We specialize in high-value electrical solutions that improve efficiency, reliability, and long-term performance.",
+  },
+  {
+    title: "Community Driven",
+    description:
+      "We believe strong infrastructure strengthens communities. That's why we educate, support, and reinvest locally whenever possible.",
+  },
+  {
+    title: "Straightforward Communication",
+    description:
+      "No jargon. No upselling. Just clear explanations and honest recommendations so you can make informed decisions.",
+  },
+];
 
 const iconMap: Record<string, typeof Sun> = {
   Sun, Zap, CircuitBoard, Lightbulb, Wrench, Building2,
@@ -40,8 +64,8 @@ export default function Home() {
       <section className="relative flex min-h-[85vh] items-center overflow-hidden" data-testid="section-hero">
         <div className="absolute inset-0">
           <img
-            src="https://images.unsplash.com/photo-1558618666-fcd25c85f82e?w=1600&q=80"
-            alt="Electrician working on residential electrical panel"
+            src="https://images.unsplash.com/photo-1621905252507-b35492cc74b4?w=1600&q=80"
+            alt="Electrician working on a residential electrical panel in an older home"
             className="h-full w-full object-cover"
           />
           <div className="absolute inset-0 bg-gradient-to-r from-black/80 via-black/60 to-black/40" />
@@ -167,6 +191,50 @@ export default function Home() {
                   </motion.div>
                 );
               })}
+            </div>
+          </motion.div>
+        </div>
+      </section>
+
+      <section className="bg-muted py-20" data-testid="section-why-viva">
+        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+          <motion.div
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true, margin: "-100px" }}
+            variants={stagger}
+            className="space-y-12"
+          >
+            <motion.div variants={fadeUp} className="text-center">
+              <h2 className="text-3xl font-bold tracking-tight sm:text-4xl" data-testid="text-why-viva-title">
+                Why Viva
+              </h2>
+              <p className="mx-auto mt-3 max-w-2xl text-muted-foreground">
+                What Sets Us Apart
+              </p>
+            </motion.div>
+
+            <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
+              {whyVivaCards.map((card) => (
+                <motion.div key={card.title} variants={fadeUp}>
+                  <div
+                    className="flex h-full flex-col items-center rounded-md border border-slate-700 bg-slate-800 p-6 text-center dark:border-slate-600 dark:bg-slate-900"
+                    data-testid={`card-why-viva-${card.title.toLowerCase().replace(/\s+/g, "-")}`}
+                  >
+                    <img
+                      src={vivaLogoPath}
+                      alt="Viva Electric & Solar"
+                      className="mb-4 h-12 w-auto"
+                    />
+                    <h3 className="mb-3 text-lg font-semibold text-white">
+                      {card.title}
+                    </h3>
+                    <p className="text-sm leading-relaxed text-slate-300">
+                      {card.description}
+                    </p>
+                  </div>
+                </motion.div>
+              ))}
             </div>
           </motion.div>
         </div>

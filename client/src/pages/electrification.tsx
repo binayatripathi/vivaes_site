@@ -82,8 +82,13 @@ export default function ElectrificationPage() {
 
   return (
     <>
-      <section className="relative flex min-h-[50vh] items-center overflow-hidden bg-gradient-to-br from-green-900 via-green-800 to-emerald-900" data-testid="section-electrification-hero">
-        <div className="absolute inset-0 bg-black/30" />
+      <section className="relative flex min-h-[50vh] items-center overflow-hidden" data-testid="section-electrification-hero">
+        <img
+          src="https://images.unsplash.com/photo-1585128792020-803d29415281?w=1600&q=80"
+          alt="Older home being renovated with electrical upgrades"
+          className="absolute inset-0 h-full w-full object-cover"
+        />
+        <div className="absolute inset-0 bg-gradient-to-r from-black/70 via-black/50 to-black/30" />
         <div className="relative z-10 mx-auto max-w-7xl px-4 py-20 sm:px-6 lg:px-8">
           <motion.div
             initial="hidden"
@@ -149,13 +154,25 @@ export default function ElectrificationPage() {
             variants={stagger}
             className="space-y-10"
           >
-            <motion.div variants={fadeUp} className="mx-auto max-w-3xl text-center">
-              <h2 className="text-3xl font-bold tracking-tight sm:text-4xl" data-testid="text-what-is-electrification-title">
-                What Is Home Electrification?
-              </h2>
-              <p className="mt-4 text-lg leading-relaxed text-muted-foreground" data-testid="text-what-is-electrification-description">
-                Home electrification means replacing the gas-powered stuff in your house — your furnace, water heater, stove, and dryer — with modern electric versions that run cleaner, safer, and cheaper. Instead of burning natural gas, you power everything with electricity, ideally from solar panels on your roof.
-              </p>
+            <motion.div variants={fadeUp} className="mx-auto max-w-5xl">
+              <div className="grid grid-cols-1 items-center gap-8 md:grid-cols-2">
+                <div className="overflow-hidden rounded-md">
+                  <img
+                    src="https://images.unsplash.com/photo-1621905251189-08b45d6a269e?w=800&q=80"
+                    alt="Electrician working on a home electrical panel"
+                    className="h-full w-full object-cover"
+                    data-testid="img-what-is-electrification"
+                  />
+                </div>
+                <div className="text-left">
+                  <h2 className="text-3xl font-bold tracking-tight sm:text-4xl" data-testid="text-what-is-electrification-title">
+                    What Is Home Electrification?
+                  </h2>
+                  <p className="mt-4 text-lg leading-relaxed text-muted-foreground" data-testid="text-what-is-electrification-description">
+                    Home electrification means replacing the gas-powered stuff in your house — your furnace, water heater, stove, and dryer — with modern electric versions that run cleaner, safer, and cheaper. Instead of burning natural gas, you power everything with electricity, ideally from solar panels on your roof.
+                  </p>
+                </div>
+              </div>
             </motion.div>
 
             <motion.div variants={fadeUp} className="mx-auto max-w-3xl">

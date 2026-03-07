@@ -12,7 +12,7 @@ Professional website for Viva Electric & Solar Inc. (vivaes.net) - licensed elec
 - **Quote System**: Interactive chatbot-style quote assistant with instant pricing engine
 
 ## Pages
-- `/` - Home: Hero ("We Show Up. We Fix It. You Pay a Fair Price."), services grid (top 6), testimonials, CTA
+- `/` - Home: Hero with background photo, "Why Viva" section (4 dark cards), services grid (top 6), testimonials, CTA
 - `/services` - All services list with images and quote buttons
 - `/services/:slug` - Individual service detail pages
 - `/solar-storage` - Solar & Battery Storage: brand logo grid (Enphase, Tesla Powerwall, FranklinWH, SolarEdge, Generac PWRcell), 3 service cards (battery add-on, re-roofing, health checks)
@@ -119,8 +119,12 @@ Professional website for Viva Electric & Solar Inc. (vivaes.net) - licensed elec
 - Inter font family
 - Dark/light mode with class-based toggling
 - Framer Motion animations for scroll reveals
-- Real Unsplash photography (working-class Bay Area neighborhoods, real electricians)
+- Real Viva logo (green/blue gradient lightning bolt) in nav and footer — imported from attached_assets/viva-logo.png
+- Real Unsplash photography (working-class Bay Area neighborhoods, craftsman bungalows, diverse tradespeople, older homes, warehouses)
+- "Why Viva" section with 4 dark slate cards (Union Trained, Focused Expertise, Community Driven, Straightforward Communication)
+- Solar & Storage and Electrification pages have real photo hero backgrounds and card images
 - No AI branding - uses "24/7" and "instant" messaging
+- Roberto is Hispanic — imagery reflects diverse/Hispanic tradespeople and Bay Area working-class neighborhoods
 
 ## User Preferences
 - No AI mentions anywhere on the site

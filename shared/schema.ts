@@ -7,7 +7,7 @@ export const servicesList = [
     shortDescription: "Harness clean energy with premium solar panel installations and battery storage systems.",
     description: "Our union-trained solar technicians design and install high-efficiency photovoltaic systems for residential and commercial properties. We pair panels with cutting-edge battery storage solutions to maximize your energy independence and savings. From initial consultation to final inspection, we handle every detail with precision.",
     icon: "Sun",
-    image: "https://images.unsplash.com/photo-1509391366360-2e959784a276?w=800&q=80",
+    image: "https://images.unsplash.com/photo-1559302504-64aae6ca6b6d?w=800&q=80",
   },
   {
     slug: "ev-chargers",
@@ -31,7 +31,7 @@ export const servicesList = [
     shortDescription: "Upgrade to energy-efficient LED lighting and smart controls.",
     description: "Transform your space with modern LED lighting that cuts energy costs by up to 75%. We retrofit commercial offices, warehouses, parking structures, and residential properties with high-quality LED fixtures, smart controls, and daylight harvesting systems. Enjoy better light quality and significant utility savings.",
     icon: "Lightbulb",
-    image: "https://images.unsplash.com/photo-1524484485831-a92ffc0de03f?w=800&q=80",
+    image: "https://images.unsplash.com/photo-1497366216548-37526070297c?w=800&q=80",
   },
   {
     slug: "general-electrical",
@@ -63,7 +63,7 @@ export const servicesList = [
     shortDescription: "Complete new solar panel and battery storage installation.",
     description: "Go solar with a fully integrated solar panel and battery storage system from day one. We design, permit, and install complete photovoltaic systems paired with premium battery solutions for maximum energy independence and savings.",
     icon: "Sun",
-    image: "https://images.unsplash.com/photo-1508514177221-188b1cf16e9d?w=800&q=80",
+    image: "https://images.unsplash.com/photo-1509391366360-2e959784a276?w=800&q=80",
   },
   {
     slug: "reroofing-solar",
@@ -71,7 +71,7 @@ export const servicesList = [
     shortDescription: "Need a new roof? We remove and reinstall your solar panels safely.",
     description: "When it's time for a new roof, your solar panels need professional removal and reinstallation. We carefully detach your panels, coordinate with your roofer, and reinstall everything to manufacturer specifications with updated wiring and optimized placement.",
     icon: "Home",
-    image: "https://images.unsplash.com/photo-1513694203232-719a280e022f?w=800&q=80",
+    image: "https://images.unsplash.com/photo-1449844908441-8829872d2607?w=800&q=80",
   },
   {
     slug: "electrification-assessment",
