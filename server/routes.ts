@@ -1,8 +1,9 @@
 import type { Express } from "express";
 import { createServer, type Server } from "http";
-import { quoteRequestSchema, contactFormSchema, bookingRequestSchema } from "@shared/schema";
+import { quoteRequestSchema, contactFormSchema, bookingRequestSchema, leadStatuses, appointmentStatuses } from "@shared/schema";
 import { sendQuoteNotification, sendContactNotification, sendBookingNotification, sendPaymentNotification } from "./email";
 import { getUncachableStripeClient, getStripePublishableKey } from "./stripeClient";
+import { storage } from "./storage";
 import { z } from "zod";
 
 const CONSULTATION_FEE = 75;
@@ -58,6 +59,22 @@ export async function registerRoutes(
     try {
       const data = quoteRequestSchema.parse(req.body);
       const estimate = req.body.estimate;
+
+      try {
+        await storage.createLead({
+          name: data.name,
+          phone: data.phone,
+          email: data.email,
+          zip: data.zip,
+          serviceType: data.serviceType,
+          details: data.details,
+          source: "web-form",
+          status: "new",
+        });
+      } catch (dbErr) {
+        console.error("[DB] Failed to save quote lead:", dbErr);
+      }
+
       await forwardToWebhook("quote", { service: data.serviceType, details: data.details, customer: { name: data.name, email: data.email, phone: data.phone, zip: data.zip } });
       sendQuoteNotification({
         name: data.name,
@@ -77,6 +94,21 @@ export async function registerRoutes(
   app.post("/api/contact", async (req, res) => {
     try {
       const data = contactFormSchema.parse(req.body);
+
+      try {
+        await storage.createLead({
+          name: data.name,
+          phone: data.phone || "",
+          email: data.email,
+          serviceType: "general-inquiry",
+          details: data.message,
+          source: "web-form",
+          status: "new",
+        });
+      } catch (dbErr) {
+        console.error("[DB] Failed to save contact lead:", dbErr);
+      }
+
       await forwardToWebhook("contact", { customer: { name: data.name, email: data.email, phone: data.phone }, message: data.message });
       sendContactNotification({
         name: data.name,
@@ -93,6 +125,38 @@ export async function registerRoutes(
   app.post("/api/booking", async (req, res) => {
     try {
       const data = bookingRequestSchema.parse(req.body);
+
+      let leadId: string | undefined;
+      try {
+        const lead = await storage.createLead({
+          name: data.name,
+          phone: data.phone,
+          email: data.email,
+          serviceType: data.serviceType,
+          source: "web-form",
+          status: "booked",
+        });
+        leadId = lead.leadId;
+      } catch (dbErr) {
+        console.error("[DB] Failed to save booking lead:", dbErr);
+      }
+
+      try {
+        await storage.createAppointment({
+          leadId: leadId || null,
+          name: data.name,
+          phone: data.phone,
+          email: data.email,
+          serviceType: data.serviceType,
+          preferredDate: data.preferredDate,
+          preferredTime: data.preferredTime,
+          notes: data.notes,
+          status: "pending",
+        });
+      } catch (dbErr) {
+        console.error("[DB] Failed to save booking appointment:", dbErr);
+      }
+
       await forwardToWebhook("booking", { service: data.serviceType, preferredDate: data.preferredDate, preferredTime: data.preferredTime, notes: data.notes, customer: { name: data.name, email: data.email, phone: data.phone } });
       sendBookingNotification({
         name: data.name,
@@ -197,6 +261,73 @@ export async function registerRoutes(
       res.json(responseData);
     } catch (err: any) {
       res.status(500).json({ error: "Failed to retrieve session" });
+    }
+  });
+
+  app.get("/api/admin/leads", async (req, res) => {
+    try {
+      const status = req.query.status as string | undefined;
+      const leads = await storage.getLeads(status ? { status } : undefined);
+      res.json(leads);
+    } catch (err: any) {
+      res.status(500).json({ error: err.message || "Failed to fetch leads" });
+    }
+  });
+
+  app.get("/api/admin/leads/:id", async (req, res) => {
+    try {
+      const lead = await storage.getLeadById(req.params.id);
+      if (!lead) return res.status(404).json({ error: "Lead not found" });
+      res.json(lead);
+    } catch (err: any) {
+      res.status(500).json({ error: err.message || "Failed to fetch lead" });
+    }
+  });
+
+  app.patch("/api/admin/leads/:id/status", async (req, res) => {
+    try {
+      const { status } = req.body;
+      if (!status || !leadStatuses.includes(status)) {
+        return res.status(400).json({ error: `Invalid status. Must be one of: ${leadStatuses.join(", ")}` });
+      }
+      const lead = await storage.updateLeadStatus(req.params.id, status);
+      if (!lead) return res.status(404).json({ error: "Lead not found" });
+      res.json(lead);
+    } catch (err: any) {
+      res.status(500).json({ error: err.message || "Failed to update lead" });
+    }
+  });
+
+  app.get("/api/admin/appointments", async (req, res) => {
+    try {
+      const status = req.query.status as string | undefined;
+      const appointments = await storage.getAppointments(status ? { status } : undefined);
+      res.json(appointments);
+    } catch (err: any) {
+      res.status(500).json({ error: err.message || "Failed to fetch appointments" });
+    }
+  });
+
+  app.patch("/api/admin/appointments/:id/status", async (req, res) => {
+    try {
+      const { status } = req.body;
+      if (!status || !appointmentStatuses.includes(status)) {
+        return res.status(400).json({ error: `Invalid status. Must be one of: ${appointmentStatuses.join(", ")}` });
+      }
+      const appointment = await storage.updateAppointmentStatus(req.params.id, status);
+      if (!appointment) return res.status(404).json({ error: "Appointment not found" });
+      res.json(appointment);
+    } catch (err: any) {
+      res.status(500).json({ error: err.message || "Failed to update appointment" });
+    }
+  });
+
+  app.get("/api/admin/stats", async (_req, res) => {
+    try {
+      const stats = await storage.getStats();
+      res.json(stats);
+    } catch (err: any) {
+      res.status(500).json({ error: err.message || "Failed to fetch stats" });
     }
   });
 

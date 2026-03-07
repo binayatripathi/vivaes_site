@@ -1,4 +1,6 @@
 import { z } from "zod";
+import { pgTable, serial, text, timestamp } from "drizzle-orm/pg-core";
+import { createInsertSchema } from "drizzle-zod";
 
 export const servicesList = [
   {
@@ -226,6 +228,119 @@ export const serviceAreas = {
 } as const;
 
 export type ServiceAreaRegion = keyof typeof serviceAreas;
+
+export const leadStatuses = ["new", "contacted", "quoted", "booked", "completed", "lost"] as const;
+export const appointmentStatuses = ["pending", "confirmed", "completed", "cancelled"] as const;
+export const leadSources = ["web-form", "vapi-phone", "vapi-chat"] as const;
+
+export const leads = pgTable("leads", {
+  id: serial("id").primaryKey(),
+  leadId: text("lead_id").notNull().unique(),
+  name: text("name").notNull(),
+  phone: text("phone").notNull(),
+  email: text("email"),
+  address: text("address"),
+  city: text("city"),
+  zip: text("zip"),
+  serviceType: text("service_type").notNull(),
+  propertyType: text("property_type"),
+  urgency: text("urgency"),
+  projectSize: text("project_size"),
+  details: text("details"),
+  source: text("source").notNull().default("web-form"),
+  status: text("status").notNull().default("new"),
+  createdAt: timestamp("created_at").defaultNow().notNull(),
+  updatedAt: timestamp("updated_at").defaultNow().notNull(),
+});
+
+export const insertLeadSchema = createInsertSchema(leads).omit({
+  id: true,
+  leadId: true,
+  createdAt: true,
+  updatedAt: true,
+});
+
+export type InsertLead = z.infer<typeof insertLeadSchema>;
+export type Lead = typeof leads.$inferSelect;
+
+export const appointments = pgTable("appointments", {
+  id: serial("id").primaryKey(),
+  bookingId: text("booking_id").notNull().unique(),
+  leadId: text("lead_id"),
+  name: text("name").notNull(),
+  phone: text("phone").notNull(),
+  email: text("email"),
+  serviceType: text("service_type").notNull(),
+  preferredDate: text("preferred_date").notNull(),
+  preferredTime: text("preferred_time").notNull(),
+  notes: text("notes"),
+  status: text("status").notNull().default("pending"),
+  createdAt: timestamp("created_at").defaultNow().notNull(),
+  updatedAt: timestamp("updated_at").defaultNow().notNull(),
+});
+
+export const insertAppointmentSchema = createInsertSchema(appointments).omit({
+  id: true,
+  bookingId: true,
+  createdAt: true,
+  updatedAt: true,
+});
+
+export type InsertAppointment = z.infer<typeof insertAppointmentSchema>;
+export type Appointment = typeof appointments.$inferSelect;
+
+export const zipToRegion: Record<string, string> = {};
+const sfPeninsulaZips = [
+  ...Array.from({ length: 33 }, (_, i) => String(94102 + i)),
+  "94014", "94015", "94016", "94017",
+  "94010", "94011",
+  "94401", "94402", "94403", "94404",
+  "94061", "94062", "94063",
+  "94301", "94302", "94303", "94304", "94305", "94306",
+  "94030", "94066",
+];
+const alamedaZips = [
+  ...Array.from({ length: 21 }, (_, i) => String(94601 + i)),
+  ...Array.from({ length: 9 }, (_, i) => String(94702 + i)),
+  "94536", "94537", "94538", "94539",
+  "94541", "94542", "94543", "94544", "94545", "94546",
+  "94550", "94551",
+  "94566", "94567", "94568",
+  "94560",
+  "94587",
+  "94501", "94502",
+  "94608",
+  "94577", "94578", "94579",
+  "94580",
+];
+const sanJoaquinZips = [
+  ...Array.from({ length: 15 }, (_, i) => String(95201 + i)),
+  "95376", "95377", "95378",
+  ...Array.from({ length: 9 }, (_, i) => String(95350 + i)),
+  "95336", "95337",
+  "95240", "95241", "95242",
+  "95380", "95381", "95382",
+  ...Array.from({ length: 9 }, (_, i) => String(95340 + i)),
+  "95330", "95366", "95320",
+];
+sfPeninsulaZips.forEach(z => { zipToRegion[z] = "SF / Peninsula"; });
+alamedaZips.forEach(z => { zipToRegion[z] = "Alameda County (510)"; });
+sanJoaquinZips.forEach(z => { zipToRegion[z] = "San Joaquin Valley (209)"; });
+
+const cityToRegionMap: Record<string, string> = {};
+Object.entries(serviceAreas).forEach(([region, cities]) => {
+  cities.forEach(city => {
+    cityToRegionMap[city.toLowerCase()] = region;
+  });
+});
+
+export function getRegionByZip(zip: string): string | null {
+  return zipToRegion[zip] || null;
+}
+
+export function getRegionByCity(city: string): string | null {
+  return cityToRegionMap[city.toLowerCase().trim()] || null;
+}
 
 export const testimonials = [
   {

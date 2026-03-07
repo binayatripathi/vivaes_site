@@ -17,6 +17,7 @@ import PaymentCancelPage from "@/pages/payment-cancel";
 import { FloatingChatButton } from "@/components/quote-chatbot";
 import { VapiProvider } from "@/components/vapi-call-button";
 import ElectrificationPage from "@/pages/electrification";
+import AdminPage from "@/pages/admin";
 import NotFound from "@/pages/not-found";
 
 function Router() {
@@ -32,6 +33,7 @@ function Router() {
       <Route path="/solar-storage" component={SolarStoragePage} />
       <Route path="/payment/success" component={PaymentSuccessPage} />
       <Route path="/payment/cancel" component={PaymentCancelPage} />
+      <Route path="/admin" component={AdminPage} />
       <Route component={NotFound} />
     </Switch>
   );
