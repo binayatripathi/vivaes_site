@@ -49,7 +49,7 @@ VIVA_ADDRESS = "Los Angeles, CA"
 VIVA_CLAW_WEBHOOK_URL = "https://your-claw.example.com/webhook"
 VIVA_CLAW_TOKEN = "your-claw-token-here"
 VITE_VAPI_PUBLIC_KEY = "58a6b0af-128a-4504-a89a-e67f2bc68dae"
-VITE_VAPI_ASSISTANT_ID = "2bd90308-444f-4151-8fb2-4a8337728816"
+VITE_VAPI_ASSISTANT_ID = "a4ac24aa-57e0-4c67-a9ce-1136e97e7831"
 
 [agent]
 integrations = ["resend:1.0.0", "stripe:2.0.0"]
