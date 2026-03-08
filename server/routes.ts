@@ -1,7 +1,7 @@
 import type { Express } from "express";
 import { createServer, type Server } from "http";
 import { quoteRequestSchema, contactFormSchema, bookingRequestSchema, leadStatuses, appointmentStatuses } from "@shared/schema";
-import { sendQuoteNotification, sendContactNotification, sendBookingNotification, sendPaymentNotification } from "./email";
+import { sendQuoteNotification, sendContactNotification, sendBookingNotification, sendPaymentNotification, sendCallSummaryNotification } from "./email";
 import { getUncachableStripeClient, getStripePublishableKey } from "./stripeClient";
 import { storage } from "./storage";
 import { z } from "zod";
@@ -261,6 +261,124 @@ export async function registerRoutes(
       res.json(responseData);
     } catch (err: any) {
       res.status(500).json({ error: "Failed to retrieve session" });
+    }
+  });
+
+  const VAPI_SERVER_SECRET = process.env.VAPI_SERVER_SECRET || "";
+
+  app.post("/api/vapi/webhook", async (req, res) => {
+    try {
+      if (!VAPI_SERVER_SECRET) {
+        console.warn("[Vapi] Webhook rejected: VAPI_SERVER_SECRET not configured");
+        return res.status(503).json({ error: "Webhook not configured" });
+      }
+
+      const authHeader = req.headers["x-vapi-secret"] || req.headers["authorization"];
+      const token = typeof authHeader === "string" ? authHeader.replace("Bearer ", "") : "";
+      if (token !== VAPI_SERVER_SECRET) {
+        console.warn("[Vapi] Unauthorized webhook attempt");
+        return res.status(401).json({ error: "Unauthorized" });
+      }
+
+      const payload = req.body;
+      const messageType = payload?.message?.type;
+
+      if (messageType === "end-of-call-report") {
+        const report = payload.message;
+
+        const durationSeconds = report.durationSeconds || report.duration || null;
+        const summary = report.summary || report.analysis?.summary || null;
+        const endedReason = report.endedReason || null;
+        const callerPhone = report.customer?.number || report.call?.customer?.number || null;
+        const costStr = report.cost != null ? String(report.cost) : null;
+        const callId = report.call?.id || report.callId || `vapi_${Date.now()}`;
+        const assistantId = report.assistant?.id || report.assistantId || null;
+
+        const rawStatus = report.status || endedReason || "completed";
+        const statusMap: Record<string, string> = {
+          "customer-ended-call": "completed",
+          "assistant-ended-call": "completed",
+          "silence-timed-out": "completed",
+          "max-duration-reached": "completed",
+          "customer-did-not-answer": "no-answer",
+          "assistant-error": "failed",
+          "pipeline-error-openai": "failed",
+          "pipeline-error-deepgram": "failed",
+          "voicemail": "missed",
+        };
+        const callStatus = statusMap[rawStatus] || (rawStatus === "completed" ? "completed" : "completed");
+
+        let transcriptJson: string | null = null;
+        if (report.transcript) {
+          transcriptJson = typeof report.transcript === "string"
+            ? report.transcript
+            : JSON.stringify(report.transcript);
+        } else if (report.messages && Array.isArray(report.messages)) {
+          transcriptJson = JSON.stringify(
+            report.messages
+              .filter((m: any) => m.role && (m.message || m.content))
+              .map((m: any) => ({ role: m.role, message: m.message || m.content }))
+          );
+        } else if (report.artifact?.messages && Array.isArray(report.artifact.messages)) {
+          transcriptJson = JSON.stringify(
+            report.artifact.messages
+              .filter((m: any) => m.role && (m.message || m.content))
+              .map((m: any) => ({ role: m.role, message: m.message || m.content }))
+          );
+        }
+
+        const existingLog = await storage.getCallLogById(callId);
+        if (existingLog) {
+          console.log(`[Vapi] Duplicate call report ignored: ${callId}`);
+          return res.json({ success: true, message: "Already processed" });
+        }
+
+        try {
+          await storage.createCallLog({
+            callId,
+            assistantId,
+            callerPhone,
+            duration: durationSeconds,
+            summary,
+            transcript: transcriptJson,
+            status: callStatus,
+            endedReason,
+            cost: costStr,
+          });
+          console.log(`[Vapi] Call log saved: ${callId}`);
+        } catch (dbErr) {
+          console.error("[Vapi] Failed to save call log:", dbErr);
+          return res.json({ success: true, message: "Received (db error)" });
+        }
+
+        sendCallSummaryNotification({
+          callId,
+          callerPhone,
+          duration: durationSeconds,
+          summary,
+          transcript: transcriptJson,
+          status: callStatus,
+          endedReason,
+          cost: costStr,
+        });
+
+        return res.json({ success: true, message: "Call report processed" });
+      }
+
+      console.log(`[Vapi] Received event: ${messageType || "unknown"}`);
+      return res.json({ success: true });
+    } catch (err: any) {
+      console.error("[Vapi] Webhook error:", err);
+      res.status(500).json({ error: "Internal server error" });
+    }
+  });
+
+  app.get("/api/admin/call-logs", async (_req, res) => {
+    try {
+      const logs = await storage.getCallLogs(100);
+      res.json(logs);
+    } catch (err: any) {
+      res.status(500).json({ error: err.message || "Failed to fetch call logs" });
     }
   });
 

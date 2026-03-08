@@ -20,7 +20,7 @@ import {
 } from "@/components/ui/dialog";
 import { Skeleton } from "@/components/ui/skeleton";
 import { useToast } from "@/hooks/use-toast";
-import type { Lead, Appointment } from "@shared/schema";
+import type { Lead, Appointment, CallLog } from "@shared/schema";
 import {
   Users,
   CalendarDays,
@@ -31,6 +31,7 @@ import {
   MapPin,
   Clock,
   ChevronDown,
+  PhoneCall,
 } from "lucide-react";
 
 interface AdminStats {
@@ -38,6 +39,7 @@ interface AdminStats {
   newLeadsToday: number;
   pendingAppointments: number;
   completedJobs: number;
+  totalCalls: number;
 }
 
 const leadStatusColors: Record<string, string> = {
@@ -87,10 +89,11 @@ function StatsBar({ stats, isLoading }: { stats?: AdminStats; isLoading: boolean
     { label: "New Today", value: stats?.newLeadsToday ?? 0, icon: UserPlus, color: "text-blue-500" },
     { label: "Pending Appts", value: stats?.pendingAppointments ?? 0, icon: CalendarDays, color: "text-orange-500" },
     { label: "Completed", value: stats?.completedJobs ?? 0, icon: CheckCircle, color: "text-green-500" },
+    { label: "Voice Calls", value: stats?.totalCalls ?? 0, icon: PhoneCall, color: "text-purple-500" },
   ];
 
   return (
-    <div className="grid grid-cols-2 gap-3 lg:grid-cols-4">
+    <div className="grid grid-cols-2 gap-3 lg:grid-cols-5">
       {items.map((item) => (
         <Card key={item.label} data-testid={`stat-${item.label.toLowerCase().replace(/\s+/g, "-")}`}>
           <CardContent className="flex items-center gap-3 p-4">
@@ -485,6 +488,118 @@ function AppointmentsTab() {
   );
 }
 
+function CallLogsTab() {
+  const { data: logs, isLoading } = useQuery<CallLog[]>({
+    queryKey: ["/api/admin/call-logs"],
+  });
+
+  function formatDuration(seconds: number | null) {
+    if (!seconds) return "—";
+    const m = Math.floor(seconds / 60);
+    const s = seconds % 60;
+    return m > 0 ? `${m}m ${s}s` : `${s}s`;
+  }
+
+  function getTranscriptPreview(transcript: string | null) {
+    if (!transcript) return null;
+    try {
+      const messages = JSON.parse(transcript);
+      if (Array.isArray(messages)) {
+        return messages
+          .filter((m: any) => m.role && m.message)
+          .map((m: any) => `${m.role === "assistant" ? "Agent" : "Caller"}: ${m.message}`)
+          .join("\n");
+      }
+    } catch {}
+    return transcript.slice(0, 500);
+  }
+
+  const [expandedId, setExpandedId] = useState<number | null>(null);
+
+  return (
+    <div className="space-y-4">
+      {isLoading ? (
+        <div className="space-y-2">
+          {Array.from({ length: 5 }).map((_, i) => (
+            <Skeleton key={i} className="h-14 w-full" />
+          ))}
+        </div>
+      ) : !logs || logs.length === 0 ? (
+        <Card>
+          <CardContent className="flex flex-col items-center justify-center py-12">
+            <PhoneCall className="mb-3 h-10 w-10 text-muted-foreground" />
+            <p className="text-muted-foreground" data-testid="text-no-call-logs">No call logs yet</p>
+            <p className="mt-1 text-xs text-muted-foreground">Call logs will appear here after voice calls are completed</p>
+          </CardContent>
+        </Card>
+      ) : (
+        <div className="space-y-3">
+          {logs.map((log) => {
+            const preview = getTranscriptPreview(log.transcript);
+            const isExpanded = expandedId === log.id;
+            return (
+              <Card key={log.id} data-testid={`card-call-log-${log.id}`}>
+                <CardContent className="p-4">
+                  <div
+                    className="flex cursor-pointer items-center justify-between"
+                    onClick={() => setExpandedId(isExpanded ? null : log.id)}
+                    data-testid={`button-expand-call-${log.id}`}
+                  >
+                    <div className="flex items-center gap-3">
+                      <div className={`rounded-full p-2 ${log.status === "completed" ? "bg-green-100 text-green-600 dark:bg-green-900/40 dark:text-green-400" : "bg-red-100 text-red-600 dark:bg-red-900/40 dark:text-red-400"}`}>
+                        <PhoneCall className="h-4 w-4" />
+                      </div>
+                      <div>
+                        <p className="font-medium">
+                          {log.callerPhone || "Web Call"}
+                          <Badge className={`ml-2 no-default-hover-elevate no-default-active-elevate ${log.status === "completed" ? "bg-green-100 text-green-800 dark:bg-green-900/40 dark:text-green-300" : "bg-red-100 text-red-800 dark:bg-red-900/40 dark:text-red-300"}`}>
+                            {log.status}
+                          </Badge>
+                        </p>
+                        <p className="text-xs text-muted-foreground">
+                          {formatDateTime(log.createdAt)} · {formatDuration(log.duration)}
+                          {log.cost ? ` · $${log.cost}` : ""}
+                        </p>
+                      </div>
+                    </div>
+                    <ChevronDown className={`h-4 w-4 text-muted-foreground transition-transform ${isExpanded ? "rotate-180" : ""}`} />
+                  </div>
+
+                  {isExpanded && (
+                    <div className="mt-4 space-y-3 border-t pt-4">
+                      {log.summary && (
+                        <div>
+                          <p className="mb-1 text-xs font-semibold uppercase text-muted-foreground">Summary</p>
+                          <p className="text-sm" data-testid={`text-call-summary-${log.id}`}>{log.summary}</p>
+                        </div>
+                      )}
+                      {log.endedReason && (
+                        <div>
+                          <p className="mb-1 text-xs font-semibold uppercase text-muted-foreground">Ended Reason</p>
+                          <p className="text-sm">{log.endedReason}</p>
+                        </div>
+                      )}
+                      {preview && (
+                        <div>
+                          <p className="mb-1 text-xs font-semibold uppercase text-muted-foreground">Transcript</p>
+                          <pre className="max-h-64 overflow-y-auto whitespace-pre-wrap rounded-md bg-muted p-3 text-xs" data-testid={`text-call-transcript-${log.id}`}>
+                            {preview}
+                          </pre>
+                        </div>
+                      )}
+                      <p className="text-xs text-muted-foreground">Call ID: {log.callId}</p>
+                    </div>
+                  )}
+                </CardContent>
+              </Card>
+            );
+          })}
+        </div>
+      )}
+    </div>
+  );
+}
+
 export default function AdminPage() {
   const { data: stats, isLoading: statsLoading } = useQuery<AdminStats>({
     queryKey: ["/api/admin/stats"],
@@ -511,6 +626,10 @@ export default function AdminPage() {
             <CalendarDays className="mr-2 h-4 w-4" />
             Appointments
           </TabsTrigger>
+          <TabsTrigger value="call-logs" data-testid="tab-call-logs">
+            <PhoneCall className="mr-2 h-4 w-4" />
+            Call Logs
+          </TabsTrigger>
         </TabsList>
 
         <TabsContent value="leads">
@@ -519,6 +638,10 @@ export default function AdminPage() {
 
         <TabsContent value="appointments">
           <AppointmentsTab />
+        </TabsContent>
+
+        <TabsContent value="call-logs">
+          <CallLogsTab />
         </TabsContent>
       </Tabs>
     </div>

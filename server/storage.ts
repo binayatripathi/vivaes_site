@@ -1,5 +1,5 @@
 import { db } from "./db";
-import { leads, appointments, type Lead, type Appointment, type InsertLead, type InsertAppointment } from "@shared/schema";
+import { leads, appointments, callLogs, type Lead, type Appointment, type CallLog, type InsertLead, type InsertAppointment, type InsertCallLog } from "@shared/schema";
 import { eq, desc, and, gte, sql } from "drizzle-orm";
 import { nanoid } from "nanoid";
 
@@ -12,7 +12,10 @@ export interface IStorage {
   getAppointments(filters?: { status?: string }): Promise<Appointment[]>;
   getAppointmentById(bookingId: string): Promise<Appointment | null>;
   updateAppointmentStatus(bookingId: string, status: string): Promise<Appointment | null>;
-  getStats(): Promise<{ totalLeads: number; newLeadsToday: number; pendingAppointments: number; completedJobs: number }>;
+  createCallLog(data: InsertCallLog): Promise<CallLog>;
+  getCallLogs(limit?: number): Promise<CallLog[]>;
+  getCallLogById(callId: string): Promise<CallLog | null>;
+  getStats(): Promise<{ totalLeads: number; newLeadsToday: number; pendingAppointments: number; completedJobs: number; totalCalls: number }>;
 }
 
 export class DatabaseStorage implements IStorage {
@@ -74,7 +77,23 @@ export class DatabaseStorage implements IStorage {
     return appointment || null;
   }
 
-  async getStats(): Promise<{ totalLeads: number; newLeadsToday: number; pendingAppointments: number; completedJobs: number }> {
+  async createCallLog(data: InsertCallLog): Promise<CallLog> {
+    const [log] = await db.insert(callLogs).values(data).returning();
+    return log;
+  }
+
+  async getCallLogs(limit: number = 50): Promise<CallLog[]> {
+    return db.select().from(callLogs)
+      .orderBy(desc(callLogs.createdAt))
+      .limit(limit);
+  }
+
+  async getCallLogById(callId: string): Promise<CallLog | null> {
+    const [log] = await db.select().from(callLogs).where(eq(callLogs.callId, callId));
+    return log || null;
+  }
+
+  async getStats(): Promise<{ totalLeads: number; newLeadsToday: number; pendingAppointments: number; completedJobs: number; totalCalls: number }> {
     const today = new Date();
     today.setHours(0, 0, 0, 0);
 
@@ -86,11 +105,14 @@ export class DatabaseStorage implements IStorage {
     const [completedResult] = await db.select({ count: sql<number>`count(*)` }).from(appointments)
       .where(eq(appointments.status, "completed"));
 
+    const [callsResult] = await db.select({ count: sql<number>`count(*)` }).from(callLogs);
+
     return {
       totalLeads: Number(totalResult.count),
       newLeadsToday: Number(newTodayResult.count),
       pendingAppointments: Number(pendingResult.count),
       completedJobs: Number(completedResult.count),
+      totalCalls: Number(callsResult.count),
     };
   }
 }

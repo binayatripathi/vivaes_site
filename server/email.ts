@@ -341,3 +341,84 @@ export async function sendPaymentNotification(data: {
     console.error('[Email] Failed to send payment notification:', err);
   }
 }
+
+export async function sendCallSummaryNotification(data: {
+  callId: string;
+  callerPhone?: string | null;
+  duration?: number | null;
+  summary?: string | null;
+  transcript?: string | null;
+  status: string;
+  endedReason?: string | null;
+  cost?: string | null;
+}) {
+  try {
+    const resend = await getResendClient();
+
+    const durationStr = data.duration
+      ? `${Math.floor(data.duration / 60)}m ${data.duration % 60}s`
+      : "N/A";
+
+    let transcriptPreview = "";
+    if (data.transcript) {
+      try {
+        const messages = JSON.parse(data.transcript);
+        if (Array.isArray(messages)) {
+          transcriptPreview = messages
+            .filter((m: any) => m.role && m.message)
+            .slice(0, 20)
+            .map((m: any) => `<strong>${m.role === "assistant" ? "Viva Agent" : "Caller"}:</strong> ${m.message}`)
+            .join("<br/><br/>");
+        }
+      } catch {
+        transcriptPreview = data.transcript.slice(0, 1000);
+      }
+    }
+
+    const transcriptSection = transcriptPreview ? `
+      <div style="background: #f8fafc; border-left: 4px solid #2563eb; padding: 16px; margin: 16px 0; border-radius: 0 6px 6px 0;">
+        <p style="color: #64748b; font-size: 12px; margin: 0 0 8px; text-transform: uppercase; font-weight: 600;">Conversation Transcript</p>
+        <div style="color: #1e293b; font-size: 13px; line-height: 1.8;">${transcriptPreview}</div>
+      </div>
+    ` : "";
+
+    const summarySection = data.summary ? `
+      <div style="background: #eff6ff; border: 1px solid #bfdbfe; border-radius: 8px; padding: 16px; margin: 16px 0;">
+        <h3 style="margin: 0 0 8px; color: #1e40af; font-size: 16px;">Call Summary</h3>
+        <p style="color: #1e293b; font-size: 14px; line-height: 1.6; margin: 0;">${data.summary}</p>
+      </div>
+    ` : "";
+
+    await resend.emails.send({
+      from: `${BUSINESS_NAME} <${FROM_EMAIL}>`,
+      to: NOTIFY_EMAIL,
+      subject: `Voice Call ${data.status === "completed" ? "Completed" : data.status} - ${durationStr}${data.callerPhone ? ` from ${data.callerPhone}` : ""}`,
+      html: `
+        <div style="font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; max-width: 600px; margin: 0 auto; background: #ffffff; border-radius: 8px; box-shadow: 0 1px 3px rgba(0,0,0,0.1);">
+          ${headerHtml('24/7 Voice Agent Call Report')}
+          <div style="padding: 24px;">
+            <div style="background: ${data.status === "completed" ? "#f0fdf4" : "#fef2f2"}; border: 1px solid ${data.status === "completed" ? "#bbf7d0" : "#fecaca"}; border-radius: 8px; padding: 16px; margin: 0 0 16px; text-align: center;">
+              <p style="color: ${data.status === "completed" ? "#166534" : "#991b1b"}; font-size: 18px; font-weight: 700; margin: 0 0 4px;">Call ${data.status.charAt(0).toUpperCase() + data.status.slice(1)}</p>
+              <p style="color: ${data.status === "completed" ? "#15803d" : "#b91c1c"}; font-size: 14px; margin: 0;">Duration: ${durationStr}</p>
+            </div>
+            <table style="width: 100%; border-collapse: collapse;">
+              ${rowHtml('Call ID', data.callId.slice(0, 20) + '...')}
+              ${data.callerPhone ? rowHtml('Caller Phone', data.callerPhone) : ''}
+              ${rowHtml('Duration', durationStr)}
+              ${rowHtml('Status', data.status)}
+              ${data.endedReason ? rowHtml('Ended Reason', data.endedReason) : ''}
+              ${data.cost ? rowHtml('Cost', '$' + data.cost) : ''}
+            </table>
+            ${summarySection}
+            ${transcriptSection}
+          </div>
+          ${footerHtml()}
+        </div>
+      `,
+    });
+
+    console.log(`[Email] Call summary sent for call ${data.callId}`);
+  } catch (err) {
+    console.error('[Email] Failed to send call summary:', err);
+  }
+}

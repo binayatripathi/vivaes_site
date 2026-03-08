@@ -15,6 +15,7 @@ Professional website for Viva Electric & Solar Inc. (vivaes.net) - licensed elec
 ## Database Tables
 - **leads**: id, leadId (ld_xxx), name, phone, email, address, city, zip, serviceType, propertyType, urgency, projectSize, details, source (web-form|vapi-phone|vapi-chat), status (new|contacted|quoted|booked|completed|lost), createdAt, updatedAt
 - **appointments**: id, bookingId (bk_xxx), leadId (FK), name, phone, email, serviceType, preferredDate, preferredTime, notes, status (pending|confirmed|completed|cancelled), createdAt, updatedAt
+- **call_logs**: id, callId (unique), assistantId, callerPhone, duration (seconds), summary, transcript (JSON), status (completed|failed|missed|no-answer), endedReason, cost, createdAt
 
 ## Pages
 - `/` - Home: Hero with background photo, "Why Viva" section (4 dark cards), services grid (top 6), testimonials, CTA
@@ -27,7 +28,7 @@ Professional website for Viva Electric & Solar Inc. (vivaes.net) - licensed elec
 - `/about` - About page with Roberto's bio, values, stats, service areas, contact form
 - `/payment/success` - Payment success page with session details
 - `/payment/cancel` - Payment cancelled page
-- `/admin` - Admin dashboard (not linked in nav): leads table, appointments table, stats, status management
+- `/admin` - Admin dashboard (not linked in nav): leads table, appointments table, call logs (expandable with transcript), stats, status management
 
 ## Services (11 total)
 1. Solar & Storage
@@ -72,6 +73,7 @@ Professional website for Viva Electric & Solar Inc. (vivaes.net) - licensed elec
 - `POST /api/vapi/book-appointment` - Create appointment from voice call
 - `POST /api/vapi/check-service-area` - Validate city/ZIP against service areas
 - `POST /api/vapi/transfer` - Transfer call to Roberto (+15107105745)
+- `POST /api/vapi/webhook` - Vapi end-of-call webhook (saves call log to DB, sends email summary to Roberto). Auth via x-vapi-secret header. Idempotent (duplicate callIds are ignored).
 
 ### Admin Endpoints (no auth, admin by obscurity)
 - `GET /api/admin/leads` - List all leads (optional ?status= filter)
@@ -79,7 +81,8 @@ Professional website for Viva Electric & Solar Inc. (vivaes.net) - licensed elec
 - `PATCH /api/admin/leads/:id/status` - Update lead status
 - `GET /api/admin/appointments` - List all appointments (optional ?status= filter)
 - `PATCH /api/admin/appointments/:id/status` - Update appointment status
-- `GET /api/admin/stats` - Dashboard stats (totalLeads, newLeadsToday, pendingAppointments, completedJobs)
+- `GET /api/admin/call-logs` - List recent call logs (up to 100)
+- `GET /api/admin/stats` - Dashboard stats (totalLeads, newLeadsToday, pendingAppointments, completedJobs, totalCalls)
 
 ## Stripe Payment Integration
 - Stripe connected via Replit connector (handles API keys securely)

@@ -1,5 +1,5 @@
 import { z } from "zod";
-import { pgTable, serial, text, timestamp } from "drizzle-orm/pg-core";
+import { pgTable, serial, text, timestamp, integer } from "drizzle-orm/pg-core";
 import { createInsertSchema } from "drizzle-zod";
 
 export const servicesList = [
@@ -288,6 +288,30 @@ export const insertAppointmentSchema = createInsertSchema(appointments).omit({
 
 export type InsertAppointment = z.infer<typeof insertAppointmentSchema>;
 export type Appointment = typeof appointments.$inferSelect;
+
+export const callLogStatuses = ["completed", "failed", "missed", "no-answer"] as const;
+
+export const callLogs = pgTable("call_logs", {
+  id: serial("id").primaryKey(),
+  callId: text("call_id").notNull().unique(),
+  assistantId: text("assistant_id"),
+  callerPhone: text("caller_phone"),
+  duration: integer("duration"),
+  summary: text("summary"),
+  transcript: text("transcript"),
+  status: text("status").notNull().default("completed"),
+  endedReason: text("ended_reason"),
+  cost: text("cost"),
+  createdAt: timestamp("created_at").defaultNow().notNull(),
+});
+
+export const insertCallLogSchema = createInsertSchema(callLogs).omit({
+  id: true,
+  createdAt: true,
+});
+
+export type InsertCallLog = z.infer<typeof insertCallLogSchema>;
+export type CallLog = typeof callLogs.$inferSelect;
 
 export const zipToRegion: Record<string, string> = {};
 const sfPeninsulaZips = [
