@@ -118,7 +118,7 @@ function LeadStatusSelect({ lead }: { lead: Lead }) {
   const { toast } = useToast();
   const mutation = useMutation({
     mutationFn: async (newStatus: string) => {
-      await apiRequest("PATCH", `/api/admin/leads/${lead.id}/status`, { status: newStatus });
+      await apiRequest("PATCH", `/api/admin/leads/${lead.leadId}/status`, { status: newStatus });
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["/api/admin/leads"] });
@@ -157,7 +157,7 @@ function AppointmentStatusSelect({ appointment }: { appointment: Appointment }) 
   const { toast } = useToast();
   const mutation = useMutation({
     mutationFn: async (newStatus: string) => {
-      await apiRequest("PATCH", `/api/admin/appointments/${appointment.id}/status`, { status: newStatus });
+      await apiRequest("PATCH", `/api/admin/appointments/${appointment.bookingId}/status`, { status: newStatus });
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["/api/admin/appointments"] });

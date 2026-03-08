@@ -6,10 +6,15 @@ Professional website for Viva Electric & Solar Inc. (vivaes.net) - licensed elec
 ## Architecture
 - **Frontend**: React + Vite + Tailwind CSS + shadcn/ui + Framer Motion
 - **Backend**: Express.js API routes
+- **Database**: PostgreSQL (Replit built-in) with Drizzle ORM
 - **Routing**: wouter (client-side)
 - **Forms**: react-hook-form + zod validation
 - **State**: @tanstack/react-query
 - **Quote System**: Interactive chatbot-style quote assistant with instant pricing engine
+
+## Database Tables
+- **leads**: id, leadId (ld_xxx), name, phone, email, address, city, zip, serviceType, propertyType, urgency, projectSize, details, source (web-form|vapi-phone|vapi-chat), status (new|contacted|quoted|booked|completed|lost), createdAt, updatedAt
+- **appointments**: id, bookingId (bk_xxx), leadId (FK), name, phone, email, serviceType, preferredDate, preferredTime, notes, status (pending|confirmed|completed|cancelled), createdAt, updatedAt
 
 ## Pages
 - `/` - Home: Hero with background photo, "Why Viva" section (4 dark cards), services grid (top 6), testimonials, CTA
@@ -22,6 +27,7 @@ Professional website for Viva Electric & Solar Inc. (vivaes.net) - licensed elec
 - `/about` - About page with Roberto's bio, values, stats, service areas, contact form
 - `/payment/success` - Payment success page with session details
 - `/payment/cancel` - Payment cancelled page
+- `/admin` - Admin dashboard (not linked in nav): leads table, appointments table, stats, status management
 
 ## Services (11 total)
 1. Solar & Storage
@@ -50,13 +56,30 @@ Professional website for Viva Electric & Solar Inc. (vivaes.net) - licensed elec
 - Floating chat button on all pages for quick access
 
 ## API Routes
-- `POST /api/quote` - Submit quote request, forwards to OpenClaw webhook + email notification
-- `POST /api/contact` - Submit contact form, forwards to OpenClaw webhook + email notification
-- `POST /api/booking` - Submit booking request, forwards to OpenClaw webhook + email notification
+
+### Customer-Facing
+- `POST /api/quote` - Submit quote request → saves lead to DB + webhook + email
+- `POST /api/contact` - Submit contact form → saves lead to DB + webhook + email
+- `POST /api/booking` - Submit booking → saves lead + appointment to DB + webhook + email
 - `POST /api/stripe/create-checkout` - Stripe checkout for deposits and consultation fees
 - `GET /api/stripe/session/:sessionId` - Retrieve checkout session details + trigger payment email
 - `GET /api/stripe/publishable-key` - Get Stripe publishable key for frontend
-- `POST /api/stripe/webhook` - Stripe webhook handler (registered before express.json())
+- `POST /api/stripe/webhook` - Stripe webhook handler
+
+### Vapi Voice Agent Endpoints (authenticated via X-Vapi-Secret header)
+- `POST /api/vapi/create-lead` - Save qualified lead from voice call
+- `POST /api/vapi/get-quote` - Calculate ballpark estimate for caller
+- `POST /api/vapi/book-appointment` - Create appointment from voice call
+- `POST /api/vapi/check-service-area` - Validate city/ZIP against service areas
+- `POST /api/vapi/transfer` - Transfer call to Roberto (+15107105745)
+
+### Admin Endpoints (no auth, admin by obscurity)
+- `GET /api/admin/leads` - List all leads (optional ?status= filter)
+- `GET /api/admin/leads/:id` - Get single lead by leadId
+- `PATCH /api/admin/leads/:id/status` - Update lead status
+- `GET /api/admin/appointments` - List all appointments (optional ?status= filter)
+- `PATCH /api/admin/appointments/:id/status` - Update appointment status
+- `GET /api/admin/stats` - Dashboard stats (totalLeads, newLeadsToday, pendingAppointments, completedJobs)
 
 ## Stripe Payment Integration
 - Stripe connected via Replit connector (handles API keys securely)
@@ -84,10 +107,13 @@ Professional website for Viva Electric & Solar Inc. (vivaes.net) - licensed elec
 - Single Vapi instance across all buttons (no duplicate sessions)
 - Call panel with real-time transcript, mute/unmute, end call
 - Integrated on: Home hero, Home CTA, Quote results, Services detail, About contact, Footer
+- Backend tool endpoints authenticated via VAPI_SERVER_SECRET
 
 ## Environment Variables (Template)
 - `VITE_VAPI_PUBLIC_KEY` - Vapi public API key (frontend, required)
-- `VITE_VAPI_ASSISTANT_ID` - Vapi assistant ID (frontend, optional - uses default if not set)
+- `VITE_VAPI_ASSISTANT_ID` - Vapi assistant ID (frontend, optional)
+- `VAPI_SERVER_SECRET` - Secret key for authenticating Vapi tool calls (backend)
+- `DATABASE_URL` - PostgreSQL connection string (auto-provisioned)
 - `VIVA_BUSINESS_NAME` - Business name
 - `VIVA_PHONE` - Business phone
 - `VIVA_EMAIL` - Business email
@@ -96,21 +122,21 @@ Professional website for Viva Electric & Solar Inc. (vivaes.net) - licensed elec
 - `VIVA_CLAW_TOKEN` - OpenClaw auth token
 
 ## Key Files
-- `shared/schema.ts` - Services data, service areas, form schemas, testimonials, pricing engine
-- `client/src/pages/solar-storage.tsx` - Solar & Storage page with brand grid and service cards
-- `client/src/pages/electrification.tsx` - Electrification page with education, rebates, roadmap
-- `client/src/components/quote-chatbot.tsx` - Interactive chatbot quote system with deposit payment
-- `client/src/components/quote-modal.tsx` - Quote modal wrapper for chatbot
-- `client/src/components/vapi-call-button.tsx` - Vapi voice call button + provider + call panel
-- `client/src/components/navigation.tsx` - Top nav with Solar & Storage + Electrification tabs
-- `client/src/components/footer.tsx` - Site footer with service areas
-- `client/src/components/theme-provider.tsx` - Dark/light mode context
-- `client/src/pages/payment-success.tsx` - Payment success page
-- `client/src/pages/payment-cancel.tsx` - Payment cancel page
-- `server/routes.ts` - API routes with webhook forwarding, Stripe checkout, email
+- `shared/schema.ts` - Services data, service areas, ZIP code mapping, form schemas, DB table definitions, pricing engine
+- `server/db.ts` - Drizzle ORM database connection
+- `server/storage.ts` - DatabaseStorage class with full CRUD for leads + appointments
+- `server/vapi-routes.ts` - 5 Vapi tool endpoints with API key auth
+- `server/routes.ts` - Customer + admin API routes with webhook forwarding, Stripe, email
 - `server/email.ts` - Resend email notification service
 - `server/stripeClient.ts` - Stripe client via Replit connector
 - `server/webhookHandlers.ts` - Stripe webhook processing
+- `client/src/pages/admin.tsx` - Admin dashboard (leads, appointments, stats, status updates)
+- `client/src/pages/solar-storage.tsx` - Solar & Storage page
+- `client/src/pages/electrification.tsx` - Electrification page
+- `client/src/components/quote-chatbot.tsx` - Interactive chatbot quote system
+- `client/src/components/vapi-call-button.tsx` - Vapi voice call button + provider
+- `client/src/components/navigation.tsx` - Top nav
+- `client/src/components/footer.tsx` - Site footer
 - `client/index.html` - Schema.org JSON-LD structured data
 
 ## Design
@@ -119,10 +145,9 @@ Professional website for Viva Electric & Solar Inc. (vivaes.net) - licensed elec
 - Inter font family
 - Dark/light mode with class-based toggling
 - Framer Motion animations for scroll reveals
-- Real Viva logo (green/blue gradient lightning bolt) in nav and footer — imported from attached_assets/viva-logo.png
+- Real Viva logo (green/blue gradient lightning bolt) in nav and footer
 - Real Unsplash photography (working-class Bay Area neighborhoods, craftsman bungalows, diverse tradespeople, older homes, warehouses)
-- "Why Viva" section with 4 dark slate cards (Union Trained, Focused Expertise, Community Driven, Straightforward Communication)
-- Solar & Storage and Electrification pages have real photo hero backgrounds and card images
+- "Why Viva" section with 4 dark slate cards
 - No AI branding - uses "24/7" and "instant" messaging
 - Roberto is Hispanic — imagery reflects diverse/Hispanic tradespeople and Bay Area working-class neighborhoods
 
