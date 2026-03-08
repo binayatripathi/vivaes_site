@@ -4,6 +4,7 @@ import { Button } from "@/components/ui/button";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import { useTheme } from "@/components/theme-provider";
 import { Menu, X, Sun, Moon } from "lucide-react";
+import { VapiCallButton } from "@/components/vapi-call-button";
 import vivaLogoPath from "@assets/viva-logo.png";
 
 const navLinks = [
@@ -63,11 +64,14 @@ export function Navigation() {
             {theme === "dark" ? <Sun className="h-4 w-4" /> : <Moon className="h-4 w-4" />}
           </Button>
 
-          <Link href="/quote" className="hidden sm:block">
-            <Button size="sm" data-testid="button-nav-quote">
-              Instant Quote
-            </Button>
-          </Link>
+          <div className="hidden items-center gap-2 sm:flex">
+            <VapiCallButton variant="outline" size="sm" label="Talk to Us 24/7" />
+            <Link href="/quote">
+              <Button size="sm" data-testid="button-nav-quote">
+                Instant Quote
+              </Button>
+            </Link>
+          </div>
 
           <Sheet open={mobileOpen} onOpenChange={setMobileOpen}>
             <SheetTrigger asChild>
@@ -99,7 +103,8 @@ export function Navigation() {
                     </Link>
                   );
                 })}
-                <div className="mt-4 px-4">
+                <div className="mt-4 space-y-2 px-4">
+                  <VapiCallButton variant="outline" size="sm" label="Talk to Us 24/7" className="w-full" />
                   <Link href="/quote" onClick={() => setMobileOpen(false)}>
                     <Button className="w-full" data-testid="button-mobile-quote">
                       Instant Quote
