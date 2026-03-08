@@ -331,5 +331,44 @@ export async function registerRoutes(
     }
   });
 
+  app.get("/robots.txt", (_req, res) => {
+    res.type("text/plain").send(
+      `User-agent: *\nAllow: /\nDisallow: /admin\nDisallow: /api/\nDisallow: /payment/\n\nSitemap: https://vivaes.net/sitemap.xml`
+    );
+  });
+
+  app.get("/sitemap.xml", (_req, res) => {
+    const pages = [
+      { loc: "/", priority: "1.0", changefreq: "weekly" },
+      { loc: "/services", priority: "0.9", changefreq: "monthly" },
+      { loc: "/services/solar-storage", priority: "0.8", changefreq: "monthly" },
+      { loc: "/services/ev-chargers", priority: "0.8", changefreq: "monthly" },
+      { loc: "/services/panel-upgrades", priority: "0.8", changefreq: "monthly" },
+      { loc: "/services/lighting-retrofits", priority: "0.7", changefreq: "monthly" },
+      { loc: "/services/general-electrical", priority: "0.8", changefreq: "monthly" },
+      { loc: "/services/commercial", priority: "0.7", changefreq: "monthly" },
+      { loc: "/services/battery-addon", priority: "0.8", changefreq: "monthly" },
+      { loc: "/services/solar-battery-new", priority: "0.8", changefreq: "monthly" },
+      { loc: "/services/reroofing-solar", priority: "0.7", changefreq: "monthly" },
+      { loc: "/services/electrification-assessment", priority: "0.8", changefreq: "monthly" },
+      { loc: "/services/warehouse-commercial", priority: "0.7", changefreq: "monthly" },
+      { loc: "/quote", priority: "0.9", changefreq: "monthly" },
+      { loc: "/booking", priority: "0.9", changefreq: "monthly" },
+      { loc: "/electrification", priority: "0.7", changefreq: "monthly" },
+      { loc: "/about", priority: "0.6", changefreq: "monthly" },
+      { loc: "/solar-storage", priority: "0.8", changefreq: "monthly" },
+    ];
+    const today = new Date().toISOString().split("T")[0];
+    const urls = pages
+      .map(
+        (p) =>
+          `  <url>\n    <loc>https://vivaes.net${p.loc}</loc>\n    <lastmod>${today}</lastmod>\n    <changefreq>${p.changefreq}</changefreq>\n    <priority>${p.priority}</priority>\n  </url>`
+      )
+      .join("\n");
+    res.type("application/xml").send(
+      `<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n${urls}\n</urlset>`
+    );
+  });
+
   return httpServer;
 }

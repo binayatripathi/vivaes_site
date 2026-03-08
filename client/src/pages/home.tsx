@@ -8,10 +8,11 @@ import { QuoteModal } from "@/components/quote-modal";
 import { VapiCallButton } from "@/components/vapi-call-button";
 import { servicesList, testimonials } from "@shared/schema";
 import vivaLogoPath from "@assets/viva-logo.png";
+import heroElectricianPath from "@assets/hero-electrician.png";
 import {
   Sun, Zap, CircuitBoard, Lightbulb, Wrench, Building2,
   Shield, Award, Clock, Star, ChevronLeft, ChevronRight,
-  ArrowRight, Phone, MessageCircle,
+  ArrowRight, Phone, MessageCircle, ChevronDown,
 } from "lucide-react";
 
 const whyVivaCards = [
@@ -37,6 +38,39 @@ const whyVivaCards = [
   },
 ];
 
+const faqData = [
+  {
+    question: "What areas does Viva Electric & Solar serve?",
+    answer:
+      "We serve the entire San Francisco Bay Area including Oakland, Berkeley, Fremont, Hayward, San Francisco, San Leandro, Richmond, Concord, Livermore, Pleasanton, and Dublin. We also serve the Central Valley including Stockton, Tracy, and Modesto.",
+  },
+  {
+    question: "Is Viva Electric & Solar licensed and insured?",
+    answer:
+      "Yes. Viva Electric & Solar Inc. holds California Contractor License #1147947. We are fully licensed, bonded, and insured. Our electricians are union-trained professionals.",
+  },
+  {
+    question: "How much does solar panel installation cost in the Bay Area?",
+    answer:
+      "Solar panel installation costs vary based on system size, roof type, and your energy needs. We offer free instant quotes through our website or by calling (510) 710-5745. Most residential systems qualify for the federal 30% solar tax credit.",
+  },
+  {
+    question: "Do you install EV chargers?",
+    answer:
+      "Yes, we install Level 2 EV chargers for all electric vehicle makes including Tesla, Ford, Rivian, Chevrolet, and more. Installation includes the charger, dedicated circuit, and any necessary panel upgrades.",
+  },
+  {
+    question: "Can I get a quote without scheduling an appointment?",
+    answer:
+      "Absolutely. You can get an instant estimate through our website 24/7, or call us at (510) 710-5745 to speak with someone directly. No obligation, no pressure.",
+  },
+  {
+    question: "What is an electrical panel upgrade and do I need one?",
+    answer:
+      "An electrical panel upgrade replaces your home's breaker box to support higher amperage — typically from 100A to 200A. You may need one if you're adding solar, an EV charger, a heat pump, or if your panel is outdated. We can assess your needs for free.",
+  },
+];
+
 const iconMap: Record<string, typeof Sun> = {
   Sun, Zap, CircuitBoard, Lightbulb, Wrench, Building2,
 };
@@ -53,6 +87,7 @@ const stagger = {
 export default function Home() {
   const [quoteOpen, setQuoteOpen] = useState(false);
   const [testimonialIdx, setTestimonialIdx] = useState(0);
+  const [openFaq, setOpenFaq] = useState<number | null>(null);
 
   const prevTestimonial = () =>
     setTestimonialIdx((i) => (i === 0 ? testimonials.length - 1 : i - 1));
@@ -64,8 +99,8 @@ export default function Home() {
       <section className="relative flex min-h-[85vh] items-center overflow-hidden" data-testid="section-hero">
         <div className="absolute inset-0">
           <img
-            src="https://images.unsplash.com/photo-1621905252507-b35492cc74b4?w=1600&q=80"
-            alt="Electrician working on a residential electrical panel in an older home"
+            src={heroElectricianPath}
+            alt="Hispanic electrician working on a residential electrical panel in a Bay Area home"
             className="h-full w-full object-cover"
           />
           <div className="absolute inset-0 bg-gradient-to-r from-black/80 via-black/60 to-black/40" />
@@ -309,6 +344,55 @@ export default function Home() {
                   <ChevronRight className="h-4 w-4" />
                 </Button>
               </div>
+            </motion.div>
+          </motion.div>
+        </div>
+      </section>
+
+      <section className="bg-muted py-20" data-testid="section-faq">
+        <div className="mx-auto max-w-3xl px-4 sm:px-6 lg:px-8">
+          <motion.div
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true, margin: "-100px" }}
+            variants={stagger}
+            className="space-y-10"
+          >
+            <motion.div variants={fadeUp} className="text-center">
+              <h2 className="text-3xl font-bold tracking-tight sm:text-4xl" data-testid="text-faq-title">
+                Frequently Asked Questions
+              </h2>
+              <p className="mx-auto mt-3 max-w-2xl text-muted-foreground">
+                Quick answers about our services, coverage, and process.
+              </p>
+            </motion.div>
+
+            <motion.div variants={fadeUp} className="space-y-3">
+              {faqData.map((faq, i) => (
+                <div
+                  key={i}
+                  className="rounded-lg border bg-card"
+                  data-testid={`faq-item-${i}`}
+                >
+                  <button
+                    onClick={() => setOpenFaq(openFaq === i ? null : i)}
+                    className="flex w-full items-center justify-between px-5 py-4 text-left"
+                    data-testid={`button-faq-${i}`}
+                  >
+                    <span className="pr-4 font-medium">{faq.question}</span>
+                    <ChevronDown
+                      className={`h-5 w-5 shrink-0 text-muted-foreground transition-transform ${
+                        openFaq === i ? "rotate-180" : ""
+                      }`}
+                    />
+                  </button>
+                  {openFaq === i && (
+                    <div className="px-5 pb-4 text-sm leading-relaxed text-muted-foreground" data-testid={`text-faq-answer-${i}`}>
+                      {faq.answer}
+                    </div>
+                  )}
+                </div>
+              ))}
             </motion.div>
           </motion.div>
         </div>

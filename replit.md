@@ -137,7 +137,8 @@ Professional website for Viva Electric & Solar Inc. (vivaes.net) - licensed elec
 - `client/src/components/vapi-call-button.tsx` - Vapi voice call button + provider
 - `client/src/components/navigation.tsx` - Top nav
 - `client/src/components/footer.tsx` - Site footer
-- `client/index.html` - Schema.org JSON-LD structured data
+- `client/index.html` - Schema.org JSON-LD structured data (ElectricalContractor, WebSite, FAQPage), OG/Twitter meta, canonical URL
+- Hero image: generated Hispanic electrician at `attached_assets/hero-electrician.png` (imported via `@assets/hero-electrician.png`)
 
 ## Design
 - Electric blue primary color (hsl 217 91% 60%)
@@ -150,6 +151,13 @@ Professional website for Viva Electric & Solar Inc. (vivaes.net) - licensed elec
 - "Why Viva" section with 4 dark slate cards
 - No AI branding - uses "24/7" and "instant" messaging
 - Roberto is Hispanic — imagery reflects diverse/Hispanic tradespeople and Bay Area working-class neighborhoods
+
+## SEO & Discoverability
+- **robots.txt**: Served at `/robots.txt` — allows all crawlers, blocks /admin, /api/, /payment/
+- **sitemap.xml**: Served at `/sitemap.xml` — 15 pages, auto-generated with current date
+- **Schema.org JSON-LD**: @graph with ElectricalContractor (business info, reviews, services, geo), WebSite, FAQPage (6 questions)
+- **Meta tags**: canonical URL, OG tags, Twitter cards, geo meta, keywords
+- **FAQ schema**: Optimized for LLM/AI search engines (Google SGE, Bing Copilot, ChatGPT) with natural-language Q&A about services, areas, licensing, pricing
 
 ## User Preferences
 - No AI mentions anywhere on the site
