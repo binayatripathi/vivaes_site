@@ -39,7 +39,7 @@ const serviceCards = [
       "Already have solar panels? Add a battery storage system to store excess energy, reduce your reliance on the grid, and keep the lights on during outages. We work with all major inverter brands for seamless integration.",
     icon: Battery,
     quoteService: "battery-addon",
-    image: "https://images.unsplash.com/photo-1558449028-b53a39d100fc?w=800&q=80",
+    image: "/images/services/battery-addon.png",
   },
   {
     title: "Re-Roofing with Panel Removal & Reinstall",
@@ -47,7 +47,7 @@ const serviceCards = [
       "Need a new roof but have solar panels in the way? We safely remove your panels, coordinate with your roofer, and reinstall everything once the roof is done — fully tested and permitted.",
     icon: Wrench,
     quoteService: "reroofing-solar",
-    image: "https://images.unsplash.com/photo-1621905252507-b35492cc74b4?w=800&q=80",
+    image: "/images/services/reroofing-solar.jpg",
   },
   {
     title: "System Health Checks & Optimization",
@@ -55,7 +55,7 @@ const serviceCards = [
       "Is your solar system performing at its best? We inspect panels, wiring, inverters, and monitoring systems to diagnose issues and optimize output. Includes a detailed performance report.",
     icon: Activity,
     quoteService: "solar-storage",
-    image: "https://images.unsplash.com/photo-1509391366360-2e959784a276?w=800&q=80",
+    image: "/images/services/solar-battery-new.jpg",
   },
 ];
 
@@ -75,7 +75,7 @@ export default function SolarStoragePage() {
         data-testid="section-solar-hero"
       >
         <img
-          src="https://images.unsplash.com/photo-1508514177221-188b1cf16e9d?w=1600&q=80"
+          src="/images/pages/solar-installation.png"
           alt="Solar panels on a residential roof"
           className="absolute inset-0 h-full w-full object-cover"
         />

@@ -147,7 +147,8 @@ Professional website for Viva Electric & Solar Inc. (vivaes.net) - licensed elec
 - Dark/light mode with class-based toggling
 - Framer Motion animations for scroll reveals
 - Real Viva logo (green/blue gradient lightning bolt) in nav and footer
-- Real Unsplash photography (working-class Bay Area neighborhoods, craftsman bungalows, diverse tradespeople, older homes, warehouses)
+- Local images in `client/public/images/services/` (11 service images) and `client/public/images/pages/` (9 page images)
+- Mix of stock photography and AI-generated images: homes, vintage homes, commercial buildings, warehouses, solar installations, EV chargers, battery storage, electrical panels
 - "Why Viva" section with 4 dark slate cards
 - No AI branding - uses "24/7" and "instant" messaging
 - Roberto is Hispanic — imagery reflects diverse/Hispanic tradespeople and Bay Area working-class neighborhoods

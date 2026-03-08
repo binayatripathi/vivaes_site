@@ -9,7 +9,7 @@ export const servicesList = [
     shortDescription: "Harness clean energy with premium solar panel installations and battery storage systems.",
     description: "Our union-trained solar technicians design and install high-efficiency photovoltaic systems for residential and commercial properties. We pair panels with cutting-edge battery storage solutions to maximize your energy independence and savings. From initial consultation to final inspection, we handle every detail with precision.",
     icon: "Sun",
-    image: "https://images.unsplash.com/photo-1559302504-64aae6ca6b6d?w=800&q=80",
+    image: "/images/services/solar-storage.png",
   },
   {
     slug: "ev-chargers",
@@ -17,7 +17,7 @@ export const servicesList = [
     shortDescription: "Level 2 and DC fast charging installations for homes and businesses.",
     description: "Stay ahead of the electric vehicle revolution with professionally installed charging stations. We install Level 2 home chargers, commercial fleet charging systems, and DC fast chargers. Our team handles permitting, electrical upgrades, and network configuration for a turnkey EV charging solution.",
     icon: "Zap",
-    image: "https://images.unsplash.com/photo-1593941707882-a5bba14938c7?w=800&q=80",
+    image: "/images/services/ev-chargers.png",
   },
   {
     slug: "panel-upgrades",
@@ -25,7 +25,7 @@ export const servicesList = [
     shortDescription: "Modernize your electrical panel to handle today's power demands safely.",
     description: "Outdated electrical panels can be a fire hazard and limit your home's capacity for modern appliances, EV chargers, and solar systems. Our licensed electricians upgrade panels from 100A to 200A or 400A, ensuring your system meets current code requirements and supports your growing electrical needs.",
     icon: "CircuitBoard",
-    image: "https://images.unsplash.com/photo-1621905252507-b35492cc74b4?w=800&q=80",
+    image: "/images/services/panel-upgrades.png",
   },
   {
     slug: "lighting-retrofits",
@@ -33,7 +33,7 @@ export const servicesList = [
     shortDescription: "Upgrade to energy-efficient LED lighting and smart controls.",
     description: "Transform your space with modern LED lighting that cuts energy costs by up to 75%. We retrofit commercial offices, warehouses, parking structures, and residential properties with high-quality LED fixtures, smart controls, and daylight harvesting systems. Enjoy better light quality and significant utility savings.",
     icon: "Lightbulb",
-    image: "https://images.unsplash.com/photo-1497366216548-37526070297c?w=800&q=80",
+    image: "/images/services/lighting-retrofits.jpg",
   },
   {
     slug: "general-electrical",
@@ -41,7 +41,7 @@ export const servicesList = [
     shortDescription: "Full-service electrical work from repairs to new construction wiring.",
     description: "From troubleshooting electrical issues to complete rewiring projects, our journeyman electricians handle it all. We provide code-compliant installations, repairs, and maintenance for residential and commercial properties. Services include outlet installation, circuit additions, surge protection, and safety inspections.",
     icon: "Wrench",
-    image: "https://images.unsplash.com/photo-1621905251189-08b45d6a269e?w=800&q=80",
+    image: "/images/services/general-electrical.jpg",
   },
   {
     slug: "commercial",
@@ -49,7 +49,7 @@ export const servicesList = [
     shortDescription: "Large-scale electrical and solar solutions for commercial properties.",
     description: "We specialize in commercial-grade electrical and solar installations that meet the demanding requirements of business operations. Our services include tenant improvements, new construction wiring, emergency power systems, data center infrastructure, and large-scale solar arrays with monitoring systems.",
     icon: "Building2",
-    image: "https://images.unsplash.com/photo-1504307651254-35680f356dfd?w=800&q=80",
+    image: "/images/services/commercial.jpg",
   },
   {
     slug: "battery-addon",
@@ -57,7 +57,7 @@ export const servicesList = [
     shortDescription: "Add battery storage to your existing solar system for energy independence.",
     description: "Already have solar panels? Add a battery storage system to store excess energy and power your home during outages or peak rate hours. We install Enphase, Tesla Powerwall, FranklinWH, and other top brands. Maximize your existing solar investment with seamless integration.",
     icon: "Battery",
-    image: "https://images.unsplash.com/photo-1558449028-b53a39d100fc?w=800&q=80",
+    image: "/images/services/battery-addon.png",
   },
   {
     slug: "solar-battery-new",
@@ -65,7 +65,7 @@ export const servicesList = [
     shortDescription: "Complete new solar panel and battery storage installation.",
     description: "Go solar with a fully integrated solar panel and battery storage system from day one. We design, permit, and install complete photovoltaic systems paired with premium battery solutions for maximum energy independence and savings.",
     icon: "Sun",
-    image: "https://images.unsplash.com/photo-1509391366360-2e959784a276?w=800&q=80",
+    image: "/images/services/solar-battery-new.jpg",
   },
   {
     slug: "reroofing-solar",
@@ -73,7 +73,7 @@ export const servicesList = [
     shortDescription: "Need a new roof? We remove and reinstall your solar panels safely.",
     description: "When it's time for a new roof, your solar panels need professional removal and reinstallation. We carefully detach your panels, coordinate with your roofer, and reinstall everything to manufacturer specifications with updated wiring and optimized placement.",
     icon: "Home",
-    image: "https://images.unsplash.com/photo-1449844908441-8829872d2607?w=800&q=80",
+    image: "/images/services/reroofing-solar.jpg",
   },
   {
     slug: "electrification-assessment",
@@ -81,7 +81,7 @@ export const servicesList = [
     shortDescription: "Free assessment to plan your home's electrification journey.",
     description: "Get a comprehensive, no-cost evaluation of your home's electrification potential. We assess your electrical panel, appliances, and energy usage to create a personalized roadmap for transitioning to all-electric. Includes rebate and incentive guidance for federal, state, and utility programs.",
     icon: "ClipboardCheck",
-    image: "https://images.unsplash.com/photo-1460317442991-0ec209397118?w=800&q=80",
+    image: "/images/services/electrification-assessment.jpg",
   },
   {
     slug: "warehouse-commercial",
@@ -89,7 +89,7 @@ export const servicesList = [
     shortDescription: "Heavy-duty electrical solutions for warehouses and commercial facilities.",
     description: "Specialized electrical services for warehouses, distribution centers, and large commercial facilities. We handle 3-phase power installations, industrial lighting, high-amperage circuits, loading dock power, and facility-wide electrical infrastructure upgrades.",
     icon: "Warehouse",
-    image: "https://images.unsplash.com/photo-1586528116311-ad8dd3c8310d?w=800&q=80",
+    image: "/images/services/warehouse-commercial.jpg",
   },
 ] as const;
 

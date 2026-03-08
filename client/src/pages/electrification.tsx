@@ -84,7 +84,7 @@ export default function ElectrificationPage() {
     <>
       <section className="relative flex min-h-[50vh] items-center overflow-hidden" data-testid="section-electrification-hero">
         <img
-          src="https://images.unsplash.com/photo-1585128792020-803d29415281?w=1600&q=80"
+          src="/images/pages/craftsman-home.png"
           alt="Older home being renovated with electrical upgrades"
           className="absolute inset-0 h-full w-full object-cover"
         />
@@ -158,7 +158,7 @@ export default function ElectrificationPage() {
               <div className="grid grid-cols-1 items-center gap-8 md:grid-cols-2">
                 <div className="overflow-hidden rounded-md">
                   <img
-                    src="https://images.unsplash.com/photo-1621905251189-08b45d6a269e?w=800&q=80"
+                    src="/images/pages/electrical-panel-work.jpg"
                     alt="Electrician working on a home electrical panel"
                     className="h-full w-full object-cover"
                     data-testid="img-what-is-electrification"

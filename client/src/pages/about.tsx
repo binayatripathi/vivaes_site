@@ -25,12 +25,12 @@ import {
 import { VapiCallButton } from "@/components/vapi-call-button";
 import { serviceAreas } from "@shared/schema";
 
-const aboutHeroImg = "https://images.unsplash.com/photo-1449844908441-8829872d2607?w=1600&q=80";
-const aboutTeamImg = "https://images.unsplash.com/photo-1504307651254-35680f356dfd?w=800&q=80";
-const valueSafetyImg = "https://images.unsplash.com/photo-1621905251189-08b45d6a269e?w=800&q=80";
-const valueUnionImg = "https://images.unsplash.com/photo-1581094794329-c8112a89af12?w=800&q=80";
-const valueLicensedImg = "https://images.unsplash.com/photo-1621905252507-b35492cc74b4?w=800&q=80";
-const valueCuttingEdgeImg = "https://images.unsplash.com/photo-1559302504-64aae6ca6b6d?w=800&q=80";
+const aboutHeroImg = "/images/pages/sf-victorian-homes.jpg";
+const aboutTeamImg = "/images/pages/team-electricians.png";
+const valueSafetyImg = "/images/pages/electrical-panel-work.jpg";
+const valueUnionImg = "/images/pages/craftsman-home.png";
+const valueLicensedImg = "/images/pages/residential-home-dusk.jpg";
+const valueCuttingEdgeImg = "/images/pages/solar-panels-roof.jpg";
 
 const fadeUp = {
   hidden: { opacity: 0, y: 24 },
