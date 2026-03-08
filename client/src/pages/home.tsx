@@ -259,7 +259,7 @@ export default function Home() {
                     <img
                       src={vivaLogoPath}
                       alt="Viva Electric & Solar"
-                      className="mb-4 h-12 w-auto"
+                      className="mb-4 h-14 w-auto brightness-125 drop-shadow-[0_0_6px_rgba(255,255,255,0.3)]"
                     />
                     <h3 className="mb-3 text-lg font-semibold text-white">
                       {card.title}

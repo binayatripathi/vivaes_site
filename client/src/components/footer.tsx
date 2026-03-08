@@ -13,7 +13,7 @@ export function Footer() {
               <img
                 src={vivaLogoPath}
                 alt="Viva Electric & Solar Inc."
-                className="h-10 w-auto"
+                className="h-12 w-auto dark:brightness-125 dark:drop-shadow-[0_0_6px_rgba(255,255,255,0.3)]"
                 data-testid="img-footer-logo"
               />
             </div>
