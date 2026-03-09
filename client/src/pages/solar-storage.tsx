@@ -13,6 +13,9 @@ import {
   ArrowRight,
   MessageCircle,
   ShieldCheck,
+  CheckCircle,
+  ExternalLink,
+  HardHat,
 } from "lucide-react";
 
 const fadeUp = {
@@ -25,26 +28,26 @@ const stagger = {
 };
 
 const batteryBrands = [
-  { name: "Enphase", initials: "EN" },
-  { name: "Tesla Powerwall", initials: "TP" },
-  { name: "FranklinWH", initials: "FW" },
-  { name: "SolarEdge", initials: "SE" },
-  { name: "Generac PWRcell", initials: "GC" },
+  { name: "Enphase IQ Battery", initials: "EN", url: "https://enphase.com/homeowners/home-solar-batteries" },
+  { name: "Tesla Powerwall", initials: "TP", url: "https://www.tesla.com/powerwall" },
+  { name: "FranklinWH", initials: "FW", url: "https://www.franklinwh.com" },
+  { name: "SolarEdge Energy Bank", initials: "SE", url: "https://www.solaredge.com/us/products/residential/storage-and-backup" },
+  { name: "Generac PWRcell", initials: "GC", url: "https://www.generac.com/pwrcell" },
 ];
 
 const serviceCards = [
   {
-    title: "Battery Add-On to Existing Solar",
+    title: "Add Battery Storage to Your Existing Solar System",
     description:
-      "Already have solar panels? Add a battery storage system to store excess energy, reduce your reliance on the grid, and keep the lights on during outages. We work with all major inverter brands for seamless integration.",
+      "Already have solar panels installed? A home battery can be added to store excess solar energy and provide backup power during outages. We evaluate your current solar equipment, inverter, and electrical system to determine the best battery solution that integrates with your setup. We install and integrate Tesla Powerwall, Enphase IQ Battery, FranklinWH, SolarEdge, and Generac PWRcell.",
     icon: Battery,
     quoteService: "battery-addon",
     image: "/images/services/battery-addon.png",
   },
   {
-    title: "Re-Roofing with Panel Removal & Reinstall",
+    title: "Re-Roofing with Solar Panel Removal & Reinstall",
     description:
-      "Need a new roof but have solar panels in the way? We safely remove your panels, coordinate with your roofer, and reinstall everything once the roof is done — fully tested and permitted.",
+      "Need solar panel removal for roof replacement? We safely remove your panels, coordinate with your roofer, and perform a complete solar panel removal and reinstall once the roof is done — fully tested and permitted. We work as a trusted solar removal and reinstall subcontractor for roofing companies across the Bay Area and Central Valley.",
     icon: Wrench,
     quoteService: "reroofing-solar",
     image: "/images/services/reroofing-solar.jpg",
@@ -57,6 +60,15 @@ const serviceCards = [
     quoteService: "solar-storage",
     image: "/images/services/solar-battery-new.jpg",
   },
+];
+
+const panelRemovalIncludes = [
+  "Safe removal and secure storage of all solar panels and racking",
+  "Coordination with your roofing contractor on project timeline",
+  "Complete reinstallation and reconnection after roof work is done",
+  "Full system testing to verify performance and output",
+  "Permit handling and utility coordination as needed",
+  "Warranty on all reinstallation labor and materials",
 ];
 
 export default function SolarStoragePage() {
@@ -147,42 +159,49 @@ export default function SolarStoragePage() {
                 className="text-3xl font-bold tracking-tight sm:text-4xl"
                 data-testid="text-brands-title"
               >
-                Battery Storage Brands We Install
+                Home Battery Backup Systems We Install
               </h2>
-              <p className="mx-auto mt-3 max-w-2xl text-muted-foreground">
-                We partner with the industry's leading battery manufacturers to
-                deliver reliable, high-performance energy storage for your home
-                or business.
+              <p className="mx-auto mt-3 max-w-3xl text-muted-foreground">
+                We install leading solar battery systems that store excess solar energy and provide backup power during grid outages. Battery storage can also be added to many existing solar systems to increase energy independence and improve energy management.
               </p>
             </motion.div>
 
             <motion.div
               variants={fadeUp}
-              className="grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-6"
+              className="grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-5"
             >
               {batteryBrands.map((brand) => (
-                <div
+                <a
                   key={brand.name}
-                  className="flex flex-col items-center justify-center gap-3 rounded-md border border-border bg-background p-6 text-center"
+                  href={brand.url}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="group flex flex-col items-center justify-center gap-3 rounded-md border border-border bg-background p-6 text-center transition-colors hover:border-primary/50 hover:bg-primary/5"
                   data-testid={`brand-${brand.name.toLowerCase().replace(/\s+/g, "-")}`}
                 >
-                  <div className="flex h-12 w-12 items-center justify-center rounded-md bg-primary/10">
+                  <div className="flex h-12 w-12 items-center justify-center rounded-md bg-primary/10 transition-colors group-hover:bg-primary/20">
                     <span className="text-lg font-bold text-primary">
                       {brand.initials}
                     </span>
                   </div>
                   <span className="text-sm font-medium">{brand.name}</span>
-                </div>
+                  <ExternalLink className="h-3 w-3 text-muted-foreground opacity-0 transition-opacity group-hover:opacity-100" />
+                </a>
               ))}
-              <div
-                className="flex flex-col items-center justify-center gap-3 rounded-md border border-dashed border-border bg-background p-6 text-center"
-                data-testid="brand-more"
+            </motion.div>
+
+            <motion.div variants={fadeUp} className="space-y-4 text-center">
+              <p className="text-sm text-muted-foreground">
+                Already have solar panels? We can add battery storage to many existing solar systems.
+              </p>
+              <Button
+                size="lg"
+                onClick={() => openQuote("battery-addon")}
+                data-testid="button-check-battery-compatibility"
               >
-                <div className="flex h-12 w-12 items-center justify-center rounded-md bg-muted">
-                  <span className="text-lg font-bold text-muted-foreground">+</span>
-                </div>
-                <Badge variant="outline">+ More</Badge>
-              </div>
+                <Battery className="mr-2 h-4 w-4" />
+                Check if Your Solar System Can Add a Battery
+              </Button>
             </motion.div>
           </motion.div>
         </div>
@@ -249,6 +268,76 @@ export default function SolarStoragePage() {
                   </motion.div>
                 );
               })}
+            </div>
+          </motion.div>
+        </div>
+      </section>
+
+      <section className="bg-card py-20" data-testid="section-panel-removal">
+        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+          <motion.div
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true, margin: "-100px" }}
+            variants={stagger}
+            className="space-y-12"
+          >
+            <motion.div variants={fadeUp} className="text-center">
+              <Badge variant="secondary" className="mb-4">
+                <HardHat className="mr-1 h-3 w-3" /> Add-On Services
+              </Badge>
+              <h2
+                className="text-3xl font-bold tracking-tight sm:text-4xl"
+                data-testid="text-panel-removal-title"
+              >
+                Solar Panel Removal & Reinstallation
+              </h2>
+            </motion.div>
+
+            <div className="grid grid-cols-1 items-center gap-10 lg:grid-cols-2">
+              <motion.div variants={fadeUp} className="space-y-6">
+                <p className="text-lg leading-relaxed text-muted-foreground">
+                  We provide professional <strong>solar panel removal and reinstall</strong> services for homeowners and roofing contractors. If your home needs a new roof, our team performs a complete <strong>solar detach and reset</strong> so the roofing project can proceed safely and on schedule.
+                </p>
+                <p className="text-lg leading-relaxed text-muted-foreground">
+                  Whether you need <strong>solar panel removal for roof replacement</strong> on your own home or you're a roofing company looking for a reliable <strong>solar removal and reinstall subcontractor</strong>, we handle every step — from safe panel removal to full system reinstallation and testing.
+                </p>
+                <p className="text-lg leading-relaxed text-muted-foreground">
+                  We serve homeowners and contractors across the region, including <strong>solar panel removal Central Valley</strong> (Stockton, Tracy, Modesto, Manteca) and <strong>solar panel removal Bay Area</strong> (Oakland, Berkeley, Fremont, San Francisco, and surrounding cities).
+                </p>
+
+                <div className="space-y-3 pt-2">
+                  <h3 className="text-lg font-semibold">What's Included</h3>
+                  <ul className="space-y-2">
+                    {panelRemovalIncludes.map((item) => (
+                      <li key={item} className="flex items-start gap-2 text-sm text-muted-foreground">
+                        <CheckCircle className="mt-0.5 h-4 w-4 shrink-0 text-green-500" />
+                        <span>{item}</span>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+
+                <div className="flex flex-wrap gap-3 pt-4">
+                  <Button
+                    size="lg"
+                    onClick={() => openQuote("reroofing-solar")}
+                    data-testid="button-panel-removal-quote"
+                  >
+                    Get a Quote for Panel Removal
+                    <MessageCircle className="ml-2 h-4 w-4" />
+                  </Button>
+                </div>
+              </motion.div>
+
+              <motion.div variants={fadeUp} className="overflow-hidden rounded-md">
+                <img
+                  src="/images/services/reroofing-solar.jpg"
+                  alt="Solar panel removal and reinstall for roof replacement"
+                  className="h-full w-full object-cover"
+                  data-testid="img-panel-removal"
+                />
+              </motion.div>
             </div>
           </motion.div>
         </div>
