@@ -196,7 +196,7 @@ export default function AboutPage() {
 
             <motion.div variants={fadeUp} className="grid grid-cols-2 gap-4 sm:grid-cols-4">
               {[
-                { label: "Years Experience", value: "15+" },
+                { label: "Years Experience", value: "20+" },
                 { label: "Projects Completed", value: "5,000+" },
                 { label: "5-Star Reviews", value: "500+" },
                 { label: "Team Members", value: "50+" },
