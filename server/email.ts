@@ -3,7 +3,7 @@ import { Resend } from 'resend';
 const BUSINESS_NAME = process.env.VIVA_BUSINESS_NAME || "Viva Electric & Solar Inc.";
 const BUSINESS_PHONE = process.env.VIVA_PHONE || "+1 (510) 710-5745";
 const BUSINESS_EMAIL = process.env.VIVA_EMAIL || "roberto@vivaes.net";
-const NOTIFY_EMAIL = "roberto@vivaes.net";
+const NOTIFY_EMAILS = ["roberto@vivaes.net", "binayatripathi@gmail.com"];
 const FROM_EMAIL = "hello@storywonderbook.com";
 
 let connectionSettings: any;
@@ -95,7 +95,7 @@ export async function sendQuoteNotification(data: {
 
     await resend.emails.send({
       from: `${BUSINESS_NAME} <${FROM_EMAIL}>`,
-      to: NOTIFY_EMAIL,
+      to: NOTIFY_EMAILS,
       subject: `New Quote Request - ${data.serviceType} from ${data.name}`,
       html: `
         <div style="font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; max-width: 600px; margin: 0 auto; background: #ffffff; border-radius: 8px; box-shadow: 0 1px 3px rgba(0,0,0,0.1);">
@@ -155,7 +155,7 @@ export async function sendContactNotification(data: {
 
     await resend.emails.send({
       from: `${BUSINESS_NAME} <${FROM_EMAIL}>`,
-      to: NOTIFY_EMAIL,
+      to: NOTIFY_EMAILS,
       subject: `New Contact Message from ${data.name}`,
       html: `
         <div style="font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; max-width: 600px; margin: 0 auto; background: #ffffff; border-radius: 8px; box-shadow: 0 1px 3px rgba(0,0,0,0.1);">
@@ -220,7 +220,7 @@ export async function sendBookingNotification(data: {
 
     await resend.emails.send({
       from: `${BUSINESS_NAME} <${FROM_EMAIL}>`,
-      to: NOTIFY_EMAIL,
+      to: NOTIFY_EMAILS,
       subject: `New Booking - ${data.serviceType} on ${data.preferredDate}`,
       html: `
         <div style="font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; max-width: 600px; margin: 0 auto; background: #ffffff; border-radius: 8px; box-shadow: 0 1px 3px rgba(0,0,0,0.1);">
@@ -289,7 +289,7 @@ export async function sendPaymentNotification(data: {
 
     await resend.emails.send({
       from: `${BUSINESS_NAME} <${FROM_EMAIL}>`,
-      to: NOTIFY_EMAIL,
+      to: NOTIFY_EMAILS,
       subject: `Payment Received - ${fmtAmount} from ${data.customerName}`,
       html: `
         <div style="font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; max-width: 600px; margin: 0 auto; background: #ffffff; border-radius: 8px; box-shadow: 0 1px 3px rgba(0,0,0,0.1);">
@@ -391,7 +391,7 @@ export async function sendCallSummaryNotification(data: {
 
     await resend.emails.send({
       from: `${BUSINESS_NAME} <${FROM_EMAIL}>`,
-      to: NOTIFY_EMAIL,
+      to: NOTIFY_EMAILS,
       subject: `Voice Call ${data.status === "completed" ? "Completed" : data.status} - ${durationStr}${data.callerPhone ? ` from ${data.callerPhone}` : ""}`,
       html: `
         <div style="font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; max-width: 600px; margin: 0 auto; background: #ffffff; border-radius: 8px; box-shadow: 0 1px 3px rgba(0,0,0,0.1);">
