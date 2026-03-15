@@ -1,0 +1,94 @@
+Absolutely.
+
+1. Message to Roberto
+
+Perfect — this is really helpful.
+
+I think the main priorities now are:
+
+1. Make the quote numbers less generic and more responsive to the actual inputs
+2. Add solar and battery more clearly into the website and estimate flow
+3. Clean up the pricing breakdown so it feels professional and balanced
+4. Organize the social accounts so the overall setup feels complete and ready to show people
+
+That way we’re not just making it look better — we’re making it more accurate, more credible, and easier for you to refer to friends once it’s dialed in.
+
+If that sounds right, I’ll send these updates to Replit next.
+
+───
+
+2. Polished prompt for Replit
+
+Please update Roberto’s Viva Electric website and quote system based on the latest client feedback.
+
+Main Priority: Improve quote realism and responsiveness
+
+Roberto noticed that the quote calculator still feels too generic. When customers change inputs, the pricing should change in a more meaningful and believable way.
+
+Update the quote logic so estimates vary based on factors like:
+
+• service type
+• charger level / amperage
+• panel upgrade requirement
+• distance / wiring complexity
+• permit / inspection assumptions
+• battery add-ons
+• solar-related electrical prep
+• other relevant install conditions
+
+Important:
+
+• The outputs should feel realistic, not random
+• Avoid quotes that look overly templated
+• If appropriate, return a pricing range instead of one overly precise number
+• Keep estimates internally consistent and customer-friendly
+
+Pricing breakdown changes
+
+• Remove the “Base Service” line item from relevant quote breakdowns
+• Rebalance that value across more believable categories
+• Keep the breakdown clean, professional, and trustworthy
+• Make permits / fees / inspection costs realistic, not inflated
+• Ensure labor and materials still make sense
+• Add language that final pricing is subject to site verification / walkthrough / code conditions
+
+Website updates: Solar + Battery
+
+Roberto wants the business positioned more clearly beyond standard electrical work.
+
+Please add or improve website sections for:
+
+• Solar-related electrical work
+• Battery backup installation
+• Battery add-ons to existing solar systems
+• EV charger + solar / battery coordination
+• Panel upgrades for energy systems
+• Backup power / home energy readiness
+
+Also add relevant CTAs such as:
+
+• “Get a battery backup estimate”
+• “See if your home is ready for solar or battery”
+• “Request a custom electrical + energy system quote”
+
+Quote flow additions
+
+Add quote categories or flows for:
+
+• battery-only installation
+• battery add-on to existing solar
+• electrical prep for solar installation
+• combined EV charger + panel + backup power work
+
+Deliverables
+
+Please return:
+
+1. Updated website sections
+2. Updated pricing / quote logic
+3. A few sample before/after quote examples showing that different inputs now produce meaningfully different outputs
+
+Goal:
+Make the system feel accurate, credible, and referral-ready — not generic.
+
+If you want, I can also make the Replit prompt shorter and more punchy so you can paste it fast without all the formatting.
