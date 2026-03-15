@@ -16,6 +16,11 @@ import {
   CheckCircle,
   ExternalLink,
   HardHat,
+  Zap,
+  CircuitBoard,
+  Power,
+  Home,
+  ShieldAlert,
 } from "lucide-react";
 
 const fadeUp = {
@@ -269,6 +274,208 @@ export default function SolarStoragePage() {
                 );
               })}
             </div>
+          </motion.div>
+        </div>
+      </section>
+
+      <section className="bg-muted py-20" data-testid="section-battery-backup">
+        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+          <motion.div
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true, margin: "-100px" }}
+            variants={stagger}
+            className="space-y-12"
+          >
+            <motion.div variants={fadeUp} className="text-center">
+              <Badge variant="secondary" className="mb-4">
+                <ShieldAlert className="mr-1 h-3 w-3" /> Power Security
+              </Badge>
+              <h2
+                className="text-3xl font-bold tracking-tight sm:text-4xl"
+                data-testid="text-battery-backup-title"
+              >
+                Battery Backup & Backup Power Readiness
+              </h2>
+              <p className="mx-auto mt-3 max-w-3xl text-muted-foreground">
+                Don't wait for the next outage to think about backup power. Whether you have solar or not, a battery backup system keeps your lights on, your fridge running, and your family safe when the grid goes down.
+              </p>
+            </motion.div>
+
+            <div className="grid grid-cols-1 gap-8 lg:grid-cols-2">
+              <motion.div variants={fadeUp} className="space-y-6">
+                <div className="flex items-start gap-4">
+                  <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-md bg-primary/10">
+                    <Battery className="h-6 w-6 text-primary" />
+                  </div>
+                  <div>
+                    <h3 className="text-lg font-semibold">Standalone Battery Backup</h3>
+                    <p className="mt-1 text-sm text-muted-foreground">
+                      No solar panels needed. We install battery systems that charge from the grid during off-peak hours and provide seamless backup power during outages. Perfect for areas with unreliable power or homes that aren't ready for solar yet.
+                    </p>
+                  </div>
+                </div>
+
+                <div className="flex items-start gap-4">
+                  <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-md bg-primary/10">
+                    <Sun className="h-6 w-6 text-primary" />
+                  </div>
+                  <div>
+                    <h3 className="text-lg font-semibold">Battery Add-On to Existing Solar</h3>
+                    <p className="mt-1 text-sm text-muted-foreground">
+                      Already have solar panels? Add a battery to store excess energy you're currently sending back to the grid. Use stored power during peak rate hours or outages to maximize your solar investment.
+                    </p>
+                  </div>
+                </div>
+
+                <div className="flex items-start gap-4">
+                  <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-md bg-primary/10">
+                    <CircuitBoard className="h-6 w-6 text-primary" />
+                  </div>
+                  <div>
+                    <h3 className="text-lg font-semibold">Backup Power Readiness Assessment</h3>
+                    <p className="mt-1 text-sm text-muted-foreground">
+                      Not sure if your home is ready for a battery? We evaluate your electrical panel, load capacity, and wiring to determine the best backup solution — and tell you exactly what it will take to get set up.
+                    </p>
+                  </div>
+                </div>
+              </motion.div>
+
+              <motion.div variants={fadeUp} className="flex flex-col justify-center space-y-4">
+                <div className="rounded-lg border bg-card p-6 space-y-4">
+                  <h3 className="text-lg font-semibold">Is Your Home Ready?</h3>
+                  <p className="text-sm text-muted-foreground">
+                    A quick assessment can tell you if your home can support a battery system today — or what upgrades you might need first. We check your panel capacity, grounding, and available space.
+                  </p>
+                  <div className="flex flex-wrap gap-3">
+                    <Button
+                      onClick={() => openQuote("battery-only")}
+                      data-testid="button-battery-backup-quote"
+                    >
+                      Get a Battery Backup Estimate
+                      <MessageCircle className="ml-2 h-4 w-4" />
+                    </Button>
+                    <Button
+                      variant="outline"
+                      onClick={() => openQuote("electrification-assessment")}
+                      data-testid="button-backup-readiness"
+                    >
+                      See if Your Home is Ready
+                      <ArrowRight className="ml-2 h-4 w-4" />
+                    </Button>
+                  </div>
+                </div>
+              </motion.div>
+            </div>
+          </motion.div>
+        </div>
+      </section>
+
+      <section className="bg-background py-20" data-testid="section-ev-solar-coordination">
+        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+          <motion.div
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true, margin: "-100px" }}
+            variants={stagger}
+            className="space-y-12"
+          >
+            <motion.div variants={fadeUp} className="text-center">
+              <Badge variant="secondary" className="mb-4">
+                <Zap className="mr-1 h-3 w-3" /> All-Electric Home
+              </Badge>
+              <h2
+                className="text-3xl font-bold tracking-tight sm:text-4xl"
+                data-testid="text-ev-solar-title"
+              >
+                EV + Solar + Battery Coordination
+              </h2>
+              <p className="mx-auto mt-3 max-w-3xl text-muted-foreground">
+                Going all-electric? Bundling your EV charger, panel upgrade, and battery backup into one project saves time, reduces costs, and ensures everything works together from day one.
+              </p>
+            </motion.div>
+
+            <div className="grid grid-cols-1 gap-6 md:grid-cols-3">
+              <motion.div variants={fadeUp}>
+                <Card className="flex h-full flex-col overflow-visible hover-elevate" data-testid="card-ev-solar-bundle">
+                  <CardContent className="flex flex-1 flex-col p-6">
+                    <div className="mb-4 flex h-12 w-12 items-center justify-center rounded-md bg-primary/10">
+                      <Zap className="h-6 w-6 text-primary" />
+                    </div>
+                    <h3 className="mb-2 text-lg font-semibold">EV Charger + Panel + Battery</h3>
+                    <p className="mb-6 flex-1 text-sm text-muted-foreground">
+                      The complete package. We install your EV charger, upgrade your panel to handle the added load, and add battery backup — all in one coordinated project with one permit and one crew.
+                    </p>
+                    <Button
+                      variant="outline"
+                      className="w-full"
+                      onClick={() => openQuote("ev-panel-battery")}
+                      data-testid="button-quote-ev-panel-battery"
+                    >
+                      Get a Quote
+                      <ArrowRight className="ml-2 h-4 w-4" />
+                    </Button>
+                  </CardContent>
+                </Card>
+              </motion.div>
+
+              <motion.div variants={fadeUp}>
+                <Card className="flex h-full flex-col overflow-visible hover-elevate" data-testid="card-solar-prep">
+                  <CardContent className="flex flex-1 flex-col p-6">
+                    <div className="mb-4 flex h-12 w-12 items-center justify-center rounded-md bg-primary/10">
+                      <Wrench className="h-6 w-6 text-primary" />
+                    </div>
+                    <h3 className="mb-2 text-lg font-semibold">Electrical Prep for Solar</h3>
+                    <p className="mb-6 flex-1 text-sm text-muted-foreground">
+                      Planning to go solar soon? We prepare your panel, conduit, and grounding so your solar installer can start immediately. Save time and avoid delays on installation day.
+                    </p>
+                    <Button
+                      variant="outline"
+                      className="w-full"
+                      onClick={() => openQuote("electrical-solar-prep")}
+                      data-testid="button-quote-electrical-solar-prep"
+                    >
+                      Get a Quote
+                      <ArrowRight className="ml-2 h-4 w-4" />
+                    </Button>
+                  </CardContent>
+                </Card>
+              </motion.div>
+
+              <motion.div variants={fadeUp}>
+                <Card className="flex h-full flex-col overflow-visible hover-elevate" data-testid="card-panel-energy">
+                  <CardContent className="flex flex-1 flex-col p-6">
+                    <div className="mb-4 flex h-12 w-12 items-center justify-center rounded-md bg-primary/10">
+                      <CircuitBoard className="h-6 w-6 text-primary" />
+                    </div>
+                    <h3 className="mb-2 text-lg font-semibold">Panel Upgrades for Energy Systems</h3>
+                    <p className="mb-6 flex-1 text-sm text-muted-foreground">
+                      Your electrical panel is the backbone of any energy system. We upgrade panels from 100A to 200A or 400A to support solar, batteries, EV chargers, heat pumps, and more.
+                    </p>
+                    <Button
+                      variant="outline"
+                      className="w-full"
+                      onClick={() => openQuote("panel-upgrades")}
+                      data-testid="button-quote-panel-energy"
+                    >
+                      Get a Quote
+                      <ArrowRight className="ml-2 h-4 w-4" />
+                    </Button>
+                  </CardContent>
+                </Card>
+              </motion.div>
+            </div>
+
+            <motion.div variants={fadeUp} className="text-center">
+              <Button
+                size="lg"
+                onClick={() => openQuote("ev-panel-battery")}
+                data-testid="button-custom-energy-quote"
+              >
+                Request a Custom Electrical + Energy System Quote
+                <MessageCircle className="ml-2 h-4 w-4" />
+              </Button>
+            </motion.div>
           </motion.div>
         </div>
       </section>

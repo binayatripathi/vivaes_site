@@ -1,7 +1,7 @@
 import type { Express, Request, Response, NextFunction } from "express";
 import { z } from "zod";
 import { storage } from "./storage";
-import { generateQuoteEstimate, servicesList, servicePricing, getRegionByZip, getRegionByCity } from "@shared/schema";
+import { generateQuoteEstimate, servicesList, getRegionByZip, getRegionByCity } from "@shared/schema";
 import { sendQuoteNotification, sendBookingNotification } from "./email";
 
 const VAPI_SERVER_SECRET = process.env.VAPI_SERVER_SECRET || "";
@@ -157,9 +157,10 @@ export function registerVapiRoutes(app: Express) {
           estimateRange: estimate.estimateRange,
           timeline: estimate.timeline,
           breakdown: {
-            basePrice: estimate.basePrice,
             laborCost: estimate.laborCost,
             materialsCost: estimate.materialsCost,
+            equipmentCost: estimate.equipmentCost,
+            sitePrepCost: estimate.sitePrepCost,
             permitFees: estimate.permitFees,
             discount: estimate.discount,
           },

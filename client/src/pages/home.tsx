@@ -12,7 +12,7 @@ import heroElectricianPath from "@assets/hero-electrician.png";
 import {
   Sun, Zap, CircuitBoard, Lightbulb, Wrench, Building2,
   Shield, Award, Clock, Star, ChevronLeft, ChevronRight,
-  ArrowRight, Phone, MessageCircle, ChevronDown,
+  ArrowRight, Phone, MessageCircle, ChevronDown, Battery,
 } from "lucide-react";
 
 const whyVivaCards = [
@@ -86,8 +86,14 @@ const stagger = {
 
 export default function Home() {
   const [quoteOpen, setQuoteOpen] = useState(false);
+  const [preselectedService, setPreselectedService] = useState<string | undefined>();
   const [testimonialIdx, setTestimonialIdx] = useState(0);
   const [openFaq, setOpenFaq] = useState<number | null>(null);
+
+  const openQuote = (service?: string) => {
+    setPreselectedService(service);
+    setQuoteOpen(true);
+  };
 
   const prevTestimonial = () =>
     setTestimonialIdx((i) => (i === 0 ? testimonials.length - 1 : i - 1));
@@ -145,7 +151,7 @@ export default function Home() {
             <motion.div variants={fadeUp} className="flex flex-wrap gap-3 pt-2">
               <Button
                 size="lg"
-                onClick={() => setQuoteOpen(true)}
+                onClick={() => openQuote()}
                 data-testid="button-hero-quote"
               >
                 Get Instant Quote
@@ -227,6 +233,92 @@ export default function Home() {
                 );
               })}
             </div>
+          </motion.div>
+        </div>
+      </section>
+
+      <section className="bg-card py-20" data-testid="section-energy-solutions">
+        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+          <motion.div
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true, margin: "-100px" }}
+            variants={stagger}
+            className="space-y-12"
+          >
+            <motion.div variants={fadeUp} className="text-center">
+              <h2 className="text-3xl font-bold tracking-tight sm:text-4xl" data-testid="text-energy-solutions-title">
+                Solar, Battery & Energy Systems
+              </h2>
+              <p className="mx-auto mt-3 max-w-3xl text-muted-foreground">
+                From solar prep to full battery backup, we help you take control of your energy. Whether you're starting from scratch or upgrading an existing system, our union-trained team handles it all.
+              </p>
+            </motion.div>
+
+            <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
+              <motion.div variants={fadeUp}>
+                <Card className="flex h-full flex-col overflow-visible hover-elevate" data-testid="card-home-battery-backup">
+                  <CardContent className="flex flex-1 flex-col p-6">
+                    <div className="mb-3 flex h-10 w-10 items-center justify-center rounded-md bg-primary/10">
+                      <Battery className="h-5 w-5 text-primary" />
+                    </div>
+                    <h3 className="mb-2 text-lg font-semibold">Battery Backup</h3>
+                    <p className="mb-4 flex-1 text-sm text-muted-foreground">
+                      Keep your home powered during outages with Tesla Powerwall, Enphase, FranklinWH, and other leading battery systems — with or without solar.
+                    </p>
+                    <Button variant="outline" className="w-full" onClick={() => openQuote("battery-only")} data-testid="button-home-battery-quote">
+                      Get a Battery Backup Estimate
+                      <ArrowRight className="ml-2 h-3 w-3" />
+                    </Button>
+                  </CardContent>
+                </Card>
+              </motion.div>
+
+              <motion.div variants={fadeUp}>
+                <Card className="flex h-full flex-col overflow-visible hover-elevate" data-testid="card-home-solar-battery">
+                  <CardContent className="flex flex-1 flex-col p-6">
+                    <div className="mb-3 flex h-10 w-10 items-center justify-center rounded-md bg-primary/10">
+                      <Sun className="h-5 w-5 text-primary" />
+                    </div>
+                    <h3 className="mb-2 text-lg font-semibold">Solar + Battery Systems</h3>
+                    <p className="mb-4 flex-1 text-sm text-muted-foreground">
+                      Go solar with battery storage from day one, or add a battery to your existing solar panels. Maximize energy independence and reduce peak-rate costs.
+                    </p>
+                    <Button variant="outline" className="w-full" onClick={() => openQuote("battery-addon")} data-testid="button-home-solar-battery-quote">
+                      See if Your Home is Ready for Solar or Battery
+                      <ArrowRight className="ml-2 h-3 w-3" />
+                    </Button>
+                  </CardContent>
+                </Card>
+              </motion.div>
+
+              <motion.div variants={fadeUp}>
+                <Card className="flex h-full flex-col overflow-visible hover-elevate" data-testid="card-home-ev-bundle">
+                  <CardContent className="flex flex-1 flex-col p-6">
+                    <div className="mb-3 flex h-10 w-10 items-center justify-center rounded-md bg-primary/10">
+                      <Zap className="h-5 w-5 text-primary" />
+                    </div>
+                    <h3 className="mb-2 text-lg font-semibold">EV + Panel + Battery Bundle</h3>
+                    <p className="mb-4 flex-1 text-sm text-muted-foreground">
+                      Going all-electric? Bundle your EV charger, panel upgrade, and battery into one project. One permit, one crew, one coordinated installation.
+                    </p>
+                    <Button variant="outline" className="w-full" onClick={() => openQuote("ev-panel-battery")} data-testid="button-home-ev-bundle-quote">
+                      Request a Custom Energy System Quote
+                      <ArrowRight className="ml-2 h-3 w-3" />
+                    </Button>
+                  </CardContent>
+                </Card>
+              </motion.div>
+            </div>
+
+            <motion.div variants={fadeUp} className="text-center">
+              <Link href="/solar-storage">
+                <Button size="lg" variant="outline" data-testid="button-home-solar-learn-more">
+                  Explore All Solar & Battery Services
+                  <ArrowRight className="ml-2 h-4 w-4" />
+                </Button>
+              </Link>
+            </motion.div>
           </motion.div>
         </div>
       </section>
@@ -421,7 +513,7 @@ export default function Home() {
               <Button
                 size="lg"
                 variant="secondary"
-                onClick={() => setQuoteOpen(true)}
+                onClick={() => openQuote()}
                 data-testid="button-cta-quote"
               >
                 Get Instant Quote
@@ -448,7 +540,7 @@ export default function Home() {
         </div>
       </section>
 
-      <QuoteModal open={quoteOpen} onOpenChange={setQuoteOpen} />
+      <QuoteModal open={quoteOpen} onOpenChange={setQuoteOpen} preselectedService={preselectedService} />
     </>
   );
 }

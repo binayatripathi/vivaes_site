@@ -8,8 +8,13 @@ import {
   propertyTypes,
   projectSizes,
   urgencyLevels,
+  chargerLevels,
+  wiringDistances,
+  panelUpgradeOptions,
+  batteryCountOptions,
   generateQuoteEstimate,
   type QuoteEstimate,
+  type ServiceSpecificOptions,
 } from "@shared/schema";
 import { apiRequest } from "@/lib/queryClient";
 import {
@@ -31,6 +36,10 @@ type ChatStep =
   | "greeting"
   | "service"
   | "property-type"
+  | "charger-level"
+  | "wiring-distance"
+  | "panel-upgrade"
+  | "battery-count"
   | "project-size"
   | "urgency"
   | "details"
@@ -57,6 +66,10 @@ export function QuoteChatbot({ preselectedService }: { preselectedService?: stri
     name: "",
     phone: "",
     email: "",
+    chargerLevel: "",
+    wiringDistance: "",
+    panelUpgrade: "",
+    batteryCount: "",
   });
 
   const scrollToBottom = () => {
@@ -115,6 +128,30 @@ export function QuoteChatbot({ preselectedService }: { preselectedService?: stri
     }
   }, []);
 
+  const goToProjectSize = async (svc: string) => {
+    const sizeDescriptions: Record<string, string> = {
+      "solar-storage": "Small = 1-10 panels, Medium = 10-25 panels, Large = 25+ panels",
+      "ev-chargers": "Small = 1 charger, Medium = 2-3 chargers, Large = 4+ chargers",
+      "panel-upgrades": "Small = Sub-panel, Medium = 200A upgrade, Large = 400A upgrade",
+      "lighting-retrofits": "Small = 1-5 rooms, Medium = full home/small office, Large = warehouse/large commercial",
+      "general-electrical": "Small = single repair, Medium = multiple repairs, Large = full rewiring",
+      "commercial": "Small = single tenant, Medium = multi-tenant, Large = full building",
+      "battery-addon": "Small = 1 battery (5kWh), Medium = 2 batteries (10kWh), Large = 3+ batteries (15kWh+)",
+      "solar-battery-new": "Small = 1-10 panels + battery, Medium = 10-25 panels + battery, Large = 25+ panels + battery",
+      "reroofing-solar": "Small = 1-10 panels, Medium = 10-25 panels, Large = 25+ panels",
+      "electrification-assessment": "Small = single system, Medium = whole home, Large = multi-unit property",
+      "warehouse-commercial": "Small = under 10,000 sq ft, Medium = 10,000-50,000 sq ft, Large = 50,000+ sq ft",
+      "battery-only": "Small = 1 battery (5kWh), Medium = 2 batteries (10kWh), Large = 3+ batteries (15kWh+)",
+      "electrical-solar-prep": "Small = basic panel check, Medium = panel + conduit + grounding, Large = full rewire + sub-panel",
+      "ev-panel-battery": "Small = Level 2 charger + 200A panel + 1 battery, Medium = 2 chargers + panel + 2 batteries, Large = 3+ chargers + 400A panel + 3+ batteries",
+    };
+    const desc = sizeDescriptions[svc] || "";
+    await addBotMessage(
+      `Got it! How would you describe the overall scope of your project?${desc ? `\n\n${desc}` : ""}`,
+      projectSizes.map(s => ({ label: s, value: s }))
+    );
+  };
+
   const handleOptionSelect = async (value: string, label: string) => {
     addUserMessage(label);
 
@@ -131,25 +168,86 @@ export function QuoteChatbot({ preselectedService }: { preselectedService?: stri
       }
       case "property-type": {
         setAnswers(prev => ({ ...prev, propertyType: value }));
-        setStep("project-size");
-        const sizeDescriptions: Record<string, string> = {
-          "solar-storage": "Small = 1-10 panels, Medium = 10-25 panels, Large = 25+ panels",
-          "ev-chargers": "Small = 1 charger, Medium = 2-3 chargers, Large = 4+ chargers",
-          "panel-upgrades": "Small = Sub-panel, Medium = 200A upgrade, Large = 400A upgrade",
-          "lighting-retrofits": "Small = 1-5 rooms, Medium = full home/small office, Large = warehouse/large commercial",
-          "general-electrical": "Small = single repair, Medium = multiple repairs, Large = full rewiring",
-          "commercial": "Small = single tenant, Medium = multi-tenant, Large = full building",
-          "battery-addon": "Small = 1 battery (5kWh), Medium = 2 batteries (10kWh), Large = 3+ batteries (15kWh+)",
-          "solar-battery-new": "Small = 1-10 panels + battery, Medium = 10-25 panels + battery, Large = 25+ panels + battery",
-          "reroofing-solar": "Small = 1-10 panels, Medium = 10-25 panels, Large = 25+ panels",
-          "electrification-assessment": "Small = single system, Medium = whole home, Large = multi-unit property",
-          "warehouse-commercial": "Small = under 10,000 sq ft, Medium = 10,000-50,000 sq ft, Large = 50,000+ sq ft",
-        };
-        const desc = sizeDescriptions[answers.service || preselectedService || ""] || "";
+        const svc = answers.service || preselectedService || "";
+        const needsCharger = ["ev-chargers", "ev-panel-battery"].includes(svc);
+        const needsBattery = ["battery-addon", "battery-only", "solar-battery-new", "ev-panel-battery"].includes(svc);
+
+        if (needsCharger) {
+          setStep("charger-level");
+          await addBotMessage(
+            "What charger level and amperage do you need?",
+            chargerLevels.map(c => ({ label: c, value: c }))
+          );
+        } else if (needsBattery) {
+          setStep("battery-count");
+          await addBotMessage(
+            "How many batteries are you considering?",
+            batteryCountOptions.map(b => ({ label: b, value: b }))
+          );
+        } else {
+          setStep("wiring-distance");
+          await addBotMessage(
+            "How far is the installation from your electrical panel?",
+            wiringDistances.map(w => ({ label: w, value: w }))
+          );
+        }
+        break;
+      }
+      case "charger-level": {
+        setAnswers(prev => ({ ...prev, chargerLevel: value }));
+        setStep("wiring-distance");
         await addBotMessage(
-          `Got it! How would you describe the size of your project?${desc ? `\n\n${desc}` : ""}`,
-          projectSizes.map(s => ({ label: s, value: s }))
+          "How far is the charger location from your electrical panel?",
+          wiringDistances.map(w => ({ label: w, value: w }))
         );
+        break;
+      }
+      case "wiring-distance": {
+        setAnswers(prev => ({ ...prev, wiringDistance: value }));
+        const svc = answers.service || preselectedService || "";
+        const needsPanelQ = ["ev-chargers", "ev-panel-battery", "electrical-solar-prep", "solar-storage", "solar-battery-new"].includes(svc);
+        if (needsPanelQ) {
+          setStep("panel-upgrade");
+          await addBotMessage(
+            "Does your electrical panel need an upgrade?",
+            panelUpgradeOptions.map(p => ({ label: p, value: p }))
+          );
+        } else {
+          setStep("project-size");
+          await goToProjectSize(svc);
+        }
+        break;
+      }
+      case "panel-upgrade": {
+        setAnswers(prev => ({ ...prev, panelUpgrade: value }));
+        const svc = answers.service || preselectedService || "";
+        const needsBattery = ["ev-panel-battery", "solar-battery-new"].includes(svc);
+        if (needsBattery && !answers.batteryCount) {
+          setStep("battery-count");
+          await addBotMessage(
+            "How many batteries are you considering?",
+            batteryCountOptions.map(b => ({ label: b, value: b }))
+          );
+        } else {
+          setStep("project-size");
+          await goToProjectSize(svc);
+        }
+        break;
+      }
+      case "battery-count": {
+        setAnswers(prev => ({ ...prev, batteryCount: value }));
+        const svc = answers.service || preselectedService || "";
+        const needsWiring = !answers.wiringDistance;
+        if (needsWiring) {
+          setStep("wiring-distance");
+          await addBotMessage(
+            "How far is the installation from your electrical panel?",
+            wiringDistances.map(w => ({ label: w, value: w }))
+          );
+        } else {
+          setStep("project-size");
+          await goToProjectSize(svc);
+        }
         break;
       }
       case "project-size": {
@@ -201,11 +299,18 @@ export function QuoteChatbot({ preselectedService }: { preselectedService?: stri
         setStep("generating");
         await addBotMessage("Calculating your personalized quote...");
 
+        const serviceOpts: ServiceSpecificOptions = {};
+        if (updatedAnswers.chargerLevel) serviceOpts.chargerLevel = updatedAnswers.chargerLevel;
+        if (updatedAnswers.wiringDistance) serviceOpts.wiringDistance = updatedAnswers.wiringDistance;
+        if (updatedAnswers.panelUpgrade) serviceOpts.panelUpgrade = updatedAnswers.panelUpgrade;
+        if (updatedAnswers.batteryCount) serviceOpts.batteryCount = updatedAnswers.batteryCount;
+
         const estimate = generateQuoteEstimate(
           updatedAnswers.service,
           updatedAnswers.propertyType,
           updatedAnswers.projectSize,
           updatedAnswers.urgency,
+          serviceOpts,
         );
         setQuote(estimate);
 
@@ -231,7 +336,7 @@ export function QuoteChatbot({ preselectedService }: { preselectedService?: stri
     setMessages([]);
     setStep("greeting");
     setQuote(null);
-    setAnswers({ service: "", propertyType: "", projectSize: "", urgency: "", details: "", name: "", phone: "", email: "" });
+    setAnswers({ service: "", propertyType: "", projectSize: "", urgency: "", details: "", name: "", phone: "", email: "", chargerLevel: "", wiringDistance: "", panelUpgrade: "", batteryCount: "" });
     setTimeout(() => {
       const startChat = async () => {
         await addBotMessage("Hi there! I'm here to help you get a free quote for your electrical or solar project. Let's get started!");
@@ -368,6 +473,10 @@ export function QuoteChatbot({ preselectedService }: { preselectedService?: stri
 function getStepForOptions(msg: ChatMessage): ChatStep {
   if (msg.options?.[0]?.value && servicesList.some(s => s.slug === msg.options![0].value)) return "service";
   if (msg.options?.some(o => propertyTypes.includes(o.value as any))) return "property-type";
+  if (msg.options?.some(o => chargerLevels.includes(o.value as any))) return "charger-level";
+  if (msg.options?.some(o => wiringDistances.includes(o.value as any))) return "wiring-distance";
+  if (msg.options?.some(o => panelUpgradeOptions.includes(o.value as any))) return "panel-upgrade";
+  if (msg.options?.some(o => batteryCountOptions.includes(o.value as any))) return "battery-count";
   if (msg.options?.some(o => projectSizes.includes(o.value as any))) return "project-size";
   if (msg.options?.some(o => urgencyLevels.includes(o.value as any))) return "urgency";
   return "greeting";
@@ -426,10 +535,6 @@ function QuoteResultCard({ quote, name, email, phone }: { quote: QuoteEstimate; 
 
         <div className="space-y-1 rounded-md bg-muted p-3 text-sm">
           <div className="flex justify-between">
-            <span className="text-muted-foreground">Base Service</span>
-            <span>{fmt(quote.basePrice)}</span>
-          </div>
-          <div className="flex justify-between">
             <span className="text-muted-foreground">Labor</span>
             <span>{fmt(quote.laborCost)}</span>
           </div>
@@ -438,7 +543,15 @@ function QuoteResultCard({ quote, name, email, phone }: { quote: QuoteEstimate; 
             <span>{fmt(quote.materialsCost)}</span>
           </div>
           <div className="flex justify-between">
-            <span className="text-muted-foreground">Permits & Fees</span>
+            <span className="text-muted-foreground">Equipment</span>
+            <span>{fmt(quote.equipmentCost)}</span>
+          </div>
+          <div className="flex justify-between">
+            <span className="text-muted-foreground">Site Prep</span>
+            <span>{fmt(quote.sitePrepCost)}</span>
+          </div>
+          <div className="flex justify-between">
+            <span className="text-muted-foreground">Permits & Inspection</span>
             <span>{fmt(quote.permitFees)}</span>
           </div>
           {quote.discount > 0 && (
@@ -515,7 +628,7 @@ function QuoteResultCard({ quote, name, email, phone }: { quote: QuoteEstimate; 
         </div>
 
         <p className="text-center text-[10px] text-muted-foreground">
-          *This is an estimate. Final pricing confirmed after on-site consultation.
+          *Final pricing subject to site verification, walkthrough, and local code conditions.
         </p>
       </CardContent>
     </Card>
