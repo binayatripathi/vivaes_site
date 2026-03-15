@@ -53,3 +53,7 @@ VITE_VAPI_ASSISTANT_ID = "a4ac24aa-57e0-4c67-a9ce-1136e97e7831"
 
 [agent]
 integrations = ["resend:1.0.0", "stripe:2.0.0"]
+
+[postMerge]
+path = "scripts/post-merge.sh"
+timeoutMs = 20000
