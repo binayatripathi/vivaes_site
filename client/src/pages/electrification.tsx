@@ -32,8 +32,8 @@ const stagger = {
 const rebates = [
   {
     title: "Federal IRA Tax Credit",
-    description: "The Inflation Reduction Act provides a 30% federal tax credit on qualifying electrification upgrades including heat pumps, electrical panel upgrades, and battery storage systems.",
-    amount: "30% Tax Credit",
+    description: "The Inflation Reduction Act provides federal tax credits for qualifying electrification upgrades including heat pumps, electrical panel upgrades, and battery storage systems.",
+    amount: "Federal Tax Credit",
     icon: DollarSign,
   },
   {

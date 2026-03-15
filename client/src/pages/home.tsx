@@ -52,7 +52,7 @@ const faqData = [
   {
     question: "How much does solar panel installation cost in the Bay Area?",
     answer:
-      "Solar panel installation costs vary based on system size, roof type, and your energy needs. We offer free instant quotes through our website or by calling (510) 710-5745. Most residential systems qualify for the federal 30% solar tax credit.",
+      "Solar panel installation costs vary based on system size, roof type, and your energy needs. We offer free instant quotes through our website or by calling (510) 710-5745. Most residential systems qualify for federal and state tax credits and incentives.",
   },
   {
     question: "Do you install EV chargers?",
