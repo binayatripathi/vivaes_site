@@ -214,7 +214,123 @@ export default function SolarStoragePage() {
         </div>
       </section>
 
-      <section className="bg-background py-20" data-testid="section-solar-services">
+      <section className="bg-background py-20" data-testid="section-existing-solar">
+        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+          <motion.div
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true, margin: "-100px" }}
+            variants={stagger}
+            className="space-y-12"
+          >
+            <motion.div variants={fadeUp} className="mx-auto max-w-3xl text-center">
+              <Badge variant="secondary" className="mb-4">
+                <Wrench className="mr-1 h-3 w-3" /> Existing System Support
+              </Badge>
+              <h2
+                className="text-3xl font-bold tracking-tight sm:text-4xl"
+                data-testid="text-existing-solar-title"
+              >
+                Add Battery Backup to Your Existing Solar System
+              </h2>
+            </motion.div>
+
+            <motion.div variants={fadeUp} className="mx-auto max-w-4xl space-y-4 text-center">
+              <p className="text-lg leading-relaxed text-muted-foreground">
+                Already have solar installed? Viva Electric & Solar Inc. can help you upgrade your existing system with battery storage, electrical improvements, and service support.
+              </p>
+              <p className="text-base leading-relaxed text-muted-foreground">
+                Many homeowners are stuck with solar systems installed by companies that are no longer in business or no longer provide support. We work with existing systems and help evaluate what's possible — whether that means troubleshooting, maintenance, electrical upgrades, or adding battery backup.
+              </p>
+              <p className="text-base leading-relaxed text-muted-foreground">
+                If you want to improve reliability, add backup power, or make better use of the solar system you already have, we can help you understand your options and recommend the right next step.
+              </p>
+            </motion.div>
+
+            <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
+              <motion.div variants={fadeUp}>
+                <Card className="h-full hover-elevate" data-testid="card-existing-solar-upgrade">
+                  <CardContent className="p-6">
+                    <div className="mb-3 flex h-10 w-10 items-center justify-center rounded-md bg-primary/10">
+                      <Sun className="h-5 w-5 text-primary" />
+                    </div>
+                    <h3 className="mb-2 text-lg font-semibold">Already Have Solar? Upgrade It.</h3>
+                    <p className="text-sm text-muted-foreground">
+                      Add battery storage or electrical improvements to any existing solar system. Get more out of the panels you already own.
+                    </p>
+                  </CardContent>
+                </Card>
+              </motion.div>
+
+              <motion.div variants={fadeUp}>
+                <Card className="h-full hover-elevate" data-testid="card-existing-solar-service">
+                  <CardContent className="p-6">
+                    <div className="mb-3 flex h-10 w-10 items-center justify-center rounded-md bg-primary/10">
+                      <HardHat className="h-5 w-5 text-primary" />
+                    </div>
+                    <h3 className="mb-2 text-lg font-semibold">We Service Solar Systems — Even If We Didn't Install Them.</h3>
+                    <p className="text-sm text-muted-foreground">
+                      No matter who installed your system, we can inspect, troubleshoot, repair, and upgrade it. You don't need to go back to the original installer.
+                    </p>
+                  </CardContent>
+                </Card>
+              </motion.div>
+
+              <motion.div variants={fadeUp}>
+                <Card className="h-full hover-elevate" data-testid="card-existing-solar-orphan">
+                  <CardContent className="p-6">
+                    <div className="mb-3 flex h-10 w-10 items-center justify-center rounded-md bg-primary/10">
+                      <ShieldCheck className="h-5 w-5 text-primary" />
+                    </div>
+                    <h3 className="mb-2 text-lg font-semibold">Original Installer Gone? We Can Help.</h3>
+                    <p className="text-sm text-muted-foreground">
+                      If your solar company closed or stopped responding, we step in. We evaluate your system, handle repairs, and keep your panels producing.
+                    </p>
+                  </CardContent>
+                </Card>
+              </motion.div>
+
+              <motion.div variants={fadeUp}>
+                <Card className="h-full hover-elevate" data-testid="card-existing-solar-battery">
+                  <CardContent className="p-6">
+                    <div className="mb-3 flex h-10 w-10 items-center justify-center rounded-md bg-primary/10">
+                      <Battery className="h-5 w-5 text-primary" />
+                    </div>
+                    <h3 className="mb-2 text-lg font-semibold">Add Battery Backup to Your Existing Solar System.</h3>
+                    <p className="text-sm text-muted-foreground">
+                      Store excess energy your panels produce and use it during outages or peak-rate hours. We integrate top battery brands with your current setup.
+                    </p>
+                  </CardContent>
+                </Card>
+              </motion.div>
+            </div>
+
+            <motion.div variants={fadeUp} className="mx-auto max-w-3xl space-y-6">
+              <p className="text-center text-sm text-muted-foreground">
+                We work on existing solar systems — including systems installed by other companies. From troubleshooting and repairs to electrical upgrades and battery storage add-ons, Viva Electric & Solar Inc. helps homeowners improve and maintain the system they already have.
+              </p>
+              <div className="flex flex-wrap items-center justify-center gap-3">
+                <Button
+                  size="lg"
+                  onClick={() => openQuote("battery-addon")}
+                  data-testid="button-existing-solar-quote"
+                >
+                  Get a Battery Add-On Quote
+                  <MessageCircle className="ml-2 h-4 w-4" />
+                </Button>
+                <Link href="/booking">
+                  <Button size="lg" variant="outline" data-testid="button-existing-solar-book">
+                    Schedule an Inspection
+                    <ArrowRight className="ml-2 h-4 w-4" />
+                  </Button>
+                </Link>
+              </div>
+            </motion.div>
+          </motion.div>
+        </div>
+      </section>
+
+      <section className="bg-card py-20" data-testid="section-solar-services">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <motion.div
             initial="hidden"

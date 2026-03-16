@@ -248,10 +248,16 @@ export default function Home() {
           >
             <motion.div variants={fadeUp} className="text-center">
               <h2 className="text-3xl font-bold tracking-tight sm:text-4xl" data-testid="text-energy-solutions-title">
-                Solar, Battery & Energy Systems
+                Solar Installation, Upgrades & Battery Backup
               </h2>
               <p className="mx-auto mt-3 max-w-3xl text-muted-foreground">
-                From solar prep to full battery backup, we help you take control of your energy. Whether you're starting from scratch or upgrading an existing system, our union-trained team handles it all.
+                We install new solar systems, service existing ones, and help homeowners add battery backup, electrical upgrades, and ongoing support.
+              </p>
+            </motion.div>
+
+            <motion.div variants={fadeUp} className="mx-auto max-w-4xl">
+              <p className="text-center text-base leading-relaxed text-muted-foreground">
+                Many homeowners already have solar but no longer have a reliable company to call for service, repairs, or upgrades. Viva Electric & Solar Inc. works with both new and existing systems — including systems installed by other companies. We can inspect, troubleshoot, maintain, repair, and upgrade your setup, including battery storage integration for added reliability and backup power.
               </p>
             </motion.div>
 
