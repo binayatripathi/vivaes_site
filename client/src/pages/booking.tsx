@@ -255,7 +255,7 @@ export default function BookingPage() {
                             <FormItem>
                               <FormLabel>Phone</FormLabel>
                               <FormControl>
-                                <Input placeholder="(555) 123-4567" {...field} data-testid="input-booking-phone" />
+                                <Input placeholder="(510) 710-5745" {...field} data-testid="input-booking-phone" />
                               </FormControl>
                               <FormMessage />
                             </FormItem>

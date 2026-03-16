@@ -197,9 +197,9 @@ export default function AboutPage() {
             <motion.div variants={fadeUp} className="grid grid-cols-2 gap-4 sm:grid-cols-4">
               {[
                 { label: "Years Experience", value: "20+" },
-                { label: "Projects Completed", value: "5,000+" },
-                { label: "5-Star Reviews", value: "500+" },
-                { label: "Team Members", value: "50+" },
+                { label: "Projects Completed", value: "500+" },
+                { label: "5-Star Reviews", value: "100+" },
+                { label: "Team Members", value: "10+" },
               ].map((stat) => (
                 <div key={stat.label} className="text-center">
                   <p className="text-3xl font-bold text-primary">{stat.value}</p>
@@ -308,7 +308,7 @@ export default function AboutPage() {
                               <FormItem>
                                 <FormLabel>Phone (Optional)</FormLabel>
                                 <FormControl>
-                                  <Input placeholder="(555) 123-4567" {...field} data-testid="input-contact-phone" />
+                                  <Input placeholder="(510) 710-5745" {...field} data-testid="input-contact-phone" />
                                 </FormControl>
                                 <FormMessage />
                               </FormItem>

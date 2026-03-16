@@ -31,28 +31,28 @@ const stagger = {
 
 const rebates = [
   {
-    title: "Federal IRA Tax Credit",
-    description: "The Inflation Reduction Act provides federal tax credits for qualifying electrification upgrades including heat pumps, electrical panel upgrades, and battery storage systems.",
-    amount: "Federal Tax Credit",
-    icon: DollarSign,
+    title: "SMUD Go Electric Bonus",
+    description: "Active for SMUD-territory customers. Panel upgrade up to $2,000, heat pump HVAC $2,000–$3,000, heat pump water heater up to $4,000. Subject to funding availability.",
+    amount: "Up to $4,000",
+    icon: Zap,
   },
   {
-    title: "HEEHRA Rebates",
-    description: "The High-Efficiency Electric Home Rebate Act offers point-of-sale rebates for low- and moderate-income households switching from gas to electric appliances.",
-    amount: "Up to $14,000",
+    title: "California Property Tax Exclusion",
+    description: "Solar installations are excluded from property tax reassessment through December 31, 2026.",
+    amount: "Tax Exclusion",
     icon: Home,
   },
   {
-    title: "California SGIP",
-    description: "The Self-Generation Incentive Program provides rebates for installing battery storage systems, helping reduce grid strain and keeping your lights on during outages.",
-    amount: "Varies by System",
-    icon: Battery,
+    title: "PG&E Energy-Smart Homes",
+    description: "Base incentive of $4,250 for qualifying whole-home electrification projects in PG&E territory, through 2027.",
+    amount: "$4,250 Base",
+    icon: DollarSign,
   },
   {
-    title: "PG&E / SMUD Rebates",
-    description: "Local utility companies offer additional rebates for heat pump water heaters, induction cooktops, panel upgrades, and other qualifying electrification projects.",
-    amount: "Utility Specific",
-    icon: Zap,
+    title: "TECH Clean California",
+    description: "State contractor incentives for heat pump and electrification projects. Must use a certified contractor. Varies by region and funding availability.",
+    amount: "Varies",
+    icon: Battery,
   },
 ];
 
@@ -101,7 +101,7 @@ export default function ElectrificationPage() {
                 <Leaf className="mr-1 h-3 w-3" /> Go All-Electric
               </Badge>
               <Badge variant="secondary" className="border border-white/20 bg-white/10 text-white backdrop-blur-sm">
-                <DollarSign className="mr-1 h-3 w-3" /> Rebates Available
+                <DollarSign className="mr-1 h-3 w-3" /> Incentives May Apply
               </Badge>
             </motion.div>
 
@@ -118,7 +118,7 @@ export default function ElectrificationPage() {
               className="text-lg leading-relaxed text-white/80 sm:text-xl"
               data-testid="text-electrification-hero-subtitle"
             >
-              Ditch gas. Cut your bills. Get thousands in rebates. We'll walk you through every step.
+              Ditch gas. Cut your bills. We'll walk you through every step.
             </motion.p>
 
             <motion.div variants={fadeUp} className="flex flex-wrap gap-3 pt-2">
@@ -185,7 +185,7 @@ export default function ElectrificationPage() {
                         {[
                           "Lower monthly energy bills",
                           "No more gas leaks or carbon monoxide risk",
-                          "Thousands in federal and state rebates",
+                          "Potential utility and state incentives depending on your area",
                           "Increase your home's value",
                           "Reduce your carbon footprint",
                         ].map((item, i) => (
@@ -239,7 +239,7 @@ export default function ElectrificationPage() {
                 Rebates & Incentives
               </h2>
               <p className="mx-auto mt-3 max-w-2xl text-muted-foreground">
-                There's never been a better time to electrify your home. Federal, state, and local programs can cover a huge chunk of the cost.
+                There's never been a better time to electrify your home. Depending on your utility and location, state and local programs may help reduce the cost.
               </p>
             </motion.div>
 
@@ -272,6 +272,10 @@ export default function ElectrificationPage() {
                 );
               })}
             </div>
+
+            <motion.p variants={fadeUp} className="mt-6 text-center text-sm text-muted-foreground" data-testid="text-rebates-disclaimer">
+              Incentive programs change frequently and are subject to funding availability. Contact us for current programs available in your area.
+            </motion.p>
           </motion.div>
         </div>
       </section>
@@ -361,7 +365,7 @@ export default function ElectrificationPage() {
               Get a Free Electrification Assessment
             </motion.h2>
             <motion.p variants={fadeUp} className="mx-auto max-w-xl text-lg text-white/80">
-              Not sure where to start? We'll visit your home, evaluate your current setup, and create a personalized plan that maximizes your rebates and savings.
+              Not sure where to start? We'll visit your home, evaluate your current setup, and create a personalized plan that maximizes your savings and identifies available incentives.
             </motion.p>
             <motion.div variants={fadeUp} className="flex flex-wrap items-center justify-center gap-3">
               <Button

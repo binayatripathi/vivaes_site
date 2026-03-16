@@ -486,7 +486,7 @@ function getPlaceholder(step: ChatStep): string {
   switch (step) {
     case "details": return "Describe your project or type 'skip'...";
     case "name": return "Your full name...";
-    case "phone": return "(555) 123-4567";
+    case "phone": return "(510) 710-5745";
     case "email": return "you@example.com";
     default: return "Type your message...";
   }
