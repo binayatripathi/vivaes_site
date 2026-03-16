@@ -1,0 +1,38 @@
+Implement the following website copy and positioning updates for Viva Electric & Solar Inc.
+
+Important: preserve all recent accuracy fixes already made, including corrected stats, real phone number, softened incentive language, active incentives only, and the updated quote calculator logic/disclaimers. Do not revert any of those changes.
+
+Add a stronger service line for homeowners who already have solar systems, especially systems installed by other companies. Position Viva as able to inspect, troubleshoot, maintain, repair, upgrade, and add battery backup to existing solar systems.
+
+Add/update copy on the Solar & Storage page with this section:
+
+Headline: Add Battery Backup to Your Existing Solar System
+
+Body:
+Already have solar installed? Viva Electric & Solar Inc. can help you upgrade your existing system with battery storage, electrical improvements, and service support.
+
+Many homeowners are stuck with solar systems installed by companies that are no longer in business or no longer provide support. We work with existing systems and help evaluate what’s possible — whether that means troubleshooting, maintenance, electrical upgrades, or adding battery backup.
+
+If you want to improve reliability, add backup power, or make better use of the solar system you already have, we can help you understand your options and recommend the right next step.
+
+Add promotional callouts/cards using lines like:
+
+• Already Have Solar? Upgrade It.
+• We Service Solar Systems — Even If We Didn’t Install Them.
+• Original Installer Gone? We Can Help.
+• Add Battery Backup to Your Existing Solar System.
+
+Include supporting text:
+We work on existing solar systems — including systems installed by other companies. From troubleshooting and repairs to electrical upgrades and battery storage add-ons, Viva Electric & Solar Inc. helps homeowners improve and maintain the system they already have.
+
+Update homepage solar positioning to:
+Headline: Solar Installation, Upgrades & Battery Backup
+Subheadline: We install new solar systems, service existing ones, and help homeowners add battery backup, electrical upgrades, and ongoing support.
+
+Intro paragraph:
+Many homeowners already have solar but no longer have a reliable company to call for service, repairs, or upgrades. Viva Electric & Solar Inc. works with both new and existing systems — including systems installed by other companies. We can inspect, troubleshoot, maintain, repair, and upgrade your setup, including battery storage integration for added reliability and backup power.
+
+Add cross-linking between the Battery Storage Add-On / Existing Solar positioning and the Solar & Storage page, plus relevant homepage and quote/contact CTAs.
+
+Keep the tone contractor-credible, practical, and trustworthy. Avoid overhyped language.
+
