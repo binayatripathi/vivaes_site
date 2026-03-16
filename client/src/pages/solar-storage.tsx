@@ -1,6 +1,8 @@
 import { useState } from "react";
 import { Link } from "wouter";
 import { motion } from "framer-motion";
+import powerwallRainPath from "@assets/IMG_6770_1773617598942.jpeg";
+import powerwallSolarPath from "@assets/IMG_6771_1773617598942.jpeg";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -47,7 +49,7 @@ const serviceCards = [
       "Already have solar panels installed? A home battery can be added to store excess solar energy and provide backup power during outages. We evaluate your current solar equipment, inverter, and electrical system to determine the best battery solution that integrates with your setup. We install and integrate Tesla Powerwall, Enphase IQ Battery, FranklinWH, SolarEdge, and Generac PWRcell.",
     icon: Battery,
     quoteService: "battery-addon",
-    image: "/images/services/battery-addon.png",
+    image: powerwallSolarPath,
   },
   {
     title: "Re-Roofing with Solar Panel Removal & Reinstall",
@@ -342,6 +344,14 @@ export default function SolarStoragePage() {
               </motion.div>
 
               <motion.div variants={fadeUp} className="flex flex-col justify-center space-y-4">
+                <div className="overflow-hidden rounded-lg aspect-[4/3]">
+                  <img
+                    src={powerwallRainPath}
+                    alt="Tesla Powerwall battery backup installed on a home"
+                    className="h-full w-full object-cover"
+                    data-testid="img-battery-backup"
+                  />
+                </div>
                 <div className="rounded-lg border bg-card p-6 space-y-4">
                   <h3 className="text-lg font-semibold">Is Your Home Ready?</h3>
                   <p className="text-sm text-muted-foreground">
