@@ -153,20 +153,13 @@ export function registerVapiRoutes(app: Express) {
         success: true,
         estimate: {
           serviceTitle: estimate.serviceTitle,
-          total: estimate.total,
+          startingFrom: estimate.estimateRange.low,
           estimateRange: estimate.estimateRange,
           timeline: estimate.timeline,
-          breakdown: {
-            laborCost: estimate.laborCost,
-            materialsCost: estimate.materialsCost,
-            equipmentCost: estimate.equipmentCost,
-            sitePrepCost: estimate.sitePrepCost,
-            permitFees: estimate.permitFees,
-            discount: estimate.discount,
-          },
+          permitFees: `$500 and up`,
           notes: estimate.notes,
         },
-        disclaimer: "This is an automated estimate. Final pricing may vary based on site conditions and specific requirements. A free on-site consultation is included.",
+        disclaimer: "This is an automated starting-range estimate. Final pricing is based on site inspection. On-site consultation is $250.",
       });
     } catch (err: any) {
       console.error("[Vapi] get-quote error:", err);

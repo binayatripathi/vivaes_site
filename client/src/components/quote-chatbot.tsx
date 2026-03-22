@@ -105,7 +105,7 @@ export function QuoteChatbot({ preselectedService }: { preselectedService?: stri
   useEffect(() => {
     if (step === "greeting") {
       const startChat = async () => {
-        await addBotMessage("Hi there! I'm here to help you get a free quote for your electrical or solar project. Let's get started!");
+        await addBotMessage("Hi there! I'm here to help you get an instant quote estimate for your electrical or solar project. Let's get started!");
         if (preselectedService) {
           const service = servicesList.find(s => s.slug === preselectedService);
           if (service) {
@@ -136,14 +136,13 @@ export function QuoteChatbot({ preselectedService }: { preselectedService?: stri
       "lighting-retrofits": "Small = 1-5 rooms, Medium = full home/small office, Large = warehouse/large commercial",
       "general-electrical": "Small = single repair, Medium = multiple repairs, Large = full rewiring",
       "commercial": "Small = single tenant, Medium = multi-tenant, Large = full building",
-      "battery-addon": "Small = 1 battery (5kWh), Medium = 2 batteries (10kWh), Large = 3+ batteries (15kWh+)",
-      "solar-battery-new": "Small = 1-10 panels + battery, Medium = 10-25 panels + battery, Large = 25+ panels + battery",
-      "reroofing-solar": "Small = 1-10 panels, Medium = 10-25 panels, Large = 25+ panels",
-      "electrification-assessment": "Small = single system, Medium = whole home, Large = multi-unit property",
+      "battery-addon": "Small = 5 kW, Medium = 10 kW, Large = 13.5–15 kW",
+      "solar-battery-new": "Small = basic system, Medium = mid-size system, Large = full system",
+      "reroofing-solar": "Small = up to 10 panels, Medium = 10-20 panels, Large = 20+ panels",
+      "electrification-assessment": "Single property assessment — $250 fee",
       "warehouse-commercial": "Small = under 10,000 sq ft, Medium = 10,000-50,000 sq ft, Large = 50,000+ sq ft",
-      "battery-only": "Small = 1 battery (5kWh), Medium = 2 batteries (10kWh), Large = 3+ batteries (15kWh+)",
-      "electrical-solar-prep": "Small = basic panel check, Medium = panel + conduit + grounding, Large = full rewire + sub-panel",
-      "ev-panel-battery": "Small = Level 2 charger + 200A panel + 1 battery, Medium = 2 chargers + panel + 2 batteries, Large = 3+ chargers + 400A panel + 3+ batteries",
+      "battery-only": "Small = 5 kW, Medium = 10 kW, Large = 13.5–15 kW",
+      "ev-panel-battery": "Small = basic bundle, Medium = mid-range bundle, Large = full bundle",
     };
     const desc = sizeDescriptions[svc] || "";
     await addBotMessage(
@@ -181,7 +180,7 @@ export function QuoteChatbot({ preselectedService }: { preselectedService?: stri
         } else if (needsBattery) {
           setStep("battery-count");
           await addBotMessage(
-            "How many batteries are you considering?",
+            "What energy storage capacity do you need? (Available: 5 kW, 10 kW, 13.5 kW, 15 kW)",
             batteryCountOptions.map(b => ({ label: b, value: b }))
           );
         } else {
@@ -205,7 +204,7 @@ export function QuoteChatbot({ preselectedService }: { preselectedService?: stri
       case "wiring-distance": {
         setAnswers(prev => ({ ...prev, wiringDistance: value }));
         const svc = answers.service || preselectedService || "";
-        const needsPanelQ = ["ev-chargers", "ev-panel-battery", "electrical-solar-prep", "solar-storage", "solar-battery-new"].includes(svc);
+        const needsPanelQ = ["ev-chargers", "ev-panel-battery", "solar-storage", "solar-battery-new"].includes(svc);
         if (needsPanelQ) {
           setStep("panel-upgrade");
           await addBotMessage(
@@ -225,7 +224,7 @@ export function QuoteChatbot({ preselectedService }: { preselectedService?: stri
         if (needsBattery && !answers.batteryCount) {
           setStep("battery-count");
           await addBotMessage(
-            "How many batteries are you considering?",
+            "What energy storage capacity do you need? (Available: 5 kW, 10 kW, 13.5 kW, 15 kW)",
             batteryCountOptions.map(b => ({ label: b, value: b }))
           );
         } else {
@@ -339,7 +338,7 @@ export function QuoteChatbot({ preselectedService }: { preselectedService?: stri
     setAnswers({ service: "", propertyType: "", projectSize: "", urgency: "", details: "", name: "", phone: "", email: "", chargerLevel: "", wiringDistance: "", panelUpgrade: "", batteryCount: "" });
     setTimeout(() => {
       const startChat = async () => {
-        await addBotMessage("Hi there! I'm here to help you get a free quote for your electrical or solar project. Let's get started!");
+        await addBotMessage("Hi there! I'm here to help you get an instant quote estimate for your electrical or solar project. Let's get started!");
         await addBotMessage(
           "What service are you interested in?",
           servicesList.map(s => ({ label: s.title, value: s.slug }))
@@ -495,14 +494,14 @@ function getPlaceholder(step: ChatStep): string {
 function QuoteResultCard({ quote, name, email, phone }: { quote: QuoteEstimate; name: string; email: string; phone: string }) {
   const [isPayLoading, setIsPayLoading] = useState(false);
   const fmt = (n: number) => n.toLocaleString("en-US", { style: "currency", currency: "USD", maximumFractionDigits: 0 });
-  const depositAmount = Math.round(quote.total * 0.2);
+  const isAssessment = quote.total === 250 && quote.estimateRange.low === 250;
 
-  const handlePayDeposit = async () => {
+  const handleBookConsultation = async () => {
     setIsPayLoading(true);
     try {
       const res = await apiRequest("POST", "/api/stripe/create-checkout", {
-        type: "deposit",
-        amount: depositAmount,
+        type: "consultation",
+        amount: 250,
         serviceName: quote.serviceTitle,
         customerName: name,
         customerEmail: email,
@@ -526,6 +525,12 @@ function QuoteResultCard({ quote, name, email, phone }: { quote: QuoteEstimate; 
           <span className="font-semibold">Your Instant Quote</span>
         </div>
 
+        <div className="rounded-md border border-amber-400/60 bg-amber-50 px-3 py-2 dark:bg-amber-950/30">
+          <p className="text-xs font-semibold text-amber-800 dark:text-amber-300">
+            ⚠ Final pricing is based on site inspection — subject to site verification, walkthrough, and local code conditions.
+          </p>
+        </div>
+
         <div>
           <h3 className="text-lg font-bold" data-testid="text-quote-service">{quote.serviceTitle}</h3>
           <p className="text-xs text-muted-foreground">
@@ -533,51 +538,32 @@ function QuoteResultCard({ quote, name, email, phone }: { quote: QuoteEstimate; 
           </p>
         </div>
 
-        <div className="space-y-1 rounded-md bg-muted p-3 text-sm">
-          <div className="flex justify-between">
-            <span className="text-muted-foreground">Labor</span>
-            <span>{fmt(quote.laborCost)}</span>
+        {isAssessment ? (
+          <div className="rounded-md bg-primary/5 p-4 text-center">
+            <p className="text-xs text-muted-foreground mb-1">On-site Assessment Fee</p>
+            <p className="text-3xl font-bold text-primary" data-testid="text-quote-total">$250</p>
+            <p className="text-xs text-muted-foreground mt-1">Fixed fee · Includes full electrification report</p>
           </div>
-          <div className="flex justify-between">
-            <span className="text-muted-foreground">Materials</span>
-            <span>{fmt(quote.materialsCost)}</span>
+        ) : (
+          <div className="rounded-md bg-primary/5 p-4 text-center">
+            <p className="text-xs text-muted-foreground mb-1">Estimated Range</p>
+            <p className="text-2xl font-bold text-primary" data-testid="text-quote-range">
+              {fmt(quote.estimateRange.low)} – {fmt(quote.estimateRange.high)}
+            </p>
+            <p className="text-xs font-medium text-muted-foreground mt-1">
+              and up · depending on site conditions
+            </p>
+            <p className="mt-2 text-xs text-muted-foreground">
+              <Calendar className="mr-1 inline h-3 w-3" />
+              Estimated timeline: {quote.timeline}
+            </p>
+            {quote.discount > 0 && (
+              <p className="mt-1 text-xs text-green-600 dark:text-green-400 font-medium">5% volume discount applied</p>
+            )}
           </div>
-          <div className="flex justify-between">
-            <span className="text-muted-foreground">Equipment</span>
-            <span>{fmt(quote.equipmentCost)}</span>
-          </div>
-          <div className="flex justify-between">
-            <span className="text-muted-foreground">Site Prep</span>
-            <span>{fmt(quote.sitePrepCost)}</span>
-          </div>
-          <div className="flex justify-between">
-            <span className="text-muted-foreground">Permits & Inspection</span>
-            <span>{fmt(quote.permitFees)}</span>
-          </div>
-          {quote.discount > 0 && (
-            <div className="flex justify-between text-green-600 dark:text-green-400">
-              <span>Volume Discount</span>
-              <span>-{fmt(quote.discount)}</span>
-            </div>
-          )}
-          <div className="mt-2 flex justify-between border-t pt-2 text-base font-bold">
-            <span>Estimated Total</span>
-            <span className="text-primary" data-testid="text-quote-total">{fmt(quote.total)}</span>
-          </div>
-        </div>
+        )}
 
-        <div className="rounded-md bg-primary/5 p-3 text-center">
-          <p className="text-xs text-muted-foreground">Estimate range</p>
-          <p className="text-sm font-semibold" data-testid="text-quote-range">
-            {fmt(quote.estimateRange.low)} &ndash; {fmt(quote.estimateRange.high)}
-          </p>
-          <p className="mt-1 text-xs text-muted-foreground">
-            <Calendar className="mr-1 inline h-3 w-3" />
-            Estimated timeline: {quote.timeline}
-          </p>
-        </div>
-
-        <div className="space-y-1">
+        <div className="space-y-1.5">
           {quote.notes.map((note, i) => (
             <div key={i} className="flex items-start gap-1.5 text-xs text-muted-foreground">
               <CheckCircle2 className="mt-0.5 h-3 w-3 shrink-0 text-green-600 dark:text-green-400" />
@@ -588,7 +574,7 @@ function QuoteResultCard({ quote, name, email, phone }: { quote: QuoteEstimate; 
 
         <div className="rounded-md border border-primary/20 bg-primary/5 p-3">
           <div className="mb-2 flex items-center justify-between">
-            <span className="text-xs font-medium text-muted-foreground">Secure Your Service</span>
+            <span className="text-xs font-medium text-muted-foreground">Book On-Site Consultation</span>
             <span className="flex items-center gap-1 text-[10px] text-muted-foreground">
               <Shield className="h-3 w-3" />
               Secure checkout
@@ -597,19 +583,19 @@ function QuoteResultCard({ quote, name, email, phone }: { quote: QuoteEstimate; 
           <Button
             className="w-full"
             size="lg"
-            onClick={handlePayDeposit}
+            onClick={handleBookConsultation}
             disabled={isPayLoading}
-            data-testid="button-pay-deposit"
+            data-testid="button-book-consultation"
           >
             {isPayLoading ? (
               <Loader2 className="mr-2 h-4 w-4 animate-spin" />
             ) : (
               <CreditCard className="mr-2 h-4 w-4" />
             )}
-            Pay {fmt(depositAmount)} Deposit (20%)
+            Book Consultation — $250
           </Button>
           <p className="mt-1.5 text-center text-[10px] text-muted-foreground">
-            Lock in your price &amp; get priority scheduling
+            On-site visit · Final pricing provided after inspection
           </p>
         </div>
 
@@ -628,7 +614,7 @@ function QuoteResultCard({ quote, name, email, phone }: { quote: QuoteEstimate; 
         </div>
 
         <p className="text-center text-[10px] text-muted-foreground">
-          *Final pricing subject to site verification, walkthrough, and local code conditions.
+          *All estimates are starting ranges. Final pricing is determined after on-site inspection.
         </p>
       </CardContent>
     </Card>

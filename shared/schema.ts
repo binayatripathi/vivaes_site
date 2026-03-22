@@ -77,9 +77,9 @@ export const servicesList = [
   },
   {
     slug: "electrification-assessment",
-    title: "Electrification Assessment (Free)",
-    shortDescription: "Free assessment to plan your home's electrification journey.",
-    description: "Get a comprehensive, no-cost evaluation of your home's electrification potential. We assess your electrical panel, appliances, and energy usage to create a personalized roadmap for transitioning to all-electric. Includes rebate and incentive guidance for federal, state, and utility programs.",
+    title: "Electrification Assessment",
+    shortDescription: "$250 on-site assessment to plan your home's electrification journey.",
+    description: "Get a comprehensive on-site evaluation of your home's electrification potential — $250 assessment fee. We assess your electrical panel, appliances, and energy usage to create a personalized roadmap for transitioning to all-electric. Includes rebate and incentive guidance for federal, state, and utility programs.",
     icon: "ClipboardCheck",
     image: "/images/services/electrification-assessment.jpg",
   },
@@ -98,14 +98,6 @@ export const servicesList = [
     description: "Protect your home or business from power outages with a standalone battery backup system — no solar panels required. We install Tesla Powerwall, Enphase IQ Battery, FranklinWH, and other leading systems that charge from the grid during off-peak hours and provide seamless backup power when you need it most.",
     icon: "Battery",
     image: "/images/services/battery-addon.png",
-  },
-  {
-    slug: "electrical-solar-prep",
-    title: "Electrical Prep for Solar",
-    shortDescription: "Get your electrical system ready for a future solar installation.",
-    description: "Planning to go solar soon? We prepare your home's electrical infrastructure so your solar installer can hit the ground running. This includes panel capacity assessment, sub-panel installation, conduit routing, grounding upgrades, and any wiring needed to ensure your system is solar-ready and code-compliant.",
-    icon: "Wrench",
-    image: "/images/services/panel-upgrades.png",
   },
   {
     slug: "ev-panel-battery",
@@ -137,7 +129,7 @@ export const urgencyLevels = ["Standard (2-4 weeks)", "Priority (1-2 weeks)", "E
 export const chargerLevels = ["Level 1 (120V / 15A)", "Level 2 (240V / 30A)", "Level 2 (240V / 50A)", "Level 2 (240V / 60A)"] as const;
 export const wiringDistances = ["Short (under 25 ft)", "Medium (25-75 ft)", "Long (75+ ft)"] as const;
 export const panelUpgradeOptions = ["No panel upgrade needed", "100A to 200A upgrade", "200A to 400A upgrade"] as const;
-export const batteryCountOptions = ["1 battery (5 kWh)", "2 batteries (10 kWh)", "3+ batteries (15+ kWh)"] as const;
+export const batteryCountOptions = ["5 kW", "10 kW", "13.5 kW", "15 kW"] as const;
 
 export interface ServiceSpecificOptions {
   chargerLevel?: string;
@@ -164,128 +156,36 @@ export interface QuoteEstimate {
   notes: string[];
 }
 
-interface ServicePricingConfig {
-  labor: { base: number; perUnit: number };
-  materials: { base: number; perUnit: number };
-  equipment: { base: number; perUnit: number };
-  sitePrep: { base: number; perUnit: number };
-  permit: { base: number; inspectionFee: number };
-  timeline: { small: string; medium: string; large: string };
-}
+const serviceStartingPrices: Record<string, number> = {
+  "solar-storage": 30000,
+  "ev-chargers": 850,
+  "panel-upgrades": 3500,
+  "lighting-retrofits": 600,
+  "general-electrical": 600,
+  "commercial": 600,
+  "battery-addon": 15500,
+  "solar-battery-new": 30000,
+  "reroofing-solar": 3600,
+  "electrification-assessment": 250,
+  "warehouse-commercial": 600,
+  "battery-only": 15500,
+  "ev-panel-battery": 28000,
+};
 
-const servicePricingV2: Record<string, ServicePricingConfig> = {
-  "solar-storage": {
-    labor: { base: 2800, perUnit: 180 },
-    materials: { base: 4500, perUnit: 350 },
-    equipment: { base: 6000, perUnit: 500 },
-    sitePrep: { base: 800, perUnit: 200 },
-    permit: { base: 350, inspectionFee: 175 },
-    timeline: { small: "3-5 days", medium: "1-2 weeks", large: "2-4 weeks" },
-  },
-  "ev-chargers": {
-    labor: { base: 450, perUnit: 350 },
-    materials: { base: 250, perUnit: 180 },
-    equipment: { base: 600, perUnit: 500 },
-    sitePrep: { base: 150, perUnit: 200 },
-    permit: { base: 125, inspectionFee: 75 },
-    timeline: { small: "4-6 hours", medium: "1 day", large: "1-2 days" },
-  },
-  "panel-upgrades": {
-    labor: { base: 1200, perUnit: 400 },
-    materials: { base: 800, perUnit: 600 },
-    equipment: { base: 1200, perUnit: 800 },
-    sitePrep: { base: 300, perUnit: 150 },
-    permit: { base: 200, inspectionFee: 150 },
-    timeline: { small: "4-6 hours", medium: "1 day", large: "1-2 days" },
-  },
-  "lighting-retrofits": {
-    labor: { base: 600, perUnit: 120 },
-    materials: { base: 400, perUnit: 200 },
-    equipment: { base: 300, perUnit: 150 },
-    sitePrep: { base: 100, perUnit: 50 },
-    permit: { base: 75, inspectionFee: 75 },
-    timeline: { small: "4-6 hours", medium: "1-2 days", large: "2-5 days" },
-  },
-  "general-electrical": {
-    labor: { base: 250, perUnit: 150 },
-    materials: { base: 100, perUnit: 100 },
-    equipment: { base: 50, perUnit: 50 },
-    sitePrep: { base: 50, perUnit: 25 },
-    permit: { base: 50, inspectionFee: 50 },
-    timeline: { small: "2-4 hours", medium: "4-8 hours", large: "1-2 days" },
-  },
-  "commercial": {
-    labor: { base: 5000, perUnit: 2500 },
-    materials: { base: 6000, perUnit: 3500 },
-    equipment: { base: 5500, perUnit: 3000 },
-    sitePrep: { base: 1500, perUnit: 800 },
-    permit: { base: 500, inspectionFee: 350 },
-    timeline: { small: "1-2 weeks", medium: "3-6 weeks", large: "6-12 weeks" },
-  },
-  "battery-addon": {
-    labor: { base: 1200, perUnit: 600 },
-    materials: { base: 800, perUnit: 400 },
-    equipment: { base: 5500, perUnit: 4500 },
-    sitePrep: { base: 400, perUnit: 200 },
-    permit: { base: 200, inspectionFee: 150 },
-    timeline: { small: "1 day", medium: "1-2 days", large: "2-4 days" },
-  },
-  "solar-battery-new": {
-    labor: { base: 3500, perUnit: 250 },
-    materials: { base: 5000, perUnit: 400 },
-    equipment: { base: 10000, perUnit: 800 },
-    sitePrep: { base: 1000, perUnit: 300 },
-    permit: { base: 400, inspectionFee: 200 },
-    timeline: { small: "1-2 weeks", medium: "2-4 weeks", large: "4-6 weeks" },
-  },
-  "reroofing-solar": {
-    labor: { base: 1500, perUnit: 100 },
-    materials: { base: 400, perUnit: 80 },
-    equipment: { base: 200, perUnit: 50 },
-    sitePrep: { base: 600, perUnit: 150 },
-    permit: { base: 150, inspectionFee: 100 },
-    timeline: { small: "1 day", medium: "1-2 days", large: "2-3 days" },
-  },
-  "electrification-assessment": {
-    labor: { base: 0, perUnit: 0 },
-    materials: { base: 0, perUnit: 0 },
-    equipment: { base: 0, perUnit: 0 },
-    sitePrep: { base: 0, perUnit: 0 },
-    permit: { base: 0, inspectionFee: 0 },
-    timeline: { small: "1 hour", medium: "1-2 hours", large: "2-3 hours" },
-  },
-  "warehouse-commercial": {
-    labor: { base: 6000, perUnit: 3000 },
-    materials: { base: 7000, perUnit: 4000 },
-    equipment: { base: 6500, perUnit: 3500 },
-    sitePrep: { base: 2000, perUnit: 1000 },
-    permit: { base: 600, inspectionFee: 400 },
-    timeline: { small: "2-4 weeks", medium: "4-8 weeks", large: "8-14 weeks" },
-  },
-  "battery-only": {
-    labor: { base: 1000, perUnit: 500 },
-    materials: { base: 600, perUnit: 300 },
-    equipment: { base: 5000, perUnit: 4200 },
-    sitePrep: { base: 350, perUnit: 150 },
-    permit: { base: 175, inspectionFee: 125 },
-    timeline: { small: "1 day", medium: "1-2 days", large: "2-3 days" },
-  },
-  "electrical-solar-prep": {
-    labor: { base: 900, perUnit: 300 },
-    materials: { base: 500, perUnit: 250 },
-    equipment: { base: 400, perUnit: 200 },
-    sitePrep: { base: 250, perUnit: 100 },
-    permit: { base: 150, inspectionFee: 100 },
-    timeline: { small: "4-6 hours", medium: "1 day", large: "1-2 days" },
-  },
-  "ev-panel-battery": {
-    labor: { base: 2800, perUnit: 900 },
-    materials: { base: 1800, perUnit: 700 },
-    equipment: { base: 7200, perUnit: 5000 },
-    sitePrep: { base: 600, perUnit: 350 },
-    permit: { base: 350, inspectionFee: 200 },
-    timeline: { small: "2-3 days", medium: "3-5 days", large: "1-2 weeks" },
-  },
+const serviceTimelines: Record<string, { small: string; medium: string; large: string }> = {
+  "solar-storage": { small: "3-5 days", medium: "1-2 weeks", large: "2-4 weeks" },
+  "ev-chargers": { small: "4-6 hours", medium: "1 day", large: "1-2 days" },
+  "panel-upgrades": { small: "4-6 hours", medium: "1 day", large: "1-2 days" },
+  "lighting-retrofits": { small: "4-6 hours", medium: "1-2 days", large: "2-5 days" },
+  "general-electrical": { small: "2-4 hours", medium: "4-8 hours", large: "1-2 days" },
+  "commercial": { small: "1-2 weeks", medium: "3-6 weeks", large: "6-12 weeks" },
+  "battery-addon": { small: "1 day", medium: "1-2 days", large: "2-4 days" },
+  "solar-battery-new": { small: "1-2 weeks", medium: "2-4 weeks", large: "4-6 weeks" },
+  "reroofing-solar": { small: "1 day", medium: "1-2 days", large: "2-3 days" },
+  "electrification-assessment": { small: "1-2 hours", medium: "1-2 hours", large: "2-3 hours" },
+  "warehouse-commercial": { small: "2-4 weeks", medium: "4-8 weeks", large: "8-14 weeks" },
+  "battery-only": { small: "1 day", medium: "1-2 days", large: "2-3 days" },
+  "ev-panel-battery": { small: "2-3 days", medium: "3-5 days", large: "1-2 weeks" },
 };
 
 export function generateQuoteEstimate(
@@ -295,104 +195,119 @@ export function generateQuoteEstimate(
   urgency: string,
   serviceOptions?: ServiceSpecificOptions,
 ): QuoteEstimate {
-  const pricing = servicePricingV2[serviceSlug] || servicePricingV2["general-electrical"];
   const service = servicesList.find(s => s.slug === serviceSlug);
+  const timelineKey = projectSize === "Large" ? "large" : projectSize === "Medium" ? "medium" : "small";
+  const timeline = (serviceTimelines[serviceSlug] || serviceTimelines["general-electrical"])[timelineKey];
 
-  const propertyMultiplier = propertyType === "Commercial" ? 1.35 : propertyType === "Industrial" ? 1.7 : 1.0;
-  const unitCount = projectSize === "Medium" ? 2.2 : projectSize === "Large" ? 4.0 : 1.0;
-  const urgencyMultiplier = urgency.includes("Priority") ? 1.15 : urgency.includes("Emergency") ? 1.4 : 1.0;
-
-  let chargerAmperageFactor = 1.0;
-  if (serviceOptions?.chargerLevel) {
-    if (serviceOptions.chargerLevel.includes("60A")) chargerAmperageFactor = 1.45;
-    else if (serviceOptions.chargerLevel.includes("50A")) chargerAmperageFactor = 1.25;
-    else if (serviceOptions.chargerLevel.includes("30A")) chargerAmperageFactor = 1.0;
-    else if (serviceOptions.chargerLevel.includes("15A")) chargerAmperageFactor = 0.7;
+  if (serviceSlug === "electrification-assessment") {
+    return {
+      serviceTitle: service?.title || "Electrification Assessment",
+      propertyType, projectSize, urgency,
+      laborCost: 0, materialsCost: 0, equipmentCost: 0, sitePrepCost: 0,
+      permitFees: 0, subtotal: 250, discount: 0, total: 250,
+      estimateRange: { low: 250, high: 250 },
+      timeline,
+      notes: [
+        "On-site assessment — $250 fee",
+        "Comprehensive evaluation of your electrical system and energy usage",
+        "Personalized electrification roadmap included",
+        "Rebate and incentive guidance for federal, state, and utility programs",
+        "Final project pricing subject to site inspection and local code conditions",
+      ],
+    };
   }
 
-  let wiringDistanceFactor = 1.0;
+  const basePrice = serviceStartingPrices[serviceSlug] || 600;
+  const propertyMultiplier = propertyType === "Commercial" ? 1.35 : propertyType === "Industrial" ? 1.7 : 1.0;
+  const urgencyMultiplier = urgency.includes("Priority") ? 1.15 : urgency.includes("Emergency") ? 1.4 : 1.0;
+
+  const reroof = serviceSlug === "reroofing-solar";
+  const sizeMultiplier = reroof
+    ? (projectSize === "Large" ? 3.125 : projectSize === "Medium" ? 1.875 : 1.0)
+    : (projectSize === "Large" ? 2.5 : projectSize === "Medium" ? 1.6 : 1.0);
+
+  const isBatteryService = ["battery-addon", "battery-only", "solar-battery-new", "ev-panel-battery"].includes(serviceSlug);
+  const isEVService = ["ev-chargers", "ev-panel-battery"].includes(serviceSlug);
+
+  let batteryMultiplier = 1.0;
+  if (isBatteryService && serviceOptions?.batteryCount) {
+    if (serviceOptions.batteryCount === "15 kW") batteryMultiplier = 2.6;
+    else if (serviceOptions.batteryCount === "13.5 kW") batteryMultiplier = 2.3;
+    else if (serviceOptions.batteryCount === "10 kW") batteryMultiplier = 1.8;
+  }
+
+  let chargerMultiplier = 1.0;
+  if (isEVService && serviceOptions?.chargerLevel) {
+    if (serviceOptions.chargerLevel.includes("60A")) chargerMultiplier = 1.45;
+    else if (serviceOptions.chargerLevel.includes("50A")) chargerMultiplier = 1.25;
+    else if (serviceOptions.chargerLevel.includes("15A")) chargerMultiplier = 0.7;
+  }
+
+  let wiringMultiplier = 1.0;
   if (serviceOptions?.wiringDistance) {
-    if (serviceOptions.wiringDistance.includes("Long")) wiringDistanceFactor = 1.6;
-    else if (serviceOptions.wiringDistance.includes("Medium")) wiringDistanceFactor = 1.25;
+    if (serviceOptions.wiringDistance.includes("Long")) wiringMultiplier = 1.5;
+    else if (serviceOptions.wiringDistance.includes("Medium")) wiringMultiplier = 1.2;
   }
 
   let panelUpgradeCost = 0;
   if (serviceOptions?.panelUpgrade) {
     if (serviceOptions.panelUpgrade.includes("400A")) panelUpgradeCost = 5500;
-    else if (serviceOptions.panelUpgrade.includes("200A")) panelUpgradeCost = 2800;
+    else if (serviceOptions.panelUpgrade.includes("200A")) panelUpgradeCost = 3500;
   }
 
-  let batteryCountFactor = 1.0;
-  if (serviceOptions?.batteryCount) {
-    if (serviceOptions.batteryCount.includes("3+")) batteryCountFactor = 2.6;
-    else if (serviceOptions.batteryCount.includes("2 batt")) batteryCountFactor = 1.8;
-  }
+  let subtotal = Math.round(basePrice * sizeMultiplier * propertyMultiplier * urgencyMultiplier);
+  if (isBatteryService) subtotal = Math.round(subtotal * batteryMultiplier);
+  if (isEVService) subtotal = Math.round(subtotal * chargerMultiplier * wiringMultiplier);
+  else if (serviceOptions?.wiringDistance) subtotal = Math.round(subtotal * wiringMultiplier);
+  subtotal += panelUpgradeCost;
 
-  const isEVService = ["ev-chargers", "ev-panel-battery"].includes(serviceSlug);
-  const isBatteryService = ["battery-addon", "battery-only", "solar-battery-new", "ev-panel-battery"].includes(serviceSlug);
+  const permitFees = Math.max(500, Math.round(subtotal * 0.02));
+  subtotal += permitFees;
 
-  const evLabor = isEVService ? chargerAmperageFactor : 1.0;
-  const evMaterials = isEVService ? chargerAmperageFactor * wiringDistanceFactor : 1.0;
-  const evSitePrep = wiringDistanceFactor;
-  const batteryEquip = isBatteryService ? batteryCountFactor : 1.0;
-
-  const laborCost = Math.round(
-    (pricing.labor.base + pricing.labor.perUnit * unitCount) * propertyMultiplier * urgencyMultiplier * evLabor
-  );
-  const materialsCost = Math.round(
-    (pricing.materials.base + pricing.materials.perUnit * unitCount) * propertyMultiplier * evMaterials
-  );
-  const equipmentCost = Math.round(
-    (pricing.equipment.base + pricing.equipment.perUnit * unitCount) * batteryEquip
-  );
-  const sitePrepCost = Math.round(
-    (pricing.sitePrep.base + pricing.sitePrep.perUnit * unitCount) * propertyMultiplier * evSitePrep
-  );
-  const permitFees = Math.round(
-    (pricing.permit.base + pricing.permit.inspectionFee) * propertyMultiplier
-    + (panelUpgradeCost > 0 ? 150 : 0)
-  );
-
-  const subtotal = laborCost + materialsCost + equipmentCost + sitePrepCost + permitFees + panelUpgradeCost;
   const discount = projectSize === "Large" ? Math.round(subtotal * 0.05) : 0;
   const total = subtotal - discount;
 
-  const varianceLow = serviceSlug.includes("solar") || serviceSlug.includes("battery") || serviceSlug === "ev-panel-battery" ? 0.88 : 0.90;
-  const varianceHigh = serviceSlug.includes("solar") || serviceSlug.includes("battery") || serviceSlug === "ev-panel-battery" ? 1.18 : 1.12;
-
-  const timelineKey = projectSize === "Large" ? "large" : projectSize === "Medium" ? "medium" : "small";
+  const variance = (serviceSlug.includes("solar") || isBatteryService || serviceSlug === "ev-panel-battery") ? 0.20 : 0.15;
 
   const notes: string[] = [
-    "Free on-site consultation included",
     "All work performed by union-trained, licensed electricians",
-    "Full warranty on labor and materials",
-    "Final pricing subject to site verification, walkthrough, and local code conditions",
+    "Industry-leading warranty coverage included",
+    "Permit & inspection fee: $500 and up depending on jurisdiction",
+    "FINAL PRICING IS BASED ON SITE INSPECTION — subject to site verification, walkthrough, and local code conditions",
   ];
+
+  if (reroof) {
+    notes.push("Solar panel detach & reset: $325–$575 per panel depending on racking type, system age, and NEC requirements");
+    notes.push("Additional fee may apply if rack replacement is needed — determined on-site evaluation");
+  }
+  if (isBatteryService && serviceOptions?.batteryCount) {
+    notes.push(`Battery system: ${serviceOptions.batteryCount} (available in 5 kW, 10 kW, 13.5 kW, or 15 kW depending on energy storage needs)`);
+  } else if (isBatteryService) {
+    notes.push("Available battery sizes: 5 kW, 10 kW, 13.5 kW, or 15 kW depending on energy storage needs");
+  }
+  if (isEVService && serviceOptions?.chargerLevel) {
+    notes.push(`Charger spec: ${serviceOptions.chargerLevel}`);
+  }
   if (discount > 0) notes.push("5% volume discount applied");
   if (urgency.includes("Emergency")) notes.push("Emergency surcharge included for expedited service");
-  if (propertyType === "Commercial" || propertyType === "Industrial") notes.push("Commercial-grade equipment and materials included");
-  if (isBatteryService) notes.push("Battery equipment pricing varies by brand and capacity selected");
-  if (serviceSlug.includes("solar") || serviceSlug === "electrical-solar-prep") notes.push("Solar-related permits may require utility interconnection approval");
-  if (serviceOptions?.chargerLevel) notes.push(`Charger spec: ${serviceOptions.chargerLevel}`);
-  if (serviceOptions?.wiringDistance && serviceOptions.wiringDistance.includes("Long")) notes.push("Extended wiring run adds to materials and site prep costs");
-  if (panelUpgradeCost > 0) notes.push(`Includes panel upgrade (${serviceOptions?.panelUpgrade}) — adds ~$${panelUpgradeCost.toLocaleString()} to materials + $150 permit`);
-  if (serviceOptions?.batteryCount && !serviceOptions.batteryCount.includes("1 batt")) notes.push(`Multi-battery install: ${serviceOptions.batteryCount}`);
+  if (propertyType === "Commercial" || propertyType === "Industrial") notes.push("Commercial-grade installation included");
+  if (panelUpgradeCost > 0) notes.push(`Panel upgrade included: ${serviceOptions?.panelUpgrade}`);
+  if (serviceOptions?.wiringDistance?.includes("Long")) notes.push("Extended wiring run — additional evaluation may apply on site");
+  if (serviceSlug.includes("solar")) notes.push("Solar-related permits may require utility interconnection approval");
 
   return {
     serviceTitle: service?.title || "Electrical Service",
-    propertyType,
-    projectSize,
-    urgency,
-    laborCost,
-    materialsCost: materialsCost + panelUpgradeCost,
-    equipmentCost,
-    sitePrepCost,
+    propertyType, projectSize, urgency,
+    laborCost: 0,
+    materialsCost: 0,
+    equipmentCost: 0,
+    sitePrepCost: 0,
     permitFees,
     subtotal,
     discount,
     total,
-    estimateRange: { low: Math.round(total * varianceLow), high: Math.round(total * varianceHigh) },
-    timeline: pricing.timeline[timelineKey],
+    estimateRange: { low: Math.round(total * (1 - variance)), high: Math.round(total * (1 + variance)) },
+    timeline,
     notes,
   };
 }

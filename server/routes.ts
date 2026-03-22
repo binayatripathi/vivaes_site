@@ -6,7 +6,7 @@ import { getUncachableStripeClient, getStripePublishableKey } from "./stripeClie
 import { storage } from "./storage";
 import { z } from "zod";
 
-const CONSULTATION_FEE = 75;
+const CONSULTATION_FEE = 250;
 
 const checkoutSchema = z.object({
   type: z.enum(["deposit", "consultation"]),

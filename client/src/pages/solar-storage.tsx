@@ -546,29 +546,6 @@ export default function SolarStoragePage() {
               </motion.div>
 
               <motion.div variants={fadeUp}>
-                <Card className="flex h-full flex-col overflow-visible hover-elevate" data-testid="card-solar-prep">
-                  <CardContent className="flex flex-1 flex-col p-6">
-                    <div className="mb-4 flex h-12 w-12 items-center justify-center rounded-md bg-primary/10">
-                      <Wrench className="h-6 w-6 text-primary" />
-                    </div>
-                    <h3 className="mb-2 text-lg font-semibold">Electrical Prep for Solar</h3>
-                    <p className="mb-6 flex-1 text-sm text-muted-foreground">
-                      Planning to go solar soon? We prepare your panel, conduit, and grounding so your solar installer can start immediately. Save time and avoid delays on installation day.
-                    </p>
-                    <Button
-                      variant="outline"
-                      className="w-full"
-                      onClick={() => openQuote("electrical-solar-prep")}
-                      data-testid="button-quote-electrical-solar-prep"
-                    >
-                      Get a Quote
-                      <ArrowRight className="ml-2 h-4 w-4" />
-                    </Button>
-                  </CardContent>
-                </Card>
-              </motion.div>
-
-              <motion.div variants={fadeUp}>
                 <Card className="flex h-full flex-col overflow-visible hover-elevate" data-testid="card-panel-energy">
                   <CardContent className="flex flex-1 flex-col p-6">
                     <div className="mb-4 flex h-12 w-12 items-center justify-center rounded-md bg-primary/10">

@@ -1,0 +1,69 @@
+Testing Checklist: Grouped by Ask
+1. General Removals & Disclaimers (Apply Site-Wide)
+ All pricing sections/tabs do NOT mention "labor", "material", "equipment", or "side prep" costs.
+Check: Visit pricing/services tab or any quote page. Search page source (Ctrl+F) for those words.
+Expected: Removed everywhere. If present → update needed.
+ All price ranges end with "and up" + a disclaimer like "depending on [system configuration / site conditions / energy storage needs / on-site evaluation]".
+Check: Every price display or quote text.
+Expected: No fixed prices; all phrased as ranges "from X and up".
+2. Consultation & Permit Fees
+ On-site Consultation / Assessment: Maximum $250 (not free, no deposit option).
+Check: Services tab, quote form, or "Electrification Assessment" section. Look for text like "$250 for on-site consultation".
+Test: Fill quote form → see if it quotes $250 max for assessment.
+Expected: Clearly stated as $250 (not free). Remove any "deposit" or "free" language.
+ Permit Inspection Fee: $500+ across all platforms.
+Check: Any permit-related text in solar/EV/panel sections.
+Expected: Updated to "$500 and up" or similar.
+3. Battery & Storage Updates
+ Battery sizes standardized: 5 kW, 10 kW, 13.5 kW, 15 kW (depending on energy needs).
+Check: Battery/storage sections, dropdowns, or descriptions (e.g., "Available in 5 kW, 10 kW...").
+Expected: Listed explicitly; no other sizes unless added.
+ Batteries / Storage Add-on (existing solar): From $15,500 and up (depending on energy storage needs).
+Check: Add-on tab or pricing grid.
+Expected: Exact phrasing, no labor/material mentions.
+ Battery Back Up Installation (only, no solar): From $15,500 and up.
+Check: Dedicated battery tab or section.
+Expected: Same as above.
+4. Solar-Specific Updates
+ Solar Panel Detach and Reset (for re-roofing): $325–$575 per panel (based on racking, age, NEC upgrades).
+Check: Solar services tab or re-roofing section.
+Additional: Note on extra fee for rack replacement (site evaluation).
+Expected: Range displayed with notes.
+ Solar + Battery System: New tab/section (confirm if separate from "Solar and Storage").
+Check: Navigation menu or tabs. Is there a "Solar plus battery system" tab?
+Expected: New tab present; if combined, note if merged correctly.
+5. EV Charger Updates
+ EV Charging: From $850 and up (depending on amperage and on-site evaluation).
+Check: EV charger tab or section.
+Expected: Range shown, no labor/material/side prep.
+6. Panel Upgrade Updates
+ Panel Upgrade: $3,500 and up (depending on site conditions).
+Check: Panel upgrade tab.
+Expected: Range updated, disclaimers present.
+7. Lighting & General Electrical
+ Lighting Retrofits / General Electrical / Commercial: $600 and up (depending on needs/evaluation).
+Check: Lighting tab or general electrical section.
+Expected: Range applied consistently.
+8. Combo & Other Bundles
+ EV Charger + Panel Upgrade + Battery Combo: From $28,000 and up (depending on storage/evaluation).
+Check: Any bundle/package tab or description.
+Expected: Range listed with dependencies.
+9. Tabs to Remove
+ "Electrical Prep for Solar" tab: Completely removed.
+Check: Navigation menu – does it exist? If yes → remove.
+Expected: No trace of this tab.
+10. Voice Agent (Alex) Integration
+ Call the (415) number → Ask for quotes on each item (e.g., "What's the price for battery add-on?" or "Solar panel detach for re-roofing?").
+Expected: Alex responds with updated ranges (e.g., "Battery add-on starts at $15,500 and up depending on..."), mentions 5/10/13.5/15 kW sizes, $250 assessment, etc.
+Test 5–10 queries: Battery, EV, panel upgrade, consultation, detach/reset.
+Also test: Does Alex avoid mentioning labor/material/side prep?
+11. Dashboard / Admin Checks
+ In /dashboard (if accessible): Check AI Employees tab → Max (bookkeeping) or Alex configs reference new prices.
+Expected: Pricing grid updated in instructions/files.
+ Google Sheets CRM (linked): Search for columns like "Service", "Price Range" → verify new values (e.g., battery $15,500+).
+Expected: Sheets reflect updates for leads/quotes.
+12. Overall Site-Wide Checks
+ Mobile responsiveness: View on phone – prices/tabs readable?
+ Search page source (Ctrl+U): Ctrl+F for old prices (e.g., $800–$2,000 EV) → should be gone.
+ Quote form submission: Submit a solar/battery quote → check if backend/Sheets captures new ranges.
+ No old pricing remnants: Search site for "labor", "material", "side prep", "free assessment".

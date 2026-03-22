@@ -148,7 +148,7 @@ export function ServiceDetailPage() {
     "Full permitting and inspection support",
     "Industry-leading warranty coverage",
     "24/7 emergency service available",
-    "Free consultation and estimate",
+    "On-site consultation: $250 (final quote included)",
     "Financing options available",
   ];
 
@@ -214,7 +214,7 @@ export function ServiceDetailPage() {
             >
               <Card data-testid="card-service-cta">
                 <CardContent className="space-y-4 p-6">
-                  <h3 className="text-lg font-semibold">Get a Free Quote</h3>
+                  <h3 className="text-lg font-semibold">Get an Instant Quote</h3>
                   <p className="text-sm text-muted-foreground">
                     Get your personalized quote in minutes. Available 24/7.
                   </p>

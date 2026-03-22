@@ -127,7 +127,7 @@ export default function ElectrificationPage() {
                 onClick={() => setQuoteOpen(true)}
                 data-testid="button-electrification-hero-quote"
               >
-                Free Electrification Assessment
+                Book Electrification Assessment — $250
                 <MessageCircle className="ml-2 h-4 w-4" />
               </Button>
               <Link href="/quote">
@@ -362,7 +362,7 @@ export default function ElectrificationPage() {
               className="text-3xl font-bold tracking-tight text-white sm:text-4xl"
               data-testid="text-electrification-cta-title"
             >
-              Get a Free Electrification Assessment
+              Book an Electrification Assessment — $250
             </motion.h2>
             <motion.p variants={fadeUp} className="mx-auto max-w-xl text-lg text-white/80">
               Not sure where to start? We'll visit your home, evaluate your current setup, and create a personalized plan that maximizes your savings and identifies available incentives.
@@ -374,7 +374,7 @@ export default function ElectrificationPage() {
                 onClick={() => setQuoteOpen(true)}
                 data-testid="button-electrification-cta-assessment"
               >
-                Schedule Free Assessment
+                Book Assessment — $250
                 <MessageCircle className="ml-2 h-4 w-4" />
               </Button>
               <Link href="/quote">
