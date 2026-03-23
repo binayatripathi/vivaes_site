@@ -197,7 +197,7 @@ export default function Home() {
             </motion.div>
 
             <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
-              {servicesList.slice(0, 6).map((service) => {
+              {servicesList.filter((s) => !('hideFromGrid' in s && s.hideFromGrid)).slice(0, 6).map((service) => {
                 const Icon = iconMap[service.icon] || Zap;
                 return (
                   <motion.div key={service.slug} variants={fadeUp}>

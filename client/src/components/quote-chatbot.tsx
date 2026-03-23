@@ -140,7 +140,6 @@ export function QuoteChatbot({ preselectedService }: { preselectedService?: stri
       "solar-battery-new": "Small = basic system, Medium = mid-size system, Large = full system",
       "reroofing-solar": "Small = up to 10 panels, Medium = 10-20 panels, Large = 20+ panels",
       "electrification-assessment": "Single property assessment — $250 fee",
-      "warehouse-commercial": "Small = under 10,000 sq ft, Medium = 10,000-50,000 sq ft, Large = 50,000+ sq ft",
       "battery-only": "Small = 5 kW, Medium = 10 kW, Large = 13.5–15 kW",
       "ev-panel-battery": "Small = basic bundle, Medium = mid-range bundle, Large = full bundle",
     };

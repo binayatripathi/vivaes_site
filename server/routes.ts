@@ -469,7 +469,6 @@ export async function registerRoutes(
       { loc: "/services/solar-battery-new", priority: "0.8", changefreq: "monthly" },
       { loc: "/services/reroofing-solar", priority: "0.7", changefreq: "monthly" },
       { loc: "/services/electrification-assessment", priority: "0.8", changefreq: "monthly" },
-      { loc: "/services/warehouse-commercial", priority: "0.7", changefreq: "monthly" },
       { loc: "/quote", priority: "0.9", changefreq: "monthly" },
       { loc: "/booking", priority: "0.9", changefreq: "monthly" },
       { loc: "/electrification", priority: "0.7", changefreq: "monthly" },

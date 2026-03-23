@@ -1,8 +1,6 @@
 import { useState } from "react";
 import { Link } from "wouter";
 import { motion } from "framer-motion";
-import powerwallRainPath from "@assets/IMG_6770_1773617598942.jpeg";
-import powerwallSolarPath from "@assets/IMG_6771_1773617598942.jpeg";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -24,6 +22,9 @@ import {
   Home,
   ShieldAlert,
 } from "lucide-react";
+
+const powerwallRainPath = "/images/services/battery-only.jpg";
+const powerwallSolarPath = "/images/services/battery-addon.jpg";
 
 const fadeUp = {
   hidden: { opacity: 0, y: 24 },

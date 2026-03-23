@@ -45,9 +45,9 @@ export const servicesList = [
   },
   {
     slug: "commercial",
-    title: "Commercial",
-    shortDescription: "Large-scale electrical and solar solutions for commercial properties.",
-    description: "We specialize in commercial-grade electrical and solar installations that meet the demanding requirements of business operations. Our services include tenant improvements, new construction wiring, emergency power systems, data center infrastructure, and large-scale solar arrays with monitoring systems.",
+    title: "Commercial & Warehouse",
+    shortDescription: "Large-scale electrical and solar solutions for commercial and warehouse properties.",
+    description: "We specialize in commercial-grade electrical and solar installations for businesses, warehouses, and large facilities. Our services include tenant improvements, new construction wiring, emergency power systems, 3-phase power installations, industrial lighting, high-amperage circuits, loading dock power, and large-scale solar arrays with monitoring systems.",
     icon: "Building2",
     image: "/images/services/commercial.jpg",
   },
@@ -57,7 +57,8 @@ export const servicesList = [
     shortDescription: "Add battery storage to your existing solar system for energy independence.",
     description: "Already have solar panels? Add a battery storage system to store excess energy and power your home during outages or peak rate hours. We install Enphase, Tesla Powerwall, FranklinWH, and other top brands. Maximize your existing solar investment with seamless integration.",
     icon: "Battery",
-    image: "/images/services/battery-addon.png",
+    image: "/images/services/battery-addon.jpg",
+    hideFromGrid: true,
   },
   {
     slug: "solar-battery-new",
@@ -66,6 +67,7 @@ export const servicesList = [
     description: "Go solar with a fully integrated solar panel and battery storage system from day one. We design, permit, and install complete photovoltaic systems paired with premium battery solutions for maximum energy independence and savings.",
     icon: "Sun",
     image: "/images/services/solar-battery-new.jpg",
+    hideFromGrid: true,
   },
   {
     slug: "reroofing-solar",
@@ -84,20 +86,13 @@ export const servicesList = [
     image: "/images/services/electrification-assessment.jpg",
   },
   {
-    slug: "warehouse-commercial",
-    title: "Warehouse / Commercial Electrical",
-    shortDescription: "Heavy-duty electrical solutions for warehouses and commercial facilities.",
-    description: "Specialized electrical services for warehouses, distribution centers, and large commercial facilities. We handle 3-phase power installations, industrial lighting, high-amperage circuits, loading dock power, and facility-wide electrical infrastructure upgrades.",
-    icon: "Warehouse",
-    image: "/images/services/warehouse-commercial.jpg",
-  },
-  {
     slug: "battery-only",
     title: "Battery Backup Install (No Solar)",
     shortDescription: "Standalone battery backup for grid resilience and outage protection.",
     description: "Protect your home or business from power outages with a standalone battery backup system — no solar panels required. We install Tesla Powerwall, Enphase IQ Battery, FranklinWH, and other leading systems that charge from the grid during off-peak hours and provide seamless backup power when you need it most.",
     icon: "Battery",
-    image: "/images/services/battery-addon.png",
+    image: "/images/services/battery-only.jpg",
+    hideFromGrid: true,
   },
   {
     slug: "ev-panel-battery",
@@ -106,6 +101,7 @@ export const servicesList = [
     description: "The ultimate home energy upgrade — bundle an EV charger installation with a panel upgrade and battery backup system. We coordinate all three in a single project to minimize disruption, reduce permit costs, and ensure your entire electrical system works together seamlessly. Ideal for homeowners going all-electric.",
     icon: "Zap",
     image: "/images/services/ev-chargers.png",
+    hideFromGrid: true,
   },
 ] as const;
 
@@ -167,7 +163,6 @@ const serviceStartingPrices: Record<string, number> = {
   "solar-battery-new": 30000,
   "reroofing-solar": 3600,
   "electrification-assessment": 250,
-  "warehouse-commercial": 600,
   "battery-only": 15500,
   "ev-panel-battery": 28000,
 };
@@ -183,7 +178,6 @@ const serviceTimelines: Record<string, { small: string; medium: string; large: s
   "solar-battery-new": { small: "1-2 weeks", medium: "2-4 weeks", large: "4-6 weeks" },
   "reroofing-solar": { small: "1 day", medium: "1-2 days", large: "2-3 days" },
   "electrification-assessment": { small: "1-2 hours", medium: "1-2 hours", large: "2-3 hours" },
-  "warehouse-commercial": { small: "2-4 weeks", medium: "4-8 weeks", large: "8-14 weeks" },
   "battery-only": { small: "1 day", medium: "1-2 days", large: "2-3 days" },
   "ev-panel-battery": { small: "2-3 days", medium: "3-5 days", large: "1-2 weeks" },
 };

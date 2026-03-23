@@ -60,11 +60,14 @@ function footerHtml(): string {
   `;
 }
 
-function rowHtml(label: string, value: string): string {
+function rowHtml(label: string, value: string, isPhone = false): string {
+  const displayValue = isPhone
+    ? `<a href="tel:${value.replace(/[^+\d]/g, '')}" style="color: #2563eb; text-decoration: none; font-weight: 600;">${value}</a>`
+    : value;
   return `
     <tr>
       <td style="padding: 8px 12px; color: #64748b; font-size: 14px; border-bottom: 1px solid #f1f5f9; width: 140px; font-weight: 600;">${label}</td>
-      <td style="padding: 8px 12px; color: #1e293b; font-size: 14px; border-bottom: 1px solid #f1f5f9;">${value}</td>
+      <td style="padding: 8px 12px; color: #1e293b; font-size: 14px; border-bottom: 1px solid #f1f5f9;">${displayValue}</td>
     </tr>
   `;
 }
@@ -105,7 +108,7 @@ export async function sendQuoteNotification(data: {
             <table style="width: 100%; border-collapse: collapse;">
               ${rowHtml('Name', data.name)}
               ${rowHtml('Email', data.email)}
-              ${rowHtml('Phone', data.phone)}
+              ${rowHtml('Phone', data.phone, true)}
               ${rowHtml('ZIP Code', data.zip)}
               ${rowHtml('Service', data.serviceType)}
               ${data.details ? rowHtml('Details', data.details) : ''}
@@ -164,7 +167,7 @@ export async function sendContactNotification(data: {
             <table style="width: 100%; border-collapse: collapse;">
               ${rowHtml('Name', data.name)}
               ${rowHtml('Email', data.email)}
-              ${data.phone ? rowHtml('Phone', data.phone) : ''}
+              ${data.phone ? rowHtml('Phone', data.phone, true) : ''}
             </table>
             <div style="background: #f8fafc; border-left: 4px solid #2563eb; padding: 16px; margin: 16px 0; border-radius: 0 6px 6px 0;">
               <p style="color: #64748b; font-size: 12px; margin: 0 0 8px; text-transform: uppercase; font-weight: 600;">Message</p>
@@ -233,7 +236,7 @@ export async function sendBookingNotification(data: {
             <table style="width: 100%; border-collapse: collapse;">
               ${rowHtml('Name', data.name)}
               ${rowHtml('Email', data.email)}
-              ${rowHtml('Phone', data.phone)}
+              ${rowHtml('Phone', data.phone, true)}
               ${rowHtml('Service', data.serviceType)}
               ${data.notes ? rowHtml('Notes', data.notes) : ''}
             </table>

@@ -69,7 +69,7 @@ export function ServicesListPage() {
             variants={stagger}
             className="grid grid-cols-1 gap-6 md:grid-cols-2"
           >
-            {servicesList.map((service) => {
+            {servicesList.filter((s) => !('hideFromGrid' in s && s.hideFromGrid)).map((service) => {
               const Icon = iconMap[service.icon] || Zap;
               return (
                 <motion.div key={service.slug} variants={fadeUp}>
