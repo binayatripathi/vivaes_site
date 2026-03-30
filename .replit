@@ -42,8 +42,8 @@ waitForPort = 5000
 [userenv]
 
 [userenv.shared]
-VIVA_BUSINESS_NAME = "Viva Electric & Solar"
-VIVA_EMAIL = "info@vivaes.net"
+VIVA_BUSINESS_NAME = "Viva Electric & Solar Inc."
+VIVA_EMAIL = "roberto@vivaes.net"
 VIVA_ADDRESS = "Los Angeles, CA"
 VIVA_CLAW_WEBHOOK_URL = "https://your-claw.example.com/webhook"
 VIVA_CLAW_TOKEN = "your-claw-token-here"

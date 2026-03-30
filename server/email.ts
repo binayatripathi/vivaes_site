@@ -5,6 +5,7 @@ const BUSINESS_PHONE = process.env.VIVA_PHONE || "+1 (510) 710-5745";
 const BUSINESS_EMAIL = process.env.VIVA_EMAIL || "roberto@vivaes.net";
 const NOTIFY_EMAILS = ["roberto@vivaes.net", "binayatripathi@gmail.com"];
 const FROM_EMAIL = "hello@storywonderbook.com";
+const REPLY_TO_EMAIL = "roberto@vivaes.net";
 
 let connectionSettings: any;
 
@@ -98,6 +99,7 @@ export async function sendQuoteNotification(data: {
 
     await resend.emails.send({
       from: `${BUSINESS_NAME} <${FROM_EMAIL}>`,
+      replyTo: REPLY_TO_EMAIL,
       to: NOTIFY_EMAILS,
       subject: `New Quote Request - ${data.serviceType} from ${data.name}`,
       html: `
@@ -121,6 +123,7 @@ export async function sendQuoteNotification(data: {
 
     await resend.emails.send({
       from: `${BUSINESS_NAME} <${FROM_EMAIL}>`,
+      replyTo: REPLY_TO_EMAIL,
       to: data.email,
       subject: `Your Quote Request - ${BUSINESS_NAME}`,
       html: `
@@ -158,6 +161,7 @@ export async function sendContactNotification(data: {
 
     await resend.emails.send({
       from: `${BUSINESS_NAME} <${FROM_EMAIL}>`,
+      replyTo: REPLY_TO_EMAIL,
       to: NOTIFY_EMAILS,
       subject: `New Contact Message from ${data.name}`,
       html: `
@@ -184,6 +188,7 @@ export async function sendContactNotification(data: {
 
     await resend.emails.send({
       from: `${BUSINESS_NAME} <${FROM_EMAIL}>`,
+      replyTo: REPLY_TO_EMAIL,
       to: data.email,
       subject: `We received your message - ${BUSINESS_NAME}`,
       html: `
@@ -223,6 +228,7 @@ export async function sendBookingNotification(data: {
 
     await resend.emails.send({
       from: `${BUSINESS_NAME} <${FROM_EMAIL}>`,
+      replyTo: REPLY_TO_EMAIL,
       to: NOTIFY_EMAILS,
       subject: `New Booking - ${data.serviceType} on ${data.preferredDate}`,
       html: `
@@ -248,6 +254,7 @@ export async function sendBookingNotification(data: {
 
     await resend.emails.send({
       from: `${BUSINESS_NAME} <${FROM_EMAIL}>`,
+      replyTo: REPLY_TO_EMAIL,
       to: data.email,
       subject: `Booking Confirmation - ${BUSINESS_NAME}`,
       html: `
@@ -292,6 +299,7 @@ export async function sendPaymentNotification(data: {
 
     await resend.emails.send({
       from: `${BUSINESS_NAME} <${FROM_EMAIL}>`,
+      replyTo: REPLY_TO_EMAIL,
       to: NOTIFY_EMAILS,
       subject: `Payment Received - ${fmtAmount} from ${data.customerName}`,
       html: `
@@ -316,6 +324,7 @@ export async function sendPaymentNotification(data: {
 
     await resend.emails.send({
       from: `${BUSINESS_NAME} <${FROM_EMAIL}>`,
+      replyTo: REPLY_TO_EMAIL,
       to: data.customerEmail,
       subject: `Payment Confirmation - ${BUSINESS_NAME}`,
       html: `
@@ -394,6 +403,7 @@ export async function sendCallSummaryNotification(data: {
 
     await resend.emails.send({
       from: `${BUSINESS_NAME} <${FROM_EMAIL}>`,
+      replyTo: REPLY_TO_EMAIL,
       to: NOTIFY_EMAILS,
       subject: `Voice Call ${data.status === "completed" ? "Completed" : data.status} - ${durationStr}${data.callerPhone ? ` from ${data.callerPhone}` : ""}`,
       html: `
