@@ -51,6 +51,7 @@ const serviceCards = [
     icon: Battery,
     quoteService: "battery-addon",
     image: powerwallSolarPath,
+    imagePosition: "object-bottom",
   },
   {
     title: "Re-Roofing with Solar Panel Removal & Reinstall",
@@ -59,6 +60,7 @@ const serviceCards = [
     icon: Wrench,
     quoteService: "reroofing-solar",
     image: "/images/services/reroofing-solar.jpg",
+    imagePosition: "object-center",
   },
   {
     title: "System Health Checks & Optimization",
@@ -67,6 +69,7 @@ const serviceCards = [
     icon: Activity,
     quoteService: "solar-storage",
     image: "/images/services/solar-battery-new.jpg",
+    imagePosition: "object-center",
   },
 ];
 
@@ -367,7 +370,7 @@ export default function SolarStoragePage() {
                         <img
                           src={card.image}
                           alt={card.title}
-                          className="h-full w-full object-cover"
+                          className={`h-full w-full object-cover ${card.imagePosition ?? "object-center"}`}
                         />
                       </div>
                       <CardContent className="flex flex-1 flex-col p-6">
