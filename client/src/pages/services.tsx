@@ -93,7 +93,7 @@ export function ServicesListPage() {
                           {service.shortDescription}
                         </p>
                         <div className="flex flex-wrap gap-2 pt-2">
-                          <Link href={`/services/${service.slug}`}>
+                          <Link href={service.slug === "solar-storage" ? "/solar-storage" : `/services/${service.slug}`}>
                             <Button variant="outline" size="sm" data-testid={`button-details-${service.slug}`}>
                               View Details
                               <ArrowRight className="ml-1 h-3 w-3" />

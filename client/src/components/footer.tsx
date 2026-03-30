@@ -25,12 +25,12 @@ export function Footer() {
           <div className="space-y-3">
             <h4 className="text-sm font-semibold">Services</h4>
             <div className="flex flex-col gap-2">
-              <Link href="/services/solar-storage" className="text-sm text-muted-foreground transition-colors" data-testid="link-footer-solar">Solar & Storage</Link>
+              <Link href="/solar-storage" className="text-sm text-muted-foreground transition-colors" data-testid="link-footer-solar">Solar & Storage</Link>
+              <Link href="/services/battery-only" className="text-sm text-muted-foreground transition-colors" data-testid="link-footer-battery">Battery Backup</Link>
               <Link href="/services/ev-chargers" className="text-sm text-muted-foreground transition-colors" data-testid="link-footer-ev">EV Chargers</Link>
               <Link href="/services/panel-upgrades" className="text-sm text-muted-foreground transition-colors" data-testid="link-footer-panel">Panel Upgrades</Link>
-              <Link href="/services/lighting-retrofits" className="text-sm text-muted-foreground transition-colors" data-testid="link-footer-lighting">Lighting Retrofits</Link>
               <Link href="/services/general-electrical" className="text-sm text-muted-foreground transition-colors" data-testid="link-footer-general">General Electrical</Link>
-              <Link href="/services/commercial" className="text-sm text-muted-foreground transition-colors" data-testid="link-footer-commercial">Commercial</Link>
+              <Link href="/services/commercial" className="text-sm text-muted-foreground transition-colors" data-testid="link-footer-commercial">Commercial & Warehouse</Link>
             </div>
           </div>
 

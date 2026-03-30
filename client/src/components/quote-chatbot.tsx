@@ -35,6 +35,8 @@ interface ChatMessage {
 type ChatStep =
   | "greeting"
   | "service"
+  | "solar-sub"
+  | "ev-sub"
   | "property-type"
   | "charger-level"
   | "wiring-distance"
@@ -120,7 +122,14 @@ export function QuoteChatbot({ preselectedService }: { preselectedService?: stri
         }
         await addBotMessage(
           "What service are you interested in?",
-          servicesList.map(s => ({ label: s.title, value: s.slug }))
+          [
+            { label: "Solar & Storage", value: "solar-storage" },
+            { label: "Battery Backup (No Solar)", value: "battery-only" },
+            { label: "EV Chargers", value: "ev-chargers" },
+            { label: "Panel Upgrades", value: "panel-upgrades" },
+            { label: "General Electrical", value: "general-electrical" },
+            { label: "Commercial & Warehouse", value: "commercial" },
+          ]
         );
         setStep("service");
       };
@@ -155,11 +164,51 @@ export function QuoteChatbot({ preselectedService }: { preselectedService?: stri
 
     switch (step) {
       case "service": {
+        if (value === "solar-storage") {
+          setAnswers(prev => ({ ...prev, service: value }));
+          setStep("solar-sub");
+          await addBotMessage(
+            "Solar & Storage — great choice! Are you looking for a new solar + battery system, or adding a battery to your existing solar?",
+            [
+              { label: "New solar + battery system", value: "solar-battery-new" },
+              { label: "Add battery to existing solar", value: "battery-addon" },
+            ]
+          );
+        } else if (value === "ev-chargers") {
+          setAnswers(prev => ({ ...prev, service: value }));
+          setStep("ev-sub");
+          await addBotMessage(
+            "EV Chargers — nice! Would you like a standard EV charger installation, or the full bundle (EV charger + Panel Upgrade + Battery)?",
+            [
+              { label: "Standard EV charger installation", value: "ev-chargers" },
+              { label: "Full bundle (EV + Panel Upgrade + Battery)", value: "ev-panel-battery" },
+            ]
+          );
+        } else {
+          setAnswers(prev => ({ ...prev, service: value }));
+          const service = servicesList.find(s => s.slug === value);
+          setStep("property-type");
+          await addBotMessage(
+            `${service?.title} - excellent choice! What type of property is this for?`,
+            propertyTypes.map(p => ({ label: p, value: p }))
+          );
+        }
+        break;
+      }
+      case "solar-sub": {
         setAnswers(prev => ({ ...prev, service: value }));
-        const service = servicesList.find(s => s.slug === value);
         setStep("property-type");
         await addBotMessage(
-          `${service?.title} - excellent choice! What type of property is this for?`,
+          "Got it! What type of property is this for?",
+          propertyTypes.map(p => ({ label: p, value: p }))
+        );
+        break;
+      }
+      case "ev-sub": {
+        setAnswers(prev => ({ ...prev, service: value }));
+        setStep("property-type");
+        await addBotMessage(
+          "Perfect! What type of property is this for?",
           propertyTypes.map(p => ({ label: p, value: p }))
         );
         break;
@@ -340,7 +389,14 @@ export function QuoteChatbot({ preselectedService }: { preselectedService?: stri
         await addBotMessage("Hi there! I'm here to help you get an instant quote estimate for your electrical or solar project. Let's get started!");
         await addBotMessage(
           "What service are you interested in?",
-          servicesList.map(s => ({ label: s.title, value: s.slug }))
+          [
+            { label: "Solar & Storage", value: "solar-storage" },
+            { label: "Battery Backup (No Solar)", value: "battery-only" },
+            { label: "EV Chargers", value: "ev-chargers" },
+            { label: "Panel Upgrades", value: "panel-upgrades" },
+            { label: "General Electrical", value: "general-electrical" },
+            { label: "Commercial & Warehouse", value: "commercial" },
+          ]
         );
         setStep("service");
       };
@@ -469,6 +525,10 @@ export function QuoteChatbot({ preselectedService }: { preselectedService?: stri
 }
 
 function getStepForOptions(msg: ChatMessage): ChatStep {
+  const solarSubSlugs = ["solar-battery-new", "battery-addon"];
+  const evSubSlugs = ["ev-chargers", "ev-panel-battery"];
+  if (msg.options?.length === 2 && msg.options.every(o => solarSubSlugs.includes(o.value))) return "solar-sub";
+  if (msg.options?.length === 2 && msg.options.every(o => evSubSlugs.includes(o.value))) return "ev-sub";
   if (msg.options?.[0]?.value && servicesList.some(s => s.slug === msg.options![0].value)) return "service";
   if (msg.options?.some(o => propertyTypes.includes(o.value as any))) return "property-type";
   if (msg.options?.some(o => chargerLevels.includes(o.value as any))) return "charger-level";

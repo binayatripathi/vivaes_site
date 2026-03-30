@@ -12,7 +12,7 @@ import heroElectricianPath from "@assets/hero-electrician.png";
 import {
   Sun, Zap, CircuitBoard, Lightbulb, Wrench, Building2,
   Shield, Award, Clock, Star, ChevronLeft, ChevronRight,
-  ArrowRight, Phone, MessageCircle, ChevronDown, Battery,
+  ArrowRight, Phone, MessageCircle, ChevronDown,
 } from "lucide-react";
 
 const whyVivaCards = [
@@ -199,9 +199,10 @@ export default function Home() {
             <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
               {servicesList.filter((s) => !('hideFromGrid' in s && s.hideFromGrid)).slice(0, 6).map((service) => {
                 const Icon = iconMap[service.icon] || Zap;
+                const serviceHref = service.slug === "solar-storage" ? "/solar-storage" : `/services/${service.slug}`;
                 return (
                   <motion.div key={service.slug} variants={fadeUp}>
-                    <Link href={`/services/${service.slug}`}>
+                    <Link href={serviceHref}>
                       <Card className="group cursor-pointer overflow-hidden transition-all duration-200 hover-elevate" data-testid={`card-service-${service.slug}`}>
                         <CardContent className="p-0">
                           <div className="aspect-video w-full overflow-hidden">
@@ -237,89 +238,26 @@ export default function Home() {
         </div>
       </section>
 
-      <section className="bg-card py-20" data-testid="section-energy-solutions">
+      <section className="bg-card py-16" data-testid="section-energy-solutions">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <motion.div
             initial="hidden"
             whileInView="visible"
             viewport={{ once: true, margin: "-100px" }}
             variants={stagger}
-            className="space-y-12"
+            className="flex flex-col items-center gap-6 text-center"
           >
-            <motion.div variants={fadeUp} className="text-center">
+            <motion.div variants={fadeUp} className="space-y-3">
               <h2 className="text-3xl font-bold tracking-tight sm:text-4xl" data-testid="text-energy-solutions-title">
-                Solar Installation, Upgrades & Battery Backup
+                Solar, Battery & Clean Energy Solutions
               </h2>
-              <p className="mx-auto mt-3 max-w-3xl text-muted-foreground">
-                We install new solar systems, service existing ones, and help homeowners add battery backup, electrical upgrades, and ongoing support.
+              <p className="mx-auto max-w-2xl text-muted-foreground">
+                New solar systems, battery storage, add-ons to existing solar, and re-roofing panel removal — all in one place. Union-trained, permitted, and ready to maximize your energy independence.
               </p>
             </motion.div>
-
-            <motion.div variants={fadeUp} className="mx-auto max-w-4xl">
-              <p className="text-center text-base leading-relaxed text-muted-foreground">
-                Many homeowners already have solar but no longer have a reliable company to call for service, repairs, or upgrades. Viva Electric & Solar Inc. works with both new and existing systems — including systems installed by other companies. We can inspect, troubleshoot, maintain, repair, and upgrade your setup, including battery storage integration for added reliability and backup power.
-              </p>
-            </motion.div>
-
-            <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
-              <motion.div variants={fadeUp}>
-                <Card className="flex h-full flex-col overflow-visible hover-elevate" data-testid="card-home-battery-backup">
-                  <CardContent className="flex flex-1 flex-col p-6">
-                    <div className="mb-3 flex h-10 w-10 items-center justify-center rounded-md bg-primary/10">
-                      <Battery className="h-5 w-5 text-primary" />
-                    </div>
-                    <h3 className="mb-2 text-lg font-semibold">Battery Backup</h3>
-                    <p className="mb-4 flex-1 text-sm text-muted-foreground">
-                      Keep your home powered during outages with Tesla Powerwall, Enphase, FranklinWH, and other leading battery systems — with or without solar.
-                    </p>
-                    <Button variant="outline" className="w-full" onClick={() => openQuote("battery-only")} data-testid="button-home-battery-quote">
-                      Get a Battery Backup Estimate
-                      <ArrowRight className="ml-2 h-3 w-3" />
-                    </Button>
-                  </CardContent>
-                </Card>
-              </motion.div>
-
-              <motion.div variants={fadeUp}>
-                <Card className="flex h-full flex-col overflow-visible hover-elevate" data-testid="card-home-solar-battery">
-                  <CardContent className="flex flex-1 flex-col p-6">
-                    <div className="mb-3 flex h-10 w-10 items-center justify-center rounded-md bg-primary/10">
-                      <Sun className="h-5 w-5 text-primary" />
-                    </div>
-                    <h3 className="mb-2 text-lg font-semibold">Solar + Battery Systems</h3>
-                    <p className="mb-4 flex-1 text-sm text-muted-foreground">
-                      Go solar with battery storage from day one, or add a battery to your existing solar panels. Maximize energy independence and reduce peak-rate costs.
-                    </p>
-                    <Button variant="outline" className="w-full" onClick={() => openQuote("battery-addon")} data-testid="button-home-solar-battery-quote">
-                      See if Your Home is Ready for Solar or Battery
-                      <ArrowRight className="ml-2 h-3 w-3" />
-                    </Button>
-                  </CardContent>
-                </Card>
-              </motion.div>
-
-              <motion.div variants={fadeUp}>
-                <Card className="flex h-full flex-col overflow-visible hover-elevate" data-testid="card-home-ev-bundle">
-                  <CardContent className="flex flex-1 flex-col p-6">
-                    <div className="mb-3 flex h-10 w-10 items-center justify-center rounded-md bg-primary/10">
-                      <Zap className="h-5 w-5 text-primary" />
-                    </div>
-                    <h3 className="mb-2 text-lg font-semibold">EV + Panel + Battery Bundle</h3>
-                    <p className="mb-4 flex-1 text-sm text-muted-foreground">
-                      Going all-electric? Bundle your EV charger, panel upgrade, and battery into one project. One permit, one crew, one coordinated installation.
-                    </p>
-                    <Button variant="outline" className="w-full" onClick={() => openQuote("ev-panel-battery")} data-testid="button-home-ev-bundle-quote">
-                      Request a Custom Energy System Quote
-                      <ArrowRight className="ml-2 h-3 w-3" />
-                    </Button>
-                  </CardContent>
-                </Card>
-              </motion.div>
-            </div>
-
-            <motion.div variants={fadeUp} className="text-center">
+            <motion.div variants={fadeUp}>
               <Link href="/solar-storage">
-                <Button size="lg" variant="outline" data-testid="button-home-solar-learn-more">
+                <Button size="lg" data-testid="button-home-solar-learn-more">
                   Explore All Solar & Battery Services
                   <ArrowRight className="ml-2 h-4 w-4" />
                 </Button>
