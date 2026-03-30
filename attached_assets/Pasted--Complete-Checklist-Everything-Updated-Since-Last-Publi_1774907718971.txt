@@ -1,0 +1,71 @@
+
+
+Complete Checklist — Everything Updated Since Last Publish
+Pricing & Quote Flow
+* ✅ Consultation fee corrected: $75 → $250 (Stripe charges the right amount now)
+* ✅ Quote result card completely rebuilt — removed the itemized Labor / Materials / Equipment / Site Prep / Permits table; replaced with a clean "Estimated Range: $X – $Y and up" display
+* ✅ Amber banner added to every quote: "Final pricing is based on site inspection"
+* ✅ "Pay X% deposit" button replaced with "Book Consultation — $250" Stripe button
+* ✅ Chatbot greeting: "get a free quote" → "get an instant quote estimate"
+* ✅ Battery capacity question reworded to show correct sizes: 5 kW / 10 kW / 13.5 kW / 15 kW
+* ✅ Electrification Assessment: "Free" removed everywhere — now clearly $250 fixed fee
+Services Structure
+* ✅ "Electrical Prep for Solar" completely removed (schema, chatbot, Solar & Storage page)
+* ✅ "Warehouse / Commercial" merged into Commercial → now "Commercial & Warehouse"
+* ✅ Main services grid cleaned to exactly 6 cards: Solar & Storage, Battery Backup, EV Chargers, Panel Upgrades, General Electrical, Commercial & Warehouse
+* ✅ Hidden from grid (still usable in chatbot): Battery Add-On, Solar+Battery New, Re-Roofing, EV+Panel+Battery Bundle, Lighting Retrofits, Electrification Assessment
+* ✅ "Solar & Storage" card now links to the rich /solar-storage page (not the generic template)
+* ✅ Home page redundant 3-card solar/battery section removed → replaced with single clean CTA banner
+Quote Chatbot
+* ✅ Service picker reduced from 12 options → 6 clean top-level options
+* ✅ Smart follow-up branches added:
+    * Solar & Storage → "New solar + battery" or "Add battery to existing solar"
+    * EV Chargers → "Standard charger" or "Full bundle (EV + Panel + Battery)"
+* ✅ Removed "Electrical Prep for Solar" from all chatbot logic
+Images
+* ✅ Battery Add-On card: new daytime Tesla Powerwallphoto (house with solar panels)
+* ✅ Battery Backup card: new rainy evening Tesla Powerwallphoto
+* ✅ Battery card image anchored to bottom so the Powerwall unit is always visible on mobile (just fixed)
+Email Notifications
+* ✅ Business phone corrected to +1 (510) 710-5745 in all email templates
+* ✅ Customer phone number in quote/booking/contact emails is now a tap-to-call link for Roberto
+Voice Agent — Alex
+* ✅ Pricing context updated: all services now say "from X and up — final pricing based on site inspection"
+* ✅ Removed "free consultation" and "free assessment" from Alex's knowledge
+* ✅ Added $250 consultation fee and $500+ permit fee awareness
+* ✅ Added correct battery kW options
+* ✅ Quote API response cleaned up — no fake itemized breakdown sent to Alex
+Electrification Page
+* ✅ All three buttons updated: "Free Electrification Assessment" → "Book Electrification Assessment — $250"
+Services & Footer
+* ✅ Service benefit: "Free consultation and estimate" → "On-site consultation: $250"
+* ✅ Footer service links updated to match the 6-service structure; Solar & Storage points to /solar-storage
+
+Pricing Architecture — Before vs. Now
+Before (old system): The engine had a detailed cost table for every service with separate line items for Labor, Materials, Equipment, Site Prep, and Permits — each with a base cost and a per-unit rate. It multiplied these together and showed customers an exact dollar total (e.g. "Labor: $1,200 / Materials: $800 / Equipment: $5,500 → Total: $8,647"). This was misleading because no licensed contractor can commit to those numbers without a site visit.
+Now (new system): The engine uses a single starting price per service and applies multipliers to produce an honest range:
+Service	Starting From
+EV Chargers	$850
+Panel Upgrades	$3,500
+Re-Roofing + Panel Removal	$3,600
+Electrification Assessment	$250 (fixed)
+General Electrical	$600
+Lighting Retrofits	$600
+Commercial	$600
+Battery Add-On (Existing Solar)	$15,500
+Battery Backup (No Solar)	$15,500
+Solar + Battery (New)	$30,000
+Solar & Storage (general)	$30,000
+EV + Panel + Battery Bundle	$28,000
+The multipliers applied on top:
+* Project size: Small = 1×, Medium = 1.6×, Large = 2.5× (re-roofing scales differently by panel count)
+* Property type: Residential = 1×, Commercial = 1.35×, Industrial = 1.7×
+* Urgency: Standard = 1×, Priority = 1.15×, Emergency = 1.4×
+* Battery capacity: 5 kW = 1×, 10 kW = 1.8×, 13.5 kW = 2.3×, 15 kW = 2.6×
+* EV charger level: 15A = 0.7×, 32A = 1×, 50A = 1.25×, 60A = 1.45×
+* Wiring distance: Short = 1×, Medium = 1.2×, Long = 1.5×
+* Panel upgrade add-on: 200A = +$3,500 / 400A = +$5,500
+* Permits: Always minimum $500, capped at 2% of subtotal
+* Large project discount: −5% applied automatically
+* Variance buffer: ±15% for electrical, ±20% for solar/battery (shown as low–high range)
+The result is displayed as "$X,XXX – $X,XXX and up · depending on site conditions" — never a fake exact total. The customer sees a realistic starting range and knows the final number comes after an on-site inspection.
