@@ -80,22 +80,9 @@ export async function sendQuoteNotification(data: {
   zip: string;
   serviceType: string;
   details?: string;
-  estimate?: {
-    estimateRange: { low: number; high: number };
-    timeline: string;
-    total: number;
-  };
 }) {
   try {
     const resend = await getResendClient();
-
-    const estimateSection = data.estimate ? `
-      <div style="background: #eff6ff; border: 1px solid #bfdbfe; border-radius: 8px; padding: 16px; margin: 16px 0;">
-        <h3 style="margin: 0 0 8px; color: #1e40af; font-size: 16px;">Instant Quote Estimate</h3>
-        <p style="margin: 0 0 4px; color: #1e293b; font-size: 18px; font-weight: 700;">$${data.estimate.estimateRange.low.toLocaleString()} - $${data.estimate.estimateRange.high.toLocaleString()}</p>
-        <p style="margin: 0; color: #64748b; font-size: 13px;">Timeline: ${data.estimate.timeline}</p>
-      </div>
-    ` : '';
 
     await resend.emails.send({
       from: `${BUSINESS_NAME} <${FROM_EMAIL}>`,
@@ -106,7 +93,6 @@ export async function sendQuoteNotification(data: {
         <div style="font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; max-width: 600px; margin: 0 auto; background: #ffffff; border-radius: 8px; box-shadow: 0 1px 3px rgba(0,0,0,0.1);">
           ${headerHtml('New Quote Request')}
           <div style="padding: 24px;">
-            ${estimateSection}
             <table style="width: 100%; border-collapse: collapse;">
               ${rowHtml('Name', data.name)}
               ${rowHtml('Email', data.email)}
@@ -132,8 +118,7 @@ export async function sendQuoteNotification(data: {
           <div style="padding: 24px;">
             <p style="color: #1e293b; font-size: 16px; margin: 0 0 16px;">Hi ${data.name},</p>
             <p style="color: #475569; font-size: 14px; line-height: 1.6; margin: 0 0 16px;">Thank you for requesting a quote for <strong>${data.serviceType}</strong>. We've received your request and our team will review it shortly.</p>
-            ${estimateSection}
-            <p style="color: #475569; font-size: 14px; line-height: 1.6; margin: 0 0 16px;">A member of our team will reach out within 24 hours to discuss your project in detail and provide a final estimate.</p>
+            <p style="color: #475569; font-size: 14px; line-height: 1.6; margin: 0 0 16px;">A member of our team will reach out within 24 hours to discuss your project in detail and provide a custom quote.</p>
             <div style="text-align: center; margin: 24px 0;">
               <a href="tel:${BUSINESS_PHONE.replace(/[^+\d]/g, '')}" style="display: inline-block; background: #2563eb; color: #ffffff; padding: 12px 28px; border-radius: 6px; text-decoration: none; font-weight: 600; font-size: 14px;">Call Us: ${BUSINESS_PHONE}</a>
             </div>

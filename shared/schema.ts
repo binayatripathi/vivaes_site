@@ -200,11 +200,11 @@ export function generateQuoteEstimate(
       serviceTitle: service?.title || "Electrification Assessment",
       propertyType, projectSize, urgency,
       laborCost: 0, materialsCost: 0, equipmentCost: 0, sitePrepCost: 0,
-      permitFees: 0, subtotal: 250, discount: 0, total: 250,
-      estimateRange: { low: 250, high: 250 },
+      permitFees: 0, subtotal: 0, discount: 0, total: 0,
+      estimateRange: { low: 0, high: 0 },
       timeline,
       notes: [
-        "On-site assessment — $250 fee",
+        "On-site assessment — fee applies",
         "Comprehensive evaluation of your electrical system and energy usage",
         "Personalized electrification roadmap included",
         "Rebate and incentive guidance for federal, state, and utility programs",
@@ -268,12 +268,12 @@ export function generateQuoteEstimate(
   const notes: string[] = [
     "All work performed by union-trained, licensed electricians",
     "Industry-leading warranty coverage included",
-    "Permit & inspection fee: $500 and up depending on jurisdiction",
-    "FINAL PRICING IS BASED ON SITE INSPECTION — subject to site verification, walkthrough, and local code conditions",
+    "Permit & inspection fees apply depending on jurisdiction",
+    "Final pricing is based on site inspection — subject to site verification, walkthrough, and local code conditions",
   ];
 
   if (reroof) {
-    notes.push("Solar panel detach & reset: $325–$575 per panel depending on racking type, system age, and NEC requirements");
+    notes.push("Solar panel detach & reset cost determined by racking type, system age, and NEC requirements");
     notes.push("Additional fee may apply if rack replacement is needed — determined on-site evaluation");
   }
   if (isBatteryService && serviceOptions?.batteryCount) {
@@ -284,7 +284,6 @@ export function generateQuoteEstimate(
   if (isEVService && serviceOptions?.chargerLevel) {
     notes.push(`Charger spec: ${serviceOptions.chargerLevel}`);
   }
-  if (discount > 0) notes.push("5% volume discount applied");
   if (urgency.includes("Emergency")) notes.push("Emergency surcharge included for expedited service");
   if (propertyType === "Commercial" || propertyType === "Industrial") notes.push("Commercial-grade installation included");
   if (panelUpgradeCost > 0) notes.push(`Panel upgrade included: ${serviceOptions?.panelUpgrade}`);
@@ -298,11 +297,11 @@ export function generateQuoteEstimate(
     materialsCost: 0,
     equipmentCost: 0,
     sitePrepCost: 0,
-    permitFees,
-    subtotal,
-    discount,
-    total,
-    estimateRange: { low: Math.round(total * (1 - variance)), high: Math.round(total * (1 + variance)) },
+    permitFees: 0,
+    subtotal: 0,
+    discount: 0,
+    total: 0,
+    estimateRange: { low: 0, high: 0 },
     timeline,
     notes,
   };

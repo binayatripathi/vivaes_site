@@ -58,7 +58,6 @@ export async function registerRoutes(
   app.post("/api/quote", async (req, res) => {
     try {
       const data = quoteRequestSchema.parse(req.body);
-      const estimate = req.body.estimate;
 
       try {
         await storage.createLead({
@@ -83,7 +82,6 @@ export async function registerRoutes(
         zip: data.zip,
         serviceType: data.serviceType,
         details: data.details,
-        estimate,
       });
       res.json({ success: true, message: "Quote request received successfully." });
     } catch (err: any) {

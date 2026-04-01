@@ -148,7 +148,7 @@ export function QuoteChatbot({ preselectedService }: { preselectedService?: stri
       "battery-addon": "Small = 5 kW, Medium = 10 kW, Large = 13.5–15 kW",
       "solar-battery-new": "Small = basic system, Medium = mid-size system, Large = full system",
       "reroofing-solar": "Small = up to 10 panels, Medium = 10-20 panels, Large = 20+ panels",
-      "electrification-assessment": "Single property assessment — $250 fee",
+      "electrification-assessment": "Single property assessment — fee applies",
       "battery-only": "Small = 5 kW, Medium = 10 kW, Large = 13.5–15 kW",
       "ev-panel-battery": "Small = basic bundle, Medium = mid-range bundle, Large = full bundle",
     };
@@ -552,8 +552,6 @@ function getPlaceholder(step: ChatStep): string {
 
 function QuoteResultCard({ quote, name, email, phone }: { quote: QuoteEstimate; name: string; email: string; phone: string }) {
   const [isPayLoading, setIsPayLoading] = useState(false);
-  const fmt = (n: number) => n.toLocaleString("en-US", { style: "currency", currency: "USD", maximumFractionDigits: 0 });
-  const isAssessment = quote.total === 250 && quote.estimateRange.low === 250;
 
   const handleBookConsultation = async () => {
     setIsPayLoading(true);
@@ -581,7 +579,7 @@ function QuoteResultCard({ quote, name, email, phone }: { quote: QuoteEstimate; 
       <CardContent className="space-y-4 p-4">
         <div className="flex items-center gap-2 text-primary">
           <CheckCircle2 className="h-5 w-5" />
-          <span className="font-semibold">Your Instant Quote</span>
+          <span className="font-semibold">Quote Request Received</span>
         </div>
 
         <div className="rounded-md border border-amber-400/60 bg-amber-50 px-3 py-2 dark:bg-amber-950/30">
@@ -597,30 +595,16 @@ function QuoteResultCard({ quote, name, email, phone }: { quote: QuoteEstimate; 
           </p>
         </div>
 
-        {isAssessment ? (
-          <div className="rounded-md bg-primary/5 p-4 text-center">
-            <p className="text-xs text-muted-foreground mb-1">On-site Assessment Fee</p>
-            <p className="text-3xl font-bold text-primary" data-testid="text-quote-total">$250</p>
-            <p className="text-xs text-muted-foreground mt-1">Fixed fee · Includes full electrification report</p>
-          </div>
-        ) : (
-          <div className="rounded-md bg-primary/5 p-4 text-center">
-            <p className="text-xs text-muted-foreground mb-1">Estimated Range</p>
-            <p className="text-2xl font-bold text-primary" data-testid="text-quote-range">
-              {fmt(quote.estimateRange.low)} – {fmt(quote.estimateRange.high)}
-            </p>
-            <p className="text-xs font-medium text-muted-foreground mt-1">
-              and up · depending on site conditions
-            </p>
-            <p className="mt-2 text-xs text-muted-foreground">
-              <Calendar className="mr-1 inline h-3 w-3" />
-              Estimated timeline: {quote.timeline}
-            </p>
-            {quote.discount > 0 && (
-              <p className="mt-1 text-xs text-green-600 dark:text-green-400 font-medium">5% volume discount applied</p>
-            )}
-          </div>
-        )}
+        <div className="rounded-md bg-primary/5 p-4 text-center" data-testid="div-quote-followup">
+          <p className="text-sm font-semibold text-primary mb-1">Custom Quote Coming Your Way</p>
+          <p className="text-xs text-muted-foreground">
+            A team member will reach out to provide a detailed, personalized quote after reviewing your project needs.
+          </p>
+          <p className="mt-2 text-xs text-muted-foreground">
+            <Calendar className="mr-1 inline h-3 w-3" />
+            Estimated timeline: {quote.timeline}
+          </p>
+        </div>
 
         <div className="space-y-1.5">
           {quote.notes.map((note, i) => (
@@ -651,7 +635,7 @@ function QuoteResultCard({ quote, name, email, phone }: { quote: QuoteEstimate; 
             ) : (
               <CreditCard className="mr-2 h-4 w-4" />
             )}
-            Book Consultation — $250
+            Book On-Site Consultation
           </Button>
           <p className="mt-1.5 text-center text-[10px] text-muted-foreground">
             On-site visit · Final pricing provided after inspection
@@ -673,7 +657,7 @@ function QuoteResultCard({ quote, name, email, phone }: { quote: QuoteEstimate; 
         </div>
 
         <p className="text-center text-[10px] text-muted-foreground">
-          *All estimates are starting ranges. Final pricing is determined after on-site inspection.
+          Final pricing is determined after on-site inspection.
         </p>
       </CardContent>
     </Card>
