@@ -18,6 +18,7 @@ import { FloatingChatButton } from "@/components/quote-chatbot";
 import { VapiProvider } from "@/components/vapi-call-button";
 import ElectrificationPage from "@/pages/electrification";
 import AdminPage from "@/pages/admin";
+import InsuranceCompliancePage from "@/pages/insurance-compliance";
 import NotFound from "@/pages/not-found";
 
 function Router() {
@@ -34,6 +35,7 @@ function Router() {
       <Route path="/payment/success" component={PaymentSuccessPage} />
       <Route path="/payment/cancel" component={PaymentCancelPage} />
       <Route path="/admin" component={AdminPage} />
+      <Route path="/insurance-compliance" component={InsuranceCompliancePage} />
       <Route component={NotFound} />
     </Switch>
   );

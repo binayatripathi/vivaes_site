@@ -9,13 +9,13 @@ import { VapiCallButton } from "@/components/vapi-call-button";
 import { servicesList } from "@shared/schema";
 import {
   Sun, Zap, CircuitBoard, Lightbulb, Wrench, Building2,
-  Battery, Home, ClipboardCheck, Warehouse,
+  Battery, Home, ClipboardCheck, Warehouse, Shield,
   ArrowRight, ArrowLeft, CheckCircle2,
 } from "lucide-react";
 
 const iconMap: Record<string, typeof Sun> = {
   Sun, Zap, CircuitBoard, Lightbulb, Wrench, Building2,
-  Battery, Home, ClipboardCheck, Warehouse,
+  Battery, Home, ClipboardCheck, Warehouse, Shield,
 };
 
 const fadeUp = {
@@ -71,6 +71,12 @@ export function ServicesListPage() {
           >
             {servicesList.filter((s) => !('hideFromGrid' in s && s.hideFromGrid)).map((service) => {
               const Icon = iconMap[service.icon] || Zap;
+              const externalHref = 'externalHref' in service ? service.externalHref as string : undefined;
+              const detailHref = externalHref
+                ? externalHref
+                : service.slug === "solar-storage"
+                ? "/solar-storage"
+                : `/services/${service.slug}`;
               return (
                 <motion.div key={service.slug} variants={fadeUp}>
                   <Card className="overflow-visible hover-elevate" data-testid={`card-service-${service.slug}`}>
@@ -93,19 +99,29 @@ export function ServicesListPage() {
                           {service.shortDescription}
                         </p>
                         <div className="flex flex-wrap gap-2 pt-2">
-                          <Link href={service.slug === "solar-storage" ? "/solar-storage" : `/services/${service.slug}`}>
+                          <Link href={detailHref}>
                             <Button variant="outline" size="sm" data-testid={`button-details-${service.slug}`}>
                               View Details
                               <ArrowRight className="ml-1 h-3 w-3" />
                             </Button>
                           </Link>
-                          <Button
-                            size="sm"
-                            onClick={() => openQuote(service.slug)}
-                            data-testid={`button-quote-${service.slug}`}
-                          >
-                            Get Quote
-                          </Button>
+                          {!externalHref && (
+                            <Button
+                              size="sm"
+                              onClick={() => openQuote(service.slug)}
+                              data-testid={`button-quote-${service.slug}`}
+                            >
+                              Get Quote
+                            </Button>
+                          )}
+                          {externalHref && (
+                            <Link href={externalHref}>
+                              <Button size="sm" data-testid={`button-quote-${service.slug}`}>
+                                Learn More
+                                <ArrowRight className="ml-1 h-3 w-3" />
+                              </Button>
+                            </Link>
+                          )}
                         </div>
                       </div>
                     </CardContent>

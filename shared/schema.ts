@@ -105,6 +105,15 @@ export const servicesList = [
     image: "/images/services/ev-chargers.png",
     hideFromGrid: true,
   },
+  {
+    slug: "insurance-compliance",
+    title: "Insurance Compliance",
+    shortDescription: "Panel inspections, corrective work, and upgrades for insurance-required electrical compliance.",
+    description: "California insurers are requiring homeowners and landlords to verify or replace aging electrical panels before renewing coverage. Viva Electric & Solar is an Insurance Electrical Compliance Specialist — we provide inspections, corrective work, full panel replacements, and multi-unit programs with written documentation your carrier can accept.",
+    icon: "Shield",
+    image: "/images/services/panel-upgrades.png",
+    externalHref: "/insurance-compliance",
+  },
 ] as const;
 
 export type Service = (typeof servicesList)[number];
@@ -306,6 +315,16 @@ export function generateQuoteEstimate(
     notes,
   };
 }
+
+export const insuranceLeadSchema = z.object({
+  name: z.string().min(2, "Name must be at least 2 characters"),
+  email: z.string().email("Please enter a valid email"),
+  phone: z.string().min(7, "Please enter a valid phone number"),
+  address: z.string().min(5, "Please enter a property address"),
+  message: z.string().optional(),
+});
+
+export type InsuranceLead = z.infer<typeof insuranceLeadSchema>;
 
 export const contactFormSchema = z.object({
   name: z.string().min(2, "Name must be at least 2 characters"),

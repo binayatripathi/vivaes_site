@@ -12,7 +12,7 @@ import heroElectricianPath from "@assets/hero-electrician.png";
 import {
   Sun, Zap, CircuitBoard, Lightbulb, Wrench, Building2,
   Shield, Award, Clock, Star, ChevronLeft, ChevronRight,
-  ArrowRight, Phone, MessageCircle, ChevronDown,
+  ArrowRight, Phone, MessageCircle, ChevronDown, AlertTriangle,
 } from "lucide-react";
 
 const whyVivaCards = [
@@ -72,7 +72,7 @@ const faqData = [
 ];
 
 const iconMap: Record<string, typeof Sun> = {
-  Sun, Zap, CircuitBoard, Lightbulb, Wrench, Building2,
+  Sun, Zap, CircuitBoard, Lightbulb, Wrench, Building2, Shield,
 };
 
 const fadeUp = {
@@ -238,7 +238,44 @@ export default function Home() {
         </div>
       </section>
 
-      <section className="bg-card py-16" data-testid="section-energy-solutions">
+      <section className="bg-card py-16" data-testid="section-insurance-callout">
+        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+          <motion.div
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true, margin: "-100px" }}
+            variants={stagger}
+            className="flex flex-col items-center gap-6 text-center"
+          >
+            <motion.div variants={fadeUp} className="space-y-3">
+              <div className="flex justify-center">
+                <Badge variant="secondary" className="gap-1.5 px-3 py-1">
+                  <AlertTriangle className="h-3.5 w-3.5 text-amber-500" />
+                  <span>Insurance Compliance Specialist</span>
+                </Badge>
+              </div>
+              <h2 className="text-3xl font-bold tracking-tight sm:text-4xl" data-testid="text-insurance-callout-title">
+                Did Your Insurer Flag Your Electrical Panel?
+              </h2>
+              <p className="mx-auto max-w-2xl text-muted-foreground">
+                California insurers are requiring homeowners and landlords to inspect or replace aging electrical
+                panels before renewing coverage. Viva Electric & Solar helps you move quickly from notice to
+                inspection to completed corrective work — with full documentation for your carrier.
+              </p>
+            </motion.div>
+            <motion.div variants={fadeUp}>
+              <Link href="/insurance-compliance">
+                <Button size="lg" data-testid="button-home-insurance-learn-more">
+                  Learn About Insurance Compliance
+                  <ArrowRight className="ml-2 h-4 w-4" />
+                </Button>
+              </Link>
+            </motion.div>
+          </motion.div>
+        </div>
+      </section>
+
+      <section className="bg-background py-16" data-testid="section-energy-solutions">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <motion.div
             initial="hidden"

@@ -1,6 +1,6 @@
 import type { Express } from "express";
 import { createServer, type Server } from "http";
-import { quoteRequestSchema, contactFormSchema, bookingRequestSchema, leadStatuses, appointmentStatuses } from "@shared/schema";
+import { quoteRequestSchema, contactFormSchema, bookingRequestSchema, insuranceLeadSchema, leadStatuses, appointmentStatuses } from "@shared/schema";
 import { sendQuoteNotification, sendContactNotification, sendBookingNotification, sendPaymentNotification, sendCallSummaryNotification } from "./email";
 import { getUncachableStripeClient, getStripePublishableKey } from "./stripeClient";
 import { storage } from "./storage";
@@ -84,6 +84,42 @@ export async function registerRoutes(
         details: data.details,
       });
       res.json({ success: true, message: "Quote request received successfully." });
+    } catch (err: any) {
+      res.status(400).json({ error: err.message || "Invalid request" });
+    }
+  });
+
+  app.post("/api/leads/insurance", async (req, res) => {
+    try {
+      const data = insuranceLeadSchema.parse(req.body);
+
+      try {
+        await storage.createLead({
+          name: data.name,
+          phone: data.phone,
+          email: data.email,
+          address: data.address,
+          serviceType: "insurance-compliance",
+          details: data.message,
+          source: "web-form",
+          status: "new",
+        });
+      } catch (dbErr) {
+        console.error("[DB] Failed to save insurance compliance lead:", dbErr);
+      }
+
+      await forwardToWebhook("insurance-compliance", {
+        customer: { name: data.name, email: data.email, phone: data.phone },
+        address: data.address,
+        message: data.message,
+      });
+      sendContactNotification({
+        name: data.name,
+        email: data.email,
+        phone: data.phone,
+        message: `Insurance Compliance Inquiry\nProperty Address: ${data.address}\n\n${data.message || ""}`,
+      });
+      res.json({ success: true, message: "Inspection request received. We'll be in touch shortly." });
     } catch (err: any) {
       res.status(400).json({ error: err.message || "Invalid request" });
     }
@@ -472,6 +508,7 @@ export async function registerRoutes(
       { loc: "/electrification", priority: "0.7", changefreq: "monthly" },
       { loc: "/about", priority: "0.6", changefreq: "monthly" },
       { loc: "/solar-storage", priority: "0.8", changefreq: "monthly" },
+      { loc: "/insurance-compliance", priority: "0.9", changefreq: "monthly" },
     ];
     const today = new Date().toISOString().split("T")[0];
     const urls = pages

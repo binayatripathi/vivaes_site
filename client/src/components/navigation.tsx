@@ -12,6 +12,7 @@ const navLinks = [
   { href: "/services", label: "Services" },
   { href: "/solar-storage", label: "Solar & Storage" },
   { href: "/electrification", label: "Electrification" },
+  { href: "/insurance-compliance", label: "Insurance Compliance" },
   { href: "/quote", label: "Instant Quote" },
   { href: "/booking", label: "Book Now" },
   { href: "/about", label: "About" },
