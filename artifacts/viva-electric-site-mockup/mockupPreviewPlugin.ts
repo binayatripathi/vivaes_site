@@ -1,4 +1,5 @@
 import { mkdirSync, writeFileSync } from "fs";
+import http from "http";
 import path from "path";
 import glob from "fast-glob";
 import chokidar from "chokidar";
@@ -174,19 +175,24 @@ export function mockupPreviewPlugin(): Plugin {
         }
       });
 
+      // Proxy ALL requests to the main app on port 5000.
+      // The mockup components are accessible via /__mockup/preview/ on port 5000.
       viteServer.middlewares.use((req, res, next) => {
-        const requestUrl = new URL(req.url ?? "/", "http://127.0.0.1");
-        const pathname = requestUrl.pathname;
-        const originalEnd = res.end.bind(res);
-
-        res.end = ((...args: Parameters<typeof originalEnd>) => {
-          if (res.statusCode === 404 && shouldAutoRescan(pathname)) {
-            void refresh();
-          }
-          return originalEnd(...args);
-        }) as typeof res.end;
-
-        next();
+        const proxyReq = http.request(
+          {
+            hostname: "127.0.0.1",
+            port: 5000,
+            path: req.url,
+            method: req.method,
+            headers: { ...req.headers, host: "localhost:5000" },
+          },
+          (proxyRes) => {
+            res.writeHead(proxyRes.statusCode ?? 200, proxyRes.headers);
+            proxyRes.pipe(res, { end: true });
+          },
+        );
+        proxyReq.on("error", () => next());
+        req.pipe(proxyReq, { end: true });
       });
     },
 
