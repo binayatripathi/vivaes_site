@@ -178,64 +178,6 @@ export default function Home() {
         </div>
       </section>
 
-      {/* Audience chooser */}
-      <section className="bg-card py-14 border-b" data-testid="section-audience-chooser">
-        <div className="mx-auto max-w-5xl px-4 sm:px-6 lg:px-8">
-          <motion.div
-            initial="hidden"
-            whileInView="visible"
-            viewport={{ once: true }}
-            variants={stagger}
-            className="space-y-8"
-          >
-            <motion.div variants={fadeUp} className="text-center">
-              <p className="text-sm font-semibold uppercase tracking-wider text-muted-foreground">
-                What brings you here?
-              </p>
-              <h2 className="mt-2 text-2xl font-bold tracking-tight sm:text-3xl">
-                We serve both homeowners and businesses
-              </h2>
-            </motion.div>
-
-            <motion.div variants={stagger} className="grid grid-cols-1 gap-4 sm:grid-cols-2">
-              <motion.div variants={fadeUp}>
-                <Link href="/residential">
-                  <div className="group cursor-pointer rounded-xl border-2 border-amber-400/50 bg-background p-8 text-center transition-all duration-200 hover:border-amber-400 hover:bg-amber-50 dark:hover:bg-amber-950/20 hover-elevate" data-testid="card-audience-residential">
-                    <div className="mx-auto mb-4 flex h-14 w-14 items-center justify-center rounded-full bg-amber-400/20 group-hover:bg-amber-400/30">
-                      <Shield className="h-7 w-7 text-amber-600 dark:text-amber-400" />
-                    </div>
-                    <h3 className="text-xl font-bold">I'm a Homeowner</h3>
-                    <p className="mt-2 text-sm text-muted-foreground leading-relaxed">
-                      Solar, EV chargers, panel upgrades, insurance compliance inspections — and 24/7 emergency electrical service across San Francisco and the Bay Area.
-                    </p>
-                    <div className="mt-4 inline-flex items-center text-sm font-semibold text-amber-600 dark:text-amber-400">
-                      View Residential Services <ArrowRight className="ml-1 h-4 w-4 transition-transform group-hover:translate-x-1" />
-                    </div>
-                  </div>
-                </Link>
-              </motion.div>
-
-              <motion.div variants={fadeUp}>
-                <Link href="/commercial">
-                  <div className="group cursor-pointer rounded-xl border-2 border-slate-400/30 bg-background p-8 text-center transition-all duration-200 hover:border-slate-600 hover:bg-slate-50 dark:hover:bg-slate-900/50 hover-elevate" data-testid="card-audience-commercial">
-                    <div className="mx-auto mb-4 flex h-14 w-14 items-center justify-center rounded-full bg-slate-400/10 group-hover:bg-slate-400/20">
-                      <Building2 className="h-7 w-7 text-slate-600 dark:text-slate-400" />
-                    </div>
-                    <h3 className="text-xl font-bold">I'm a Business / Property Owner</h3>
-                    <p className="mt-2 text-sm text-muted-foreground leading-relaxed">
-                      Commercial solar, EV fleet charging, Tier 1–4 insurance compliance inspections, and full-scope commercial electrical for hotels, warehouses, and multi-unit properties.
-                    </p>
-                    <div className="mt-4 inline-flex items-center text-sm font-semibold text-foreground">
-                      View Commercial Services <ArrowRight className="ml-1 h-4 w-4 transition-transform group-hover:translate-x-1" />
-                    </div>
-                  </div>
-                </Link>
-              </motion.div>
-            </motion.div>
-          </motion.div>
-        </div>
-      </section>
-
       <section className="bg-background py-20" data-testid="section-services">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <motion.div
