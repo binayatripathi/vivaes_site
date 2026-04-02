@@ -1,0 +1,8 @@
+uploads = []
+outputs = []
+
+[[generated]]
+id = "MmqeL_XDZM581aa2QQ297"
+uri = "file://artifacts/viva-electric-site-mockup/public/inn-on-folsom.png"
+type = "image"
+title = "generated_image"

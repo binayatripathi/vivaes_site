@@ -1,0 +1,22 @@
+kind = "design"
+previewPath = "/"
+title = "Viva Electric & Solar — Site Mockup"
+version = "1.0.0"
+id = "artifacts/viva-electric-site-mockup"
+router = "path"
+
+[[integratedSkills]]
+name = "mockup-sandbox"
+version = "1.0.0"
+
+[[services]]
+name = "Component Preview Server"
+paths = [ "/" ]
+localPort = 20117
+
+[services.development]
+run = "npm run dev"
+
+[services.env]
+PORT = "20117"
+BASE_PATH = "/"
