@@ -7,6 +7,8 @@ import { ThemeProvider } from "@/components/theme-provider";
 import { Navigation } from "@/components/navigation";
 import { Footer } from "@/components/footer";
 import Home from "@/pages/home";
+import ResidentialPage from "@/pages/residential";
+import CommercialPage from "@/pages/commercial";
 import { ServicesListPage, ServiceDetailPage } from "@/pages/services";
 import QuotePage from "@/pages/quote";
 import BookingPage from "@/pages/booking";
@@ -25,6 +27,8 @@ function Router() {
   return (
     <Switch>
       <Route path="/" component={Home} />
+      <Route path="/residential" component={ResidentialPage} />
+      <Route path="/commercial" component={CommercialPage} />
       <Route path="/services" component={ServicesListPage} />
       <Route path="/services/:slug" component={ServiceDetailPage} />
       <Route path="/quote" component={QuotePage} />
