@@ -2,7 +2,7 @@ import express, { type Request, Response, NextFunction } from "express";
 import { registerRoutes } from "./routes";
 import { registerVapiRoutes } from "./vapi-routes";
 import { serveStatic } from "./static";
-import { createServer } from "http";
+import http, { createServer } from "http";
 import { runMigrations } from 'stripe-replit-sync';
 import { getStripeSync } from "./stripeClient";
 import { WebhookHandlers } from "./webhookHandlers";
@@ -128,6 +128,16 @@ app.use((req, res, next) => {
 });
 
 (async () => {
+  app.use("/__mockup", (req, res) => {
+    const target = `http://localhost:20117${req.url}`;
+    const proxy = http.request(target, { method: req.method, headers: req.headers }, (proxyRes) => {
+      res.writeHead(proxyRes.statusCode || 200, proxyRes.headers);
+      proxyRes.pipe(res, { end: true });
+    });
+    proxy.on("error", () => res.status(502).send("Mockup server unavailable"));
+    req.pipe(proxy, { end: true });
+  });
+
   registerVapiRoutes(app);
   await registerRoutes(httpServer, app);
 
