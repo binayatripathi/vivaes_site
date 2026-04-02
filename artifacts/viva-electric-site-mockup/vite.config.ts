@@ -59,6 +59,11 @@ export default defineConfig({
       strict: true,
       deny: ["**/.*"],
     },
+    proxy: {
+      "/api": { target: "http://localhost:5000", changeOrigin: true },
+      "/assets": { target: "http://localhost:5000", changeOrigin: true },
+      "/images": { target: "http://localhost:5000", changeOrigin: true },
+    },
   },
   preview: {
     port,
