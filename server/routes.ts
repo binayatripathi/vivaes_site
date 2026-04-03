@@ -509,6 +509,8 @@ export async function registerRoutes(
       { loc: "/about", priority: "0.6", changefreq: "monthly" },
       { loc: "/solar-storage", priority: "0.8", changefreq: "monthly" },
       { loc: "/insurance-compliance", priority: "0.9", changefreq: "monthly" },
+      { loc: "/residential", priority: "0.9", changefreq: "monthly" },
+      { loc: "/commercial", priority: "0.9", changefreq: "monthly" },
     ];
     const today = new Date().toISOString().split("T")[0];
     const urls = pages

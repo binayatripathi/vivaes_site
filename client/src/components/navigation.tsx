@@ -1,9 +1,10 @@
 import { useState } from "react";
 import { Link, useLocation } from "wouter";
 import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import { useTheme } from "@/components/theme-provider";
-import { Menu, X, Sun, Moon } from "lucide-react";
+import { Menu, Sun, Moon, Home, Building2 } from "lucide-react";
 import { VapiCallButton } from "@/components/vapi-call-button";
 import vivaLogoPath from "@assets/viva-logo.png";
 
@@ -16,6 +17,21 @@ const navLinks = [
   { href: "/quote", label: "Instant Quote" },
   { href: "/booking", label: "Book Now" },
   { href: "/about", label: "About" },
+];
+
+const audiencePills = [
+  {
+    href: "/residential",
+    label: "Residential",
+    icon: Home,
+    className: "border border-amber-400/40 bg-amber-400/10 text-amber-600 dark:text-amber-400 hover:bg-amber-400/20",
+  },
+  {
+    href: "/commercial",
+    label: "Commercial",
+    icon: Building2,
+    className: "border border-slate-500/40 bg-slate-700/20 text-slate-700 dark:text-slate-300 hover:bg-slate-700/30 dark:hover:bg-slate-700/40",
+  },
 ];
 
 export function Navigation() {
@@ -36,6 +52,21 @@ export function Navigation() {
         </Link>
 
         <nav className="hidden items-center gap-1 md:flex" data-testid="nav-desktop">
+          {audiencePills.map((pill) => {
+            const Icon = pill.icon;
+            return (
+              <Link key={pill.href} href={pill.href}>
+                <Badge
+                  className={`cursor-pointer gap-1 px-2.5 py-1 text-xs font-medium transition-colors ${pill.className}`}
+                  data-testid={`link-nav-${pill.label.toLowerCase()}`}
+                >
+                  <Icon className="h-3 w-3" />
+                  {pill.label}
+                </Badge>
+              </Link>
+            );
+          })}
+          <div className="mx-1 h-4 w-px bg-border" />
           {navLinks.map((link) => {
             const isActive = location === link.href || (link.href !== "/" && location.startsWith(link.href));
             return (
@@ -87,6 +118,23 @@ export function Navigation() {
             </SheetTrigger>
             <SheetContent side="right" className="w-72">
               <div className="flex flex-col gap-1 pt-8">
+                <div className="mb-2 flex gap-2 px-4">
+                  {audiencePills.map((pill) => {
+                    const Icon = pill.icon;
+                    return (
+                      <Link key={pill.href} href={pill.href} onClick={() => setMobileOpen(false)}>
+                        <Badge
+                          className={`cursor-pointer gap-1 px-2.5 py-1 text-xs font-medium transition-colors ${pill.className}`}
+                          data-testid={`link-mobile-${pill.label.toLowerCase()}`}
+                        >
+                          <Icon className="h-3 w-3" />
+                          {pill.label}
+                        </Badge>
+                      </Link>
+                    );
+                  })}
+                </div>
+                <div className="mb-2 border-t" />
                 {navLinks.map((link) => {
                   const isActive = location === link.href;
                   return (

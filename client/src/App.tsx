@@ -19,6 +19,8 @@ import { VapiProvider } from "@/components/vapi-call-button";
 import ElectrificationPage from "@/pages/electrification";
 import AdminPage from "@/pages/admin";
 import InsuranceCompliancePage from "@/pages/insurance-compliance";
+import ResidentialPage from "@/pages/residential";
+import CommercialPage from "@/pages/commercial";
 import NotFound from "@/pages/not-found";
 
 function Router() {
@@ -36,6 +38,8 @@ function Router() {
       <Route path="/payment/cancel" component={PaymentCancelPage} />
       <Route path="/admin" component={AdminPage} />
       <Route path="/insurance-compliance" component={InsuranceCompliancePage} />
+      <Route path="/residential" component={ResidentialPage} />
+      <Route path="/commercial" component={CommercialPage} />
       <Route component={NotFound} />
     </Switch>
   );

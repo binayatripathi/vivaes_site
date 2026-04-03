@@ -178,6 +178,85 @@ export default function Home() {
         </div>
       </section>
 
+      <section className="bg-background py-16" data-testid="section-audience-chooser">
+        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+          <motion.div
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true, margin: "-100px" }}
+            variants={stagger}
+            className="space-y-10"
+          >
+            <motion.div variants={fadeUp} className="text-center">
+              <h2 className="text-3xl font-bold tracking-tight sm:text-4xl" data-testid="text-audience-chooser-title">
+                Who Are You?
+              </h2>
+              <p className="mx-auto mt-3 max-w-xl text-muted-foreground">
+                We tailor our services to your specific needs. Choose your path to get started.
+              </p>
+            </motion.div>
+
+            <div className="grid grid-cols-1 gap-6 sm:grid-cols-2">
+              <motion.div variants={fadeUp}>
+                <Link href="/residential">
+                  <Card
+                    className="group cursor-pointer overflow-hidden transition-all duration-200 hover-elevate"
+                    data-testid="card-audience-homeowner"
+                  >
+                    <CardContent className="flex flex-col items-center gap-4 p-8 text-center">
+                      <div className="flex h-16 w-16 items-center justify-center rounded-full bg-amber-400/10">
+                        <Shield className="h-8 w-8 text-amber-500" />
+                      </div>
+                      <div>
+                        <Badge className="mb-3 border border-amber-400/30 bg-amber-400/10 text-amber-600 dark:text-amber-400">
+                          Homeowner
+                        </Badge>
+                        <h3 className="text-xl font-bold">I'm a Homeowner</h3>
+                        <p className="mt-2 text-sm text-muted-foreground">
+                          Panel upgrades, solar, EV chargers, and insurance compliance for Bay Area homes.
+                        </p>
+                      </div>
+                      <div className="flex items-center text-sm font-medium text-primary">
+                        See residential services
+                        <ArrowRight className="ml-1 h-3 w-3 transition-transform group-hover:translate-x-1" />
+                      </div>
+                    </CardContent>
+                  </Card>
+                </Link>
+              </motion.div>
+
+              <motion.div variants={fadeUp}>
+                <Link href="/commercial">
+                  <Card
+                    className="group cursor-pointer overflow-hidden transition-all duration-200 hover-elevate"
+                    data-testid="card-audience-business"
+                  >
+                    <CardContent className="flex flex-col items-center gap-4 p-8 text-center">
+                      <div className="flex h-16 w-16 items-center justify-center rounded-full bg-slate-700/10 dark:bg-slate-700/30">
+                        <Building2 className="h-8 w-8 text-slate-600 dark:text-slate-300" />
+                      </div>
+                      <div>
+                        <Badge variant="secondary" className="mb-3">
+                          Commercial
+                        </Badge>
+                        <h3 className="text-xl font-bold">I'm a Business</h3>
+                        <p className="mt-2 text-sm text-muted-foreground">
+                          Hotels, warehouses, and property managers — 3-phase power, tenant improvements, and EV fleet charging.
+                        </p>
+                      </div>
+                      <div className="flex items-center text-sm font-medium text-primary">
+                        See commercial services
+                        <ArrowRight className="ml-1 h-3 w-3 transition-transform group-hover:translate-x-1" />
+                      </div>
+                    </CardContent>
+                  </Card>
+                </Link>
+              </motion.div>
+            </div>
+          </motion.div>
+        </div>
+      </section>
+
       <section className="bg-background py-20" data-testid="section-services">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <motion.div
