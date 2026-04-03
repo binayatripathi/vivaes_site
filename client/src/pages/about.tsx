@@ -236,6 +236,102 @@ export default function AboutPage() {
         </div>
       </section>
 
+      <section className="py-16 bg-muted" data-testid="section-credentials">
+        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+          <motion.div
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true, margin: "-100px" }}
+            variants={stagger}
+            className="space-y-8"
+          >
+            <motion.div variants={fadeUp} className="text-center">
+              <h2 className="text-2xl font-bold tracking-tight sm:text-3xl" data-testid="text-credentials-title">
+                Licensed & Certified
+              </h2>
+              <p className="mx-auto mt-3 max-w-2xl text-sm text-muted-foreground">
+                Viva Electric & Solar Inc. is fully licensed, bonded, and insured in the state of California. Our credentials and authoritative industry registrations are listed below for verification.
+              </p>
+            </motion.div>
+
+            <motion.div variants={fadeUp} className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
+              <Card data-testid="card-credential-cslb">
+                <CardContent className="p-5 space-y-2">
+                  <div className="flex items-center gap-2">
+                    <Shield className="h-5 w-5 text-primary shrink-0" />
+                    <h3 className="font-semibold text-sm">CSLB License #1147947</h3>
+                  </div>
+                  <p className="text-sm text-muted-foreground">
+                    California C-10 Electrical Contractor License issued by the California Contractors State License Board. Covers residential and commercial electrical work statewide.
+                  </p>
+                  <a
+                    href="https://www.cslb.ca.gov/onlineservices/checklicenseII/checklicense.aspx"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="text-xs text-primary hover:underline inline-flex items-center gap-1"
+                    data-testid="link-cslb-verify"
+                  >
+                    Verify License on CSLB.ca.gov
+                    <Award className="h-3 w-3" />
+                  </a>
+                </CardContent>
+              </Card>
+
+              <Card data-testid="card-credential-solar">
+                <CardContent className="p-5 space-y-2">
+                  <div className="flex items-center gap-2">
+                    <Zap className="h-5 w-5 text-primary shrink-0" />
+                    <h3 className="font-semibold text-sm">California Solar Programs</h3>
+                  </div>
+                  <p className="text-sm text-muted-foreground">
+                    Solar installations by Viva Electric qualify for the federal 30% Investment Tax Credit (ITC) and California incentive programs, including PG&amp;E rebates and the CPUC Self-Generation Incentive Program (SGIP).
+                  </p>
+                  <a
+                    href="https://www.energy.ca.gov/programs-and-topics/programs/go-solar-california"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="text-xs text-primary hover:underline inline-flex items-center gap-1"
+                    data-testid="link-ca-energy-commission"
+                  >
+                    California Energy Commission Solar
+                    <Award className="h-3 w-3" />
+                  </a>
+                </CardContent>
+              </Card>
+
+              <Card data-testid="card-credential-cpuc">
+                <CardContent className="p-5 space-y-2">
+                  <div className="flex items-center gap-2">
+                    <Award className="h-5 w-5 text-primary shrink-0" />
+                    <h3 className="font-semibold text-sm">CPUC & PG&E Incentives</h3>
+                  </div>
+                  <p className="text-sm text-muted-foreground">
+                    Battery storage systems installed by Viva Electric may qualify for the CPUC Self-Generation Incentive Program (SGIP). We assist customers with documentation for PG&amp;E interconnection and rebate applications.
+                  </p>
+                  <a
+                    href="https://www.cpuc.ca.gov/sgip/"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="text-xs text-primary hover:underline inline-flex items-center gap-1"
+                    data-testid="link-cpuc-sgip"
+                  >
+                    CPUC Self-Generation Incentive Program
+                    <Award className="h-3 w-3" />
+                  </a>
+                </CardContent>
+              </Card>
+            </motion.div>
+
+            <motion.div variants={fadeUp} className="rounded-lg border bg-card p-5 text-sm text-muted-foreground space-y-1 max-w-2xl mx-auto text-center" data-testid="text-credentials-summary">
+              <p className="font-medium text-foreground">Viva Electric & Solar Inc.</p>
+              <p>CSLB License #1147947 · C-10 Electrical Contractor · Oakland, CA 94601</p>
+              <p>Phone: (510) 710-5745 · Email: roberto@vivaes.net</p>
+              <p>Serving Bay Area & Central Valley since 2009</p>
+            </motion.div>
+          </motion.div>
+        </div>
+      </section>
+
       <section id="contact" className="bg-card py-16" data-testid="section-contact">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <motion.div

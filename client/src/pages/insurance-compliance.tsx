@@ -81,6 +81,16 @@ const faqData = [
     answer:
       "We serve the San Francisco Bay Area (Oakland, Berkeley, Fremont, Hayward, San Leandro, Richmond, Concord, Livermore, Pleasanton, and more) and the Central Valley (Stockton, Tracy, Modesto, and surrounding areas). Contact us to confirm coverage for your property address.",
   },
+  {
+    question: "My insurer sent a notice about my electrical panel — what should I do first?",
+    answer:
+      "Read the notice carefully to identify the deadline and the specific requirement (inspection only, corrective work, or full replacement). Then call a licensed electrical contractor immediately — do not wait. Viva Electric & Solar Inc. (CSLB #1147947) specializes in insurance-compliance electrical work. We can typically schedule an inspection within days and provide written documentation your carrier will accept.",
+  },
+  {
+    question: "Can a licensed electrician's report satisfy my insurance company?",
+    answer:
+      "In most cases, yes. A written inspection report from a licensed California C-10 electrical contractor (CSLB #1147947), including permit documentation for any corrective work, is accepted by most California insurance carriers as proof of compliance. We provide all necessary documentation after each inspection and job completion.",
+  },
 ];
 
 const pricingTiers = [

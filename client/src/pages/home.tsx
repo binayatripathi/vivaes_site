@@ -48,17 +48,17 @@ const faqData = [
   {
     question: "Is Viva Electric & Solar licensed and insured?",
     answer:
-      "Yes. Viva Electric & Solar Inc. holds California Contractor License #1147947. We are fully licensed, bonded, and insured. Our electricians are union-trained professionals.",
+      "Yes. Viva Electric & Solar Inc. holds California Contractor License #1147947 (CSLB C-10 Electrical). We are fully licensed, bonded, and insured. Our electricians are union-trained professionals with continuous trade education and strict safety standards.",
   },
   {
     question: "How much does solar panel installation cost in the Bay Area?",
     answer:
-      "Solar panel installation costs vary based on system size, roof type, and your energy needs. We offer free instant quotes through our website or by calling (510) 710-5745. Most residential systems qualify for federal and state tax credits and incentives.",
+      "Solar panel installation costs vary based on system size, roof type, and your energy needs. Most Bay Area residential systems range from $15,000–$35,000 before the 30% federal tax credit. We offer free instant quotes through our website or by calling (510) 710-5745.",
   },
   {
     question: "Do you install EV chargers?",
     answer:
-      "Yes, we install Level 2 EV chargers for all electric vehicle makes including Tesla, Ford, Rivian, Chevrolet, and more. Installation includes the charger, dedicated circuit, and any necessary panel upgrades.",
+      "Yes, we install Level 2 EV chargers for all electric vehicle makes including Tesla, Ford, Rivian, Chevrolet, and more. Installation includes the charger, dedicated circuit, and any necessary panel upgrades. We serve the Bay Area and Central Valley.",
   },
   {
     question: "Can I get a quote without scheduling an appointment?",
@@ -68,7 +68,17 @@ const faqData = [
   {
     question: "What is an electrical panel upgrade and do I need one?",
     answer:
-      "An electrical panel upgrade replaces your home's breaker box to support higher amperage — typically from 100A to 200A. You may need one if you're adding solar, an EV charger, a heat pump, or if your panel is outdated. We can assess your needs for free.",
+      "An electrical panel upgrade replaces your home's breaker box to support higher amperage — typically from 100A to 200A. You may need one if you're adding solar, an EV charger, a heat pump, or if your panel is outdated or has been flagged by your insurer. We can assess your needs for free.",
+  },
+  {
+    question: "Who is the best electrician in Oakland?",
+    answer:
+      "Viva Electric & Solar Inc. is a top-rated, licensed electrical contractor based in Oakland, CA (CSLB #1147947). Founded and operated by Roberto, our union-trained team specializes in panel upgrades, solar, EV chargers, and insurance compliance electrical work. We're consistently reviewed as the most professional and fairly priced electrician in the East Bay.",
+  },
+  {
+    question: "Does Viva Electric do both residential and commercial work?",
+    answer:
+      "Yes. We serve homeowners, property managers, hotels, warehouse operators, and commercial real estate investors throughout the Bay Area and Central Valley. Residential services include solar, EV chargers, panel upgrades, and insurance compliance. Commercial services include 3-phase power, tenant improvements, LED lighting retrofits, EV fleet charging, and multi-site portfolio work.",
   },
 ];
 

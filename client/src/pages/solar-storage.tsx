@@ -22,6 +22,7 @@ import {
   Power,
   Home,
   ShieldAlert,
+  ChevronDown,
 } from "lucide-react";
 
 const powerwallRainPath = "/images/services/battery-only.jpg";
@@ -83,9 +84,118 @@ const panelRemovalIncludes = [
   "Warranty on all reinstallation labor and materials",
 ];
 
+const faqData = [
+  {
+    question: "Who installs solar panels in the Bay Area?",
+    answer:
+      "Viva Electric & Solar Inc. installs solar panels throughout the San Francisco Bay Area, including Oakland, Berkeley, Fremont, Hayward, San Francisco, San Leandro, Concord, Livermore, and surrounding cities. We are a licensed California C-10 electrical contractor (CSLB #1147947) with union-trained electricians who handle the full process from design to permit to utility interconnection.",
+  },
+  {
+    question: "How long does solar installation take from start to finish?",
+    answer:
+      "A typical residential solar installation in California takes 4–8 weeks from signed contract to activation. This includes system design (1–2 weeks), permit submission and approval (2–4 weeks, varies by municipality), physical installation (1–2 days), utility interconnection agreement, and final inspection. Viva Electric manages permits and utility coordination so you don't have to.",
+  },
+  {
+    question: "Can I add a battery to my existing solar system?",
+    answer:
+      "Yes, in most cases you can add battery storage to an existing solar system. We evaluate your current solar equipment, inverter compatibility, and electrical panel to determine the best battery option for your setup. We install Tesla Powerwall, Enphase IQ Battery, FranklinWH, SolarEdge Energy Bank, and Generac PWRcell with existing solar systems across the Bay Area and Central Valley.",
+  },
+  {
+    question: "What is the federal solar tax credit and do I qualify?",
+    answer:
+      "The federal Investment Tax Credit (ITC) allows you to deduct 30% of your total solar installation cost from your federal income taxes. Most homeowners and businesses that install solar between 2022 and 2032 qualify, provided they have sufficient tax liability. Battery storage systems installed alongside solar also qualify. California does not tax solar equipment, and additional state incentives may apply.",
+  },
+  {
+    question: "How much does solar installation cost in Oakland or the Bay Area?",
+    answer:
+      "Solar system costs in the Bay Area typically range from $15,000 to $35,000 before incentives, depending on system size, roof type, and energy usage. After the 30% federal tax credit, the net cost drops significantly. We provide free, detailed estimates — call (510) 710-5745 or request a quote online to get a number specific to your home.",
+  },
+  {
+    question: "Do you remove and reinstall solar panels for roof replacement?",
+    answer:
+      "Yes. We provide complete solar panel removal and reinstallation (detach and reset) for homeowners replacing their roofs and for roofing contractors looking for a reliable solar subcontractor. We serve the Bay Area and Central Valley, handling safe removal, storage, reinstallation, full system testing, and permits as needed.",
+  },
+  {
+    question: "What battery backup systems do you recommend for Bay Area homes?",
+    answer:
+      "The best battery for your home depends on your solar system, energy usage, and backup goals. We install Tesla Powerwall (13.5 kWh), Enphase IQ Battery 5P, FranklinWH aPower, SolarEdge Energy Bank, and Generac PWRcell. During a free assessment, we evaluate your panel capacity and usage to recommend the right system. Most Bay Area homeowners opt for one or two batteries to cover essential loads during outages.",
+  },
+  {
+    question: "Does Viva Electric handle the permits for solar installation?",
+    answer:
+      "Yes. We handle all permit applications, plan checks, utility interconnection agreements, and final inspections on every solar installation. In California, solar installations require a building permit and utility approval — we manage the entire process so you can focus on enjoying your new system.",
+  },
+];
+
+const howToJsonLd = {
+  "@context": "https://schema.org",
+  "@type": "HowTo",
+  "name": "How Solar Installation Works — Bay Area Home",
+  "description": "Step-by-step overview of the residential solar installation process in the San Francisco Bay Area by Viva Electric & Solar Inc., a licensed California C-10 electrical contractor (CSLB #1147947).",
+  "totalTime": "P6W",
+  "estimatedCost": {
+    "@type": "MonetaryAmount",
+    "currency": "USD",
+    "minValue": "10500",
+    "maxValue": "35000",
+    "description": "After 30% federal tax credit"
+  },
+  "supply": [
+    { "@type": "HowToSupply", "name": "Solar panels (monocrystalline, 370–420W per panel)" },
+    { "@type": "HowToSupply", "name": "Inverter (string or microinverter)" },
+    { "@type": "HowToSupply", "name": "Racking and mounting hardware" },
+    { "@type": "HowToSupply", "name": "Conduit, wiring, and disconnect hardware" }
+  ],
+  "step": [
+    {
+      "@type": "HowToStep",
+      "position": 1,
+      "name": "Site Assessment & System Design",
+      "text": "A certified electrician visits your home to assess roof orientation, shading, structural condition, and your electrical panel. We review 12 months of utility bills to size the system accurately. A detailed system design and production estimate is produced.",
+      "url": "https://vivaes.net/solar-storage"
+    },
+    {
+      "@type": "HowToStep",
+      "position": 2,
+      "name": "Proposal & Contract",
+      "text": "You receive a line-item proposal showing system size (kW), estimated annual production (kWh), equipment brands, total cost, and incentives (federal 30% tax credit). Once approved, we finalize the contract and collect a deposit.",
+      "url": "https://vivaes.net/solar-storage"
+    },
+    {
+      "@type": "HowToStep",
+      "position": 3,
+      "name": "Permit Submission",
+      "text": "We prepare and submit permit applications to your local building department and file an interconnection application with your utility (PG&E, SCE, or other). Permit approval typically takes 2–4 weeks depending on the jurisdiction.",
+      "url": "https://vivaes.net/solar-storage"
+    },
+    {
+      "@type": "HowToStep",
+      "position": 4,
+      "name": "Solar Panel Installation",
+      "text": "Our union-trained crew installs racking on your roof, mounts the solar panels, runs conduit and wiring to the inverter and electrical panel, and connects the system. Most residential installations are completed in 1–2 days.",
+      "url": "https://vivaes.net/solar-storage"
+    },
+    {
+      "@type": "HowToStep",
+      "position": 5,
+      "name": "Inspection",
+      "text": "A local building inspector visits to verify the installation meets code. We schedule and attend the inspection on your behalf. Most installations pass on the first visit.",
+      "url": "https://vivaes.net/solar-storage"
+    },
+    {
+      "@type": "HowToStep",
+      "position": 6,
+      "name": "Utility Interconnection & Activation",
+      "text": "After passing inspection, the utility approves Permission to Operate (PTO). We then perform final system commissioning, verify monitoring is live, and walk you through your new solar system. Your panels begin producing clean energy immediately.",
+      "url": "https://vivaes.net/solar-storage"
+    }
+  ]
+};
+
 export default function SolarStoragePage() {
   const [quoteOpen, setQuoteOpen] = useState(false);
   const [preselectedService, setPreselectedService] = useState<string | undefined>();
+  const [openFaq, setOpenFaq] = useState<number | null>(null);
 
   const openQuote = (service?: string) => {
     setPreselectedService(service);
@@ -101,6 +211,10 @@ export default function SolarStoragePage() {
         ogTitle="Solar & Battery Storage | Viva Electric & Solar Bay Area"
         ogDescription="Cut your electricity bill with rooftop solar and battery backup. Tesla Powerwall, Enphase IQ. Union-installed, permitted, and utility-coordinated for Bay Area homes."
         ogImage="https://vivaes.net/images/pages/solar-installation.png"
+      />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(howToJsonLd) }}
       />
       <section
         className="relative flex min-h-[50vh] items-center overflow-hidden"
@@ -662,6 +776,58 @@ export default function SolarStoragePage() {
                 />
               </motion.div>
             </div>
+          </motion.div>
+        </div>
+      </section>
+
+      <section id="faq" className="bg-muted py-20" data-testid="section-solar-faq">
+        <div className="mx-auto max-w-3xl px-4 sm:px-6 lg:px-8">
+          <motion.div
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true, margin: "-100px" }}
+            variants={stagger}
+            className="space-y-10"
+          >
+            <motion.div variants={fadeUp} className="text-center">
+              <h2 className="text-3xl font-bold tracking-tight sm:text-4xl" data-testid="text-solar-faq-title">
+                Solar & Battery FAQs
+              </h2>
+              <p className="mx-auto mt-3 max-w-2xl text-muted-foreground">
+                Common questions Bay Area homeowners ask about solar installation, battery storage, and incentives.
+              </p>
+            </motion.div>
+
+            <motion.div variants={fadeUp} className="space-y-3">
+              {faqData.map((faq, i) => (
+                <div
+                  key={i}
+                  className="rounded-lg border bg-card"
+                  data-testid={`faq-solar-item-${i}`}
+                >
+                  <button
+                    onClick={() => setOpenFaq(openFaq === i ? null : i)}
+                    className="flex w-full items-center justify-between px-5 py-4 text-left"
+                    data-testid={`button-solar-faq-${i}`}
+                  >
+                    <span className="pr-4 font-medium">{faq.question}</span>
+                    <ChevronDown
+                      className={`h-5 w-5 shrink-0 text-muted-foreground transition-transform ${
+                        openFaq === i ? "rotate-180" : ""
+                      }`}
+                    />
+                  </button>
+                  {openFaq === i && (
+                    <div
+                      className="px-5 pb-4 text-sm leading-relaxed text-muted-foreground"
+                      data-testid={`text-solar-faq-answer-${i}`}
+                    >
+                      {faq.answer}
+                    </div>
+                  )}
+                </div>
+              ))}
+            </motion.div>
           </motion.div>
         </div>
       </section>

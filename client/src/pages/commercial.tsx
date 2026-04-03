@@ -156,6 +156,21 @@ const faqData = [
     answer:
       "We serve the entire San Francisco Bay Area (San Francisco, Oakland, Berkeley, Fremont, Hayward, Concord, Livermore, and surrounding cities) and the Central Valley (Stockton, Tracy, Modesto). Contact us to confirm coverage for your property location.",
   },
+  {
+    question: "Who installs EV fleet charging for businesses in the Bay Area?",
+    answer:
+      "Viva Electric & Solar Inc. designs and installs Level 2 and DC fast-charging infrastructure for commercial fleets, hotels, apartment buildings, and parking structures throughout the Bay Area and Central Valley. We hold California C-10 Electrical Contractor License #1147947 and handle all permitting, utility coordination, and load management.",
+  },
+  {
+    question: "How does a commercial electrical inspection work?",
+    answer:
+      "A commercial electrical inspection from Viva Electric starts at $550 and includes a visual assessment of all panels, wiring, grounding, labeling, and code compliance. You receive a written report with findings, photos, and recommended corrective actions. For insurance carriers or lenders, we include the documentation they need to verify compliance.",
+  },
+  {
+    question: "Is Viva Electric licensed for commercial electrical work in California?",
+    answer:
+      "Yes. Viva Electric & Solar Inc. holds California Contractors State License Board (CSLB) License #1147947, a C-10 Electrical Contractor license that covers both residential and commercial electrical work throughout the state of California. Our electricians are union-trained and carry full liability insurance.",
+  },
 ];
 
 export default function CommercialPage() {

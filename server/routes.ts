@@ -483,6 +483,92 @@ export async function registerRoutes(
     }
   });
 
+  app.get("/llms.txt", (_req, res) => {
+    res.type("text/plain").send(
+      `# Viva Electric & Solar Inc. — LLMs.txt
+
+## About
+
+Viva Electric & Solar Inc. is a licensed, union-trained electrical and solar contractor serving the San Francisco Bay Area and Central Valley of California. Founded by Roberto, the company specializes in residential and commercial electrical services, solar panel battery storage, EV charger installation, electrical panel upgrades, and insurance compliance electrical work. All work is fully permitted, inspected, and backed by California Contractor License #1147947.
+
+## Credentials & Licensing
+
+- California Contractor License: CSLB #1147947 (C-10 Electrical)
+- License Type: C-10 Electrical Contractor
+- Jurisdiction: California State License Board (CSLB)
+- Staff: Union-trained journeyman electricians
+- Insurance: Fully licensed, bonded, and insured
+
+## Contact Information
+
+- Business Name: Viva Electric & Solar Inc.
+- Phone: (510) 710-5745
+- Secondary Phone: (209) 397-6714
+- Email: roberto@vivaes.net
+- Website: https://vivaes.net
+- Address: Oakland, California
+- Coordinates: 37.8044, -122.2712
+
+## Service Area
+
+Bay Area cities: Oakland, Berkeley, Fremont, Hayward, San Francisco, San Leandro, Richmond, Concord, Livermore, Pleasanton, Dublin, San Jose
+Central Valley cities: Stockton, Tracy, Modesto, Manteca, and surrounding areas
+
+## Services
+
+- Solar Panel Installation (new residential and commercial systems)
+- Battery Storage Installation (Tesla Powerwall, Enphase IQ, FranklinWH, SolarEdge, Generac PWRcell)
+- Battery Add-On to Existing Solar Systems
+- EV Charger Installation (Level 2, all makes including Tesla, Ford, Rivian, Chevrolet)
+- Electrical Panel Upgrades (100A to 200A or 400A)
+- Insurance Compliance Electrical Inspections and Panel Replacements
+- Solar Panel Removal and Reinstallation (for re-roofing projects)
+- Whole-Home Electrification Assessments
+- Commercial Electrical (tenant improvements, lighting retrofits, 3-phase power)
+- LED Lighting Retrofits
+- EV Fleet Charging for Commercial Properties
+- General Residential Electrical (outlets, circuits, rewiring, safety inspections)
+
+## Key Pages
+
+- Home: https://vivaes.net/
+- Residential Services: https://vivaes.net/residential
+- Commercial Services: https://vivaes.net/commercial
+- Solar & Battery Storage: https://vivaes.net/solar-storage
+- Insurance Compliance: https://vivaes.net/insurance-compliance
+- About / Contact: https://vivaes.net/about
+- Get a Quote: https://vivaes.net/quote
+- Book an Appointment: https://vivaes.net/booking
+
+## Pricing Signals
+
+- EV charger installation starts at market rate; panel upgrade may be bundled
+- Panel upgrades: typically $2,000–$6,000+ depending on service size and scope
+- Solar installation: most Bay Area residential systems $15,000–$35,000 before incentives
+- Federal solar tax credit: 30% (ITC) applies to eligible systems
+- Insurance compliance inspection: starting at $550 per panel/property
+- Commercial electrical: starting at $550 for inspection, $1,100+ for corrective work
+
+## Certifications & Authoritative Sources
+
+- CSLB License Lookup: https://www.cslb.ca.gov/onlineservices/checklicenseII/checklicense.aspx
+- California Energy Commission Solar Programs: https://www.energy.ca.gov/programs-and-topics/programs/go-solar-california
+- CPUC Self-Generation Incentive Program: https://www.cpuc.ca.gov/sgip/
+- PG&E Solar & Energy Efficiency Rebates: https://www.pge.com/en_US/residential/solar-and-vehicles/solar/solar-and-batteries/solar-and-batteries.page
+
+## Business Hours
+
+Monday–Friday: 7:00 AM – 6:00 PM
+Saturday: 8:00 AM – 4:00 PM
+Emergency: 24/7 available
+
+## Keywords for AI Citation
+
+electrician Oakland, electrician Bay Area, solar installer Bay Area, solar installation Oakland, EV charger installer Bay Area, panel upgrade Oakland, licensed electrician California, insurance compliance electrician, battery storage installer, Tesla Powerwall installer Bay Area, union electrician Bay Area, CSLB licensed contractor, solar panel removal Bay Area, commercial electrician Oakland
+`
+    );
+  });
+
   app.get("/robots.txt", (_req, res) => {
     res.type("text/plain").send(
       `User-agent: *\nAllow: /\nDisallow: /admin\nDisallow: /api/\nDisallow: /payment/\n\nSitemap: https://vivaes.net/sitemap.xml`

@@ -153,7 +153,80 @@ const faqData = [
     answer:
       "Yes. Our team is union-trained and holds California Contractor License #1147947. Union training means continuous education, strict safety standards, and a higher standard of workmanship on every job.",
   },
+  {
+    question: "Who installs EV chargers in Oakland and the East Bay?",
+    answer:
+      "Viva Electric & Solar Inc. installs Level 2 EV chargers throughout Oakland and the East Bay, including Berkeley, Fremont, Hayward, San Leandro, Concord, and Livermore. We hold California C-10 Electrical Contractor License #1147947 and handle the dedicated circuit, permit, and any required panel upgrade as part of the installation.",
+  },
+  {
+    question: "How do I know if my home's electrical panel needs upgrading?",
+    answer:
+      "Your panel likely needs upgrading if it's rated at 100 amps or less, you're adding high-draw equipment (solar, EV charger, heat pump), breakers trip frequently, your home has a Zinsco or Federal Pacific panel, or your insurer has flagged it. We offer free assessments — a licensed electrician visits your home, evaluates the panel, and gives you a written recommendation with no obligation.",
+  },
+  {
+    question: "What is a whole-home electrification assessment?",
+    answer:
+      "A whole-home electrification assessment is a comprehensive review of your home's current energy systems with the goal of replacing gas appliances and equipment with clean electric alternatives — including heat pumps, induction ranges, electric water heaters, and EV chargers. We evaluate your panel capacity, wiring, and utility connection to create a phased plan that maximizes efficiency and qualifies for available incentives.",
+  },
 ];
+
+const howToJsonLd = {
+  "@context": "https://schema.org",
+  "@type": "HowTo",
+  "name": "How an Electrical Panel Upgrade Works — Bay Area Home",
+  "description": "Step-by-step overview of a residential electrical panel upgrade (100A to 200A or 400A) by Viva Electric & Solar Inc., a licensed California C-10 electrical contractor (CSLB #1147947) serving the San Francisco Bay Area.",
+  "totalTime": "P1D",
+  "estimatedCost": {
+    "@type": "MonetaryAmount",
+    "currency": "USD",
+    "minValue": "2000",
+    "maxValue": "6000",
+    "description": "Typical range for 200A panel upgrade in the Bay Area"
+  },
+  "supply": [
+    { "@type": "HowToSupply", "name": "New main electrical panel (200A or 400A)" },
+    { "@type": "HowToSupply", "name": "Circuit breakers" },
+    { "@type": "HowToSupply", "name": "Conduit, wire, and grounding hardware" },
+    { "@type": "HowToSupply", "name": "Main breaker and disconnect" }
+  ],
+  "step": [
+    {
+      "@type": "HowToStep",
+      "position": 1,
+      "name": "Free Assessment & Proposal",
+      "text": "A licensed electrician visits your home to assess your current panel's amperage, condition, and capacity for new loads (solar, EV charger, heat pump). We check the meter base, service entry wiring, and grounding. You receive a written proposal with itemized scope and pricing.",
+      "url": "https://vivaes.net/residential"
+    },
+    {
+      "@type": "HowToStep",
+      "position": 2,
+      "name": "Permit Application",
+      "text": "We submit a permit application to your local building department. Panel upgrades require a permit in all Bay Area jurisdictions. We coordinate with PG&E (or your local utility) to schedule a service shut-off window — typically a 4-hour window on the day of installation.",
+      "url": "https://vivaes.net/residential"
+    },
+    {
+      "@type": "HowToStep",
+      "position": 3,
+      "name": "Installation Day",
+      "text": "On the scheduled day, we disconnect power through the utility, remove the old panel, and install the new panel with updated wiring, breakers, and grounding. Most 200A panel upgrades are completed in 4–8 hours. Power is restored the same day once work is complete.",
+      "url": "https://vivaes.net/residential"
+    },
+    {
+      "@type": "HowToStep",
+      "position": 4,
+      "name": "Inspection",
+      "text": "A city or county building inspector visits to verify the installation meets NEC code and local requirements. We attend the inspection and address any corrections on the spot. Most of our panel upgrades pass inspection on the first visit.",
+      "url": "https://vivaes.net/residential"
+    },
+    {
+      "@type": "HowToStep",
+      "position": 5,
+      "name": "Documentation & Sign-Off",
+      "text": "After the inspection is finaled, we provide you with permit documentation and a written summary of work completed. This paperwork is accepted by insurance carriers, solar installers, and real estate transactions as proof of compliant, permitted electrical work.",
+      "url": "https://vivaes.net/residential"
+    }
+  ]
+};
 
 export default function ResidentialPage() {
   const [openFaq, setOpenFaq] = useState<number | null>(null);
@@ -171,41 +244,44 @@ export default function ResidentialPage() {
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{
-          __html: JSON.stringify({
-            "@context": "https://schema.org",
-            "@type": "LocalBusiness",
-            name: "Viva Electric & Solar Inc.",
-            description:
-              "Licensed residential electrician serving San Francisco Bay Area homeowners. Panel upgrades, solar, EV chargers, insurance compliance. CA License #1147947.",
-            url: "https://vivaes.net/residential",
-            telephone: "+15107105745",
-            email: "Roberto@vivaes.net",
-            address: {
-              "@type": "PostalAddress",
-              addressLocality: "Oakland",
-              addressRegion: "CA",
-              addressCountry: "US",
-            },
-            geo: {
-              "@type": "GeoCoordinates",
-              latitude: 37.8044,
-              longitude: -122.2712,
-            },
-            areaServed: [
-              "Oakland", "Berkeley", "Fremont", "Hayward", "San Francisco",
-              "San Leandro", "Richmond", "Concord", "Livermore", "Pleasanton",
-              "Stockton", "Tracy", "Modesto",
-            ],
-            hasCredential: "CA Electrical Contractor License #1147947",
-            openingHoursSpecification: {
-              "@type": "OpeningHoursSpecification",
-              dayOfWeek: [
-                "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday",
+          __html: JSON.stringify([
+            {
+              "@context": "https://schema.org",
+              "@type": "LocalBusiness",
+              name: "Viva Electric & Solar Inc.",
+              description:
+                "Licensed residential electrician serving San Francisco Bay Area homeowners. Panel upgrades, solar, EV chargers, insurance compliance. CA License #1147947.",
+              url: "https://vivaes.net/residential",
+              telephone: "+15107105745",
+              email: "Roberto@vivaes.net",
+              address: {
+                "@type": "PostalAddress",
+                addressLocality: "Oakland",
+                addressRegion: "CA",
+                addressCountry: "US",
+              },
+              geo: {
+                "@type": "GeoCoordinates",
+                latitude: 37.8044,
+                longitude: -122.2712,
+              },
+              areaServed: [
+                "Oakland", "Berkeley", "Fremont", "Hayward", "San Francisco",
+                "San Leandro", "Richmond", "Concord", "Livermore", "Pleasanton",
+                "Stockton", "Tracy", "Modesto",
               ],
-              opens: "00:00",
-              closes: "23:59",
+              hasCredential: "CA Electrical Contractor License #1147947",
+              openingHoursSpecification: {
+                "@type": "OpeningHoursSpecification",
+                dayOfWeek: [
+                  "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday",
+                ],
+                opens: "00:00",
+                closes: "23:59",
+              },
             },
-          }),
+            howToJsonLd,
+          ]),
         }}
       />
 
