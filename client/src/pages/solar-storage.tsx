@@ -5,6 +5,7 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { QuoteModal } from "@/components/quote-modal";
+import { PageMeta } from "@/components/page-meta";
 import {
   Sun,
   Battery,
@@ -93,6 +94,14 @@ export default function SolarStoragePage() {
 
   return (
     <>
+      <PageMeta
+        title="Solar Panels & Battery Storage Bay Area | Viva Electric & Solar"
+        description="Rooftop solar installation and battery backup systems for Bay Area homes and businesses. Tesla Powerwall, Enphase IQ Battery. Licensed, permitted, utility-coordinated. CA Lic #1147947."
+        canonical="https://vivaes.net/solar-storage"
+        ogTitle="Solar & Battery Storage | Viva Electric & Solar Bay Area"
+        ogDescription="Cut your electricity bill with rooftop solar and battery backup. Tesla Powerwall, Enphase IQ. Union-installed, permitted, and utility-coordinated for Bay Area homes."
+        ogImage="https://vivaes.net/images/pages/solar-installation.png"
+      />
       <section
         className="relative flex min-h-[50vh] items-center overflow-hidden"
         data-testid="section-solar-hero"

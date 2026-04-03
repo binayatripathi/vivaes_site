@@ -7,6 +7,7 @@ import { Badge } from "@/components/ui/badge";
 import { QuoteModal } from "@/components/quote-modal";
 import { VapiCallButton } from "@/components/vapi-call-button";
 import { servicesList } from "@shared/schema";
+import { PageMeta } from "@/components/page-meta";
 import {
   Sun, Zap, CircuitBoard, Lightbulb, Wrench, Building2,
   Battery, Home, ClipboardCheck, Warehouse, Shield,
@@ -38,6 +39,13 @@ export function ServicesListPage() {
 
   return (
     <>
+      <PageMeta
+        title="Electrical & Solar Services Bay Area | Viva Electric & Solar"
+        description="Browse all electrical and solar services from Viva Electric & Solar — panel upgrades, solar installation, EV chargers, battery storage, and commercial electrical. CA Lic #1147947."
+        canonical="https://vivaes.net/services"
+        ogTitle="All Electrical & Solar Services | Viva Electric & Solar Bay Area"
+        ogDescription="Panel upgrades, solar, EV chargers, battery storage, electrification, and commercial electrical from licensed Bay Area electricians. Union-trained, fully insured."
+      />
       <section className="bg-card py-16">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <motion.div
@@ -170,6 +178,14 @@ export function ServiceDetailPage() {
 
   return (
     <>
+      <PageMeta
+        title={`${service.title} Bay Area | Viva Electric & Solar`}
+        description={`${service.description} Licensed, union-trained electricians serving the SF Bay Area & Central Valley. CA Lic #1147947.`}
+        canonical={`https://vivaes.net/services/${service.slug}`}
+        ogTitle={`${service.title} | Viva Electric & Solar Bay Area`}
+        ogDescription={service.description}
+        ogImage={`https://vivaes.net${service.image}`}
+      />
       <section className="relative">
         <div className="absolute inset-0 h-72">
           <img

@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { PageMeta } from "@/components/page-meta";
 import { useMutation } from "@tanstack/react-query";
 import { apiRequest } from "@/lib/queryClient";
 import { motion } from "framer-motion";
@@ -101,6 +102,13 @@ export default function AboutPage() {
 
   return (
     <>
+      <PageMeta
+        title="About Viva Electric & Solar | Licensed Bay Area Electricians"
+        description="Meet the team at Viva Electric & Solar Inc. — union-trained, licensed electricians serving the SF Bay Area and Central Valley since day one. CA Lic #1147947."
+        canonical="https://vivaes.net/about"
+        ogTitle="About Viva Electric & Solar | Bay Area Electrical Contractor"
+        ogDescription="Union-trained, licensed electricians serving the Bay Area & Central Valley. Roberto and the Viva Electric team bring experience, honesty, and fair pricing to every job."
+      />
       <section className="relative overflow-hidden bg-card">
         <div className="absolute inset-0">
           <img

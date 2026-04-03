@@ -5,6 +5,7 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { QuoteModal } from "@/components/quote-modal";
+import { PageMeta } from "@/components/page-meta";
 import {
   Zap,
   Sun,
@@ -82,6 +83,13 @@ export default function ElectrificationPage() {
 
   return (
     <>
+      <PageMeta
+        title="Whole-Home Electrification Bay Area | Heat Pumps & Panel Upgrades"
+        description="Electrify your Bay Area home — heat pumps, induction cooking, EV chargers, and panel upgrades. Free electrification assessment from licensed electricians. CA Lic #1147947."
+        canonical="https://vivaes.net/electrification"
+        ogTitle="Whole-Home Electrification | Viva Electric & Solar Bay Area"
+        ogDescription="Switch from gas to all-electric with heat pumps, induction, EV chargers, and solar. Licensed Bay Area electricians handle assessment, permits, and installation."
+      />
       <section className="relative flex min-h-[50vh] items-center overflow-hidden" data-testid="section-electrification-hero">
         <img
           src="/images/pages/craftsman-home.png"

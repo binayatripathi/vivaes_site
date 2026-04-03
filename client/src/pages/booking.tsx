@@ -3,6 +3,7 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useMutation } from "@tanstack/react-query";
 import { apiRequest } from "@/lib/queryClient";
+import { PageMeta } from "@/components/page-meta";
 import { motion } from "framer-motion";
 import { bookingRequestSchema, type BookingRequest, servicesList } from "@shared/schema";
 import { Card, CardContent } from "@/components/ui/card";
@@ -188,6 +189,13 @@ export default function BookingPage() {
 
   return (
     <>
+      <PageMeta
+        title="Book a Licensed Electrician Bay Area | Viva Electric & Solar"
+        description="Schedule your electrical or solar project with Viva Electric & Solar. Panel upgrades, solar, EV chargers, and more. Fast scheduling across the Bay Area. CA Lic #1147947."
+        canonical="https://vivaes.net/booking"
+        ogTitle="Book an Electrician | Viva Electric & Solar Bay Area"
+        ogDescription="Ready to start your electrical or solar project? Book an appointment online with Viva Electric & Solar. Fast scheduling, licensed electricians, fair pricing."
+      />
       <section className="bg-card py-16">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <motion.div initial="hidden" animate="visible" variants={stagger}>

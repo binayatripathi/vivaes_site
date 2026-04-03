@@ -4,6 +4,7 @@ import { motion } from "framer-motion";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
+import { PageMeta } from "@/components/page-meta";
 import {
   Shield, CheckCircle2, ChevronDown, Phone, Mail, ArrowRight,
   Building2, Clock, Star, Zap, ClipboardCheck, Wrench, Users,
@@ -162,6 +163,14 @@ export default function CommercialPage() {
 
   return (
     <>
+      <PageMeta
+        title="Commercial Electrician Bay Area | Hotels, Warehouses & Retail"
+        description="Commercial electrical contractor for the SF Bay Area — tenant improvements, 3-phase power, EV fleet chargers, lighting retrofits, panel upgrades. CA Lic #1147947."
+        canonical="https://vivaes.net/commercial"
+        ogTitle="Commercial Electrical Services | Viva Electric & Solar Bay Area"
+        ogDescription="Bay Area commercial electrician for hotels, warehouses, retail & multifamily. Tenant improvements, panel upgrades, EV fleet chargers. Licensed & insured."
+        ogImage="https://vivaes.net/images/services/commercial.jpg"
+      />
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{

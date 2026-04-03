@@ -7,6 +7,7 @@ import { Badge } from "@/components/ui/badge";
 import { QuoteModal } from "@/components/quote-modal";
 import { VapiCallButton } from "@/components/vapi-call-button";
 import { servicesList, testimonials } from "@shared/schema";
+import { PageMeta } from "@/components/page-meta";
 import vivaLogoPath from "@assets/viva-logo.png";
 import heroElectricianPath from "@assets/hero-electrician.png";
 import {
@@ -102,6 +103,13 @@ export default function Home() {
 
   return (
     <>
+      <PageMeta
+        title="Bay Area Electrician & Solar Contractor | Viva Electric & Solar"
+        description="Licensed, union-trained electrician serving the SF Bay Area & Central Valley. Solar panels, EV chargers, panel upgrades, battery storage. CA Lic #1147947. Call (510) 710-5745."
+        canonical="https://vivaes.net/"
+        ogTitle="Viva Electric & Solar Inc. | Bay Area Electrician & Solar Contractor"
+        ogDescription="We show up. We fix it. You pay a fair price. Union-trained electricians serving the SF Bay Area & Central Valley. Solar, EV chargers, panel upgrades, battery storage."
+      />
       <section className="relative flex min-h-[85vh] items-center overflow-hidden" data-testid="section-hero">
         <div className="absolute inset-0">
           <img

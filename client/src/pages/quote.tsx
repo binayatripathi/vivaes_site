@@ -2,6 +2,7 @@ import { motion } from "framer-motion";
 import { QuoteChatbot } from "@/components/quote-chatbot";
 import { Card, CardContent } from "@/components/ui/card";
 import { Shield, Clock, Award, Phone } from "lucide-react";
+import { PageMeta } from "@/components/page-meta";
 
 const fadeUp = {
   hidden: { opacity: 0, y: 24 },
@@ -15,6 +16,13 @@ const stagger = {
 export default function QuotePage() {
   return (
     <>
+      <PageMeta
+        title="Get a Free Electrical & Solar Quote | Viva Electric Bay Area"
+        description="Get an instant, no-obligation quote for solar, panel upgrades, EV chargers, or any electrical project. Available 24/7. Bay Area & Central Valley. CA Lic #1147947."
+        canonical="https://vivaes.net/quote"
+        ogTitle="Free Electrical & Solar Quote | Viva Electric & Solar Bay Area"
+        ogDescription="Chat with our quote assistant and get a personalized estimate for solar, EV chargers, panel upgrades, or any electrical project — instantly, 24/7. No obligation."
+      />
       <section className="bg-card py-16">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <motion.div initial="hidden" animate="visible" variants={stagger}>

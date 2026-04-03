@@ -4,6 +4,7 @@ import { motion } from "framer-motion";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
+import { PageMeta } from "@/components/page-meta";
 import {
   Shield, Award, CheckCircle2, ChevronDown, Phone, Mail, ArrowRight,
   AlertTriangle, Star, Zap, CircuitBoard, Sun, Home, Clock, Users,
@@ -159,6 +160,14 @@ export default function ResidentialPage() {
 
   return (
     <>
+      <PageMeta
+        title="Residential Electrician Bay Area | Solar, EV Chargers & Panel Upgrades"
+        description="Bay Area residential electrician — panel upgrades, solar installation, EV chargers, and insurance compliance. Licensed, union-trained. CA Lic #1147947. Free estimates."
+        canonical="https://vivaes.net/residential"
+        ogTitle="Residential Electrical Services | Viva Electric & Solar Bay Area"
+        ogDescription="Union-trained residential electricians serving Oakland, Berkeley, Fremont & the entire SF Bay Area. Solar, EV chargers, panel upgrades, insurance compliance."
+        ogImage="https://vivaes.net/images/services/panel-upgrades.png"
+      />
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{
@@ -457,6 +466,7 @@ export default function ResidentialPage() {
                         src={t.jobPhoto}
                         alt={t.jobPhotoAlt}
                         className="h-full w-full object-cover"
+                        loading="lazy"
                         data-testid={`img-residential-testimonial-photo-${i}`}
                       />
                     </div>

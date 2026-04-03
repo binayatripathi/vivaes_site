@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { Link } from "wouter";
 import { motion } from "framer-motion";
+import { PageMeta } from "@/components/page-meta";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useMutation } from "@tanstack/react-query";
@@ -163,6 +164,73 @@ export default function InsuranceCompliancePage() {
 
   return (
     <>
+      <PageMeta
+        title="Insurance Electrical Panel Compliance | Bay Area | Viva Electric"
+        description="Insurance requiring your electrical panel replaced in California? We inspect, correct & document for homeowners and property managers. Licensed C-10 contractor. CA Lic #1147947."
+        canonical="https://vivaes.net/insurance-compliance"
+        ogTitle="Insurance Panel Compliance Electrician | Viva Electric & Solar Bay Area"
+        ogDescription="Your insurer flagged your electrical panel? Viva Electric inspects, corrects, and documents compliance for Bay Area homeowners and property managers. Fast, permitted work."
+        ogImage="https://vivaes.net/images/services/panel-upgrades.png"
+      />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify({
+            "@context": "https://schema.org",
+            "@graph": [
+              {
+                "@type": "LocalBusiness",
+                "@id": "https://vivaes.net/insurance-compliance#business",
+                "name": "Viva Electric & Solar Inc.",
+                "description": "Licensed C-10 electrical contractor specializing in insurance compliance panel inspections, corrections, and upgrades for homeowners and property managers in the San Francisco Bay Area and Central Valley. CA License #1147947.",
+                "url": "https://vivaes.net/insurance-compliance",
+                "telephone": "+15107105745",
+                "email": "Roberto@vivaes.net",
+                "priceRange": "$$",
+                "address": {
+                  "@type": "PostalAddress",
+                  "addressLocality": "Oakland",
+                  "addressRegion": "CA",
+                  "addressCountry": "US",
+                },
+                "geo": {
+                  "@type": "GeoCoordinates",
+                  "latitude": "37.8044",
+                  "longitude": "-122.2712",
+                },
+                "areaServed": [
+                  "Oakland", "Berkeley", "Fremont", "Hayward", "San Francisco",
+                  "San Leandro", "Richmond", "Concord", "Livermore", "Pleasanton",
+                  "Dublin", "Stockton", "Tracy", "Modesto",
+                ],
+                "hasCredential": "California Contractor License #1147947",
+                "hasOfferCatalog": {
+                  "@type": "OfferCatalog",
+                  "name": "Insurance Compliance Electrical Services",
+                  "itemListElement": [
+                    { "@type": "Offer", "itemOffered": { "@type": "Service", "name": "Electrical Panel Inspection", "description": "Visual inspection, photos, summary findings, and next-step recommendation for insurance compliance." } },
+                    { "@type": "Offer", "itemOffered": { "@type": "Service", "name": "Corrective Electrical Work", "description": "Breaker corrections, grounding/bonding corrections, labeling, and code-related fixes." } },
+                    { "@type": "Offer", "itemOffered": { "@type": "Service", "name": "Panel Replacement & Service Upgrade", "description": "Full panel or service equipment replacement with permit and utility coordination." } },
+                    { "@type": "Offer", "itemOffered": { "@type": "Service", "name": "Multi-Unit Portfolio Program", "description": "Portfolio and apartment pricing with phased scheduling and volume structure." } },
+                  ],
+                },
+              },
+              {
+                "@type": "FAQPage",
+                "@id": "https://vivaes.net/insurance-compliance#faq",
+                "mainEntity": faqData.map((faq) => ({
+                  "@type": "Question",
+                  "name": faq.question,
+                  "acceptedAnswer": {
+                    "@type": "Answer",
+                    "text": faq.answer,
+                  },
+                })),
+              },
+            ],
+          }),
+        }}
+      />
       <section
         className="relative flex min-h-[75vh] items-center overflow-hidden bg-slate-900"
         data-testid="section-insurance-hero"
