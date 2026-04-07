@@ -6,3 +6,9 @@ id = "zbgmGRfRtJ0PmCDLWdjLd"
 uri = "file://bay_area_hotel_prospects.csv"
 type = "table"
 title = "Bay Area Hotel Prospects – Electrical Panel Inspection & Upgrade (50 Properties)"
+
+[[outputs]]
+id = "uxjmEtkUtKJn3eM_yWuiU"
+uri = "file://Bay_Area_Multifamily_Panel_Prospects.csv"
+type = "table"
+title = "Bay Area Multifamily Panel Prospects – 50 Qualified Leads (Final)"
