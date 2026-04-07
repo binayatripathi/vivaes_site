@@ -110,11 +110,11 @@ function TeslaModal({ onClose }: TeslaModalProps) {
               className="rounded-xl overflow-hidden border border-white/10"
               data-testid="card-tesla-powerwall"
             >
-              <div className="relative h-44">
+              <div className="relative h-44 bg-zinc-900 flex items-center justify-center overflow-hidden">
                 <img
                   src={powerwallCardImg}
                   alt="Tesla Powerwall 3 home battery unit"
-                  className="h-full w-full object-cover object-center"
+                  className="h-full w-auto max-w-full object-contain"
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/30 to-transparent" />
                 <div className="absolute bottom-0 left-0 p-4">

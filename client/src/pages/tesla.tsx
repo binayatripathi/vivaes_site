@@ -302,12 +302,12 @@ export default function TeslaPage() {
               </p>
             </motion.div>
 
-            <motion.div variants={fadeUp} className="overflow-hidden rounded-2xl">
-              <div className="relative h-64 sm:h-80">
+            <motion.div variants={fadeUp} className="overflow-hidden rounded-2xl bg-black">
+              <div className="relative h-64 sm:h-80 flex items-center justify-center">
                 <img
                   src={powerwallProductImg}
                   alt="Tesla Powerwall 3 home battery unit"
-                  className="w-full h-full object-cover object-center"
+                  className="h-full w-auto max-w-full object-contain"
                 />
                 <div
                   className="absolute inset-0"
