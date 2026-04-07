@@ -181,7 +181,7 @@ function TeslaModal({ onClose }: TeslaModalProps) {
               </Button>
             </Link>
             <a
-              href="https://www.tesla.com/powerwall"
+              href="https://www.tesla.com/support/certified-installers?productType=homecharging"
               target="_blank"
               rel="noopener noreferrer"
               className="sm:flex-none"
@@ -193,7 +193,7 @@ function TeslaModal({ onClose }: TeslaModalProps) {
                 data-testid="button-tesla-modal-locator"
               >
                 <ExternalLink className="mr-1.5 h-4 w-4" />
-                Tesla.com
+                Find Installers
               </Button>
             </a>
           </div>

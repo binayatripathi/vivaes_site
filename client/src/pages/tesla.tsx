@@ -148,7 +148,7 @@ export default function TeslaPage() {
                 </Button>
               </Link>
               <a
-                href="https://www.tesla.com/powerwall"
+                href="https://www.tesla.com/support/certified-installers?productType=homecharging"
                 target="_blank"
                 rel="noopener noreferrer"
               >
@@ -158,7 +158,7 @@ export default function TeslaPage() {
                   className="border-white/30 bg-white/10 text-white backdrop-blur-sm hover:bg-white/20"
                   data-testid="button-tesla-find-installer"
                 >
-                  View on Tesla.com
+                  Find Certified Installers
                   <ExternalLink className="ml-2 h-4 w-4" />
                 </Button>
               </a>
@@ -414,7 +414,7 @@ export default function TeslaPage() {
 
             <motion.div variants={fadeUp} className="flex flex-wrap gap-4 justify-center">
               <a
-                href="https://www.tesla.com/powerwall"
+                href="https://www.tesla.com/support/certified-installers?productType=homecharging"
                 target="_blank"
                 rel="noopener noreferrer"
                 data-testid="link-tesla-locator"
@@ -423,7 +423,7 @@ export default function TeslaPage() {
                   size="lg"
                   className="bg-[#e31937] hover:bg-[#c41530] text-white border-0"
                 >
-                  View on Tesla.com
+                  Find Certified Installers
                   <ExternalLink className="ml-2 h-4 w-4" />
                 </Button>
               </a>
