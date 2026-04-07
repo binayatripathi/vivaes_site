@@ -68,7 +68,7 @@ export default function BookingPage() {
   const [submittedData, setSubmittedData] = useState<BookingRequest | null>(null);
   const [isPayLoading, setIsPayLoading] = useState(false);
   const availableDays = getNext14Days();
-  const CONSULTATION_FEE = 75;
+  const CONSULTATION_FEE = 250;
 
   const form = useForm<BookingRequest>({
     resolver: zodResolver(bookingRequestSchema),

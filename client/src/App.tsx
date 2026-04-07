@@ -22,6 +22,7 @@ import AdminPage from "@/pages/admin";
 import InsuranceCompliancePage from "@/pages/insurance-compliance";
 import ResidentialPage from "@/pages/residential";
 import CommercialPage from "@/pages/commercial";
+import TeslaPage from "@/pages/tesla";
 import NotFound from "@/pages/not-found";
 
 function Router() {
@@ -41,6 +42,7 @@ function Router() {
       <Route path="/insurance-compliance" component={InsuranceCompliancePage} />
       <Route path="/residential" component={ResidentialPage} />
       <Route path="/commercial" component={CommercialPage} />
+      <Route path="/tesla" component={TeslaPage} />
       <Route component={NotFound} />
     </Switch>
   );

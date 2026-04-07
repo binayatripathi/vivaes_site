@@ -14,6 +14,7 @@ const navLinks = [
   { href: "/solar-storage", label: "Solar & Storage" },
   { href: "/electrification", label: "Electrification" },
   { href: "/insurance-compliance", label: "Insurance Compliance" },
+  { href: "/tesla", label: "Tesla Certified", isTesla: true },
   { href: "/booking", label: "Book Now" },
   { href: "/about", label: "About" },
 ];
@@ -68,6 +69,20 @@ export function Navigation() {
           <div className="mx-1 h-4 w-px bg-border" />
           {navLinks.map((link) => {
             const isActive = location === link.href || (link.href !== "/" && location.startsWith(link.href));
+            if (link.isTesla) {
+              return (
+                <Link key={link.href} href={link.href}>
+                  <span
+                    className={`inline-flex items-center rounded-md px-3 py-2 text-sm font-medium transition-colors ${
+                      isActive ? "text-[#e31937]" : "text-[#e31937]/70 hover:text-[#e31937]"
+                    }`}
+                    data-testid={`link-nav-${link.label.toLowerCase().replace(/\s+/g, "-")}`}
+                  >
+                    {link.label}
+                  </span>
+                </Link>
+              );
+            }
             return (
               <Link key={link.href} href={link.href}>
                 <span
@@ -136,6 +151,20 @@ export function Navigation() {
                 <div className="mb-2 border-t" />
                 {navLinks.map((link) => {
                   const isActive = location === link.href;
+                  if (link.isTesla) {
+                    return (
+                      <Link key={link.href} href={link.href} onClick={() => setMobileOpen(false)}>
+                        <span
+                          className={`flex items-center rounded-md px-4 py-3 text-sm font-medium transition-colors ${
+                            isActive ? "bg-[#e31937]/10 text-[#e31937]" : "text-[#e31937]/70"
+                          }`}
+                          data-testid={`link-mobile-${link.label.toLowerCase().replace(/\s+/g, "-")}`}
+                        >
+                          {link.label}
+                        </span>
+                      </Link>
+                    );
+                  }
                   return (
                     <Link key={link.href} href={link.href} onClick={() => setMobileOpen(false)}>
                       <span

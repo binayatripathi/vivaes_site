@@ -8,6 +8,7 @@ import { QuoteModal } from "@/components/quote-modal";
 import { VapiCallButton } from "@/components/vapi-call-button";
 import { servicesList, testimonials } from "@shared/schema";
 import { PageMeta } from "@/components/page-meta";
+import { useTeslaModal, TeslaBanner } from "@/components/tesla-modal";
 import vivaLogoPath from "@assets/viva-logo.png";
 import heroElectricianPath from "@assets/hero-electrician.png";
 import {
@@ -100,6 +101,7 @@ export default function Home() {
   const [preselectedService, setPreselectedService] = useState<string | undefined>();
   const [testimonialIdx, setTestimonialIdx] = useState(0);
   const [openFaq, setOpenFaq] = useState<number | null>(null);
+  const { showModal, showBanner, handleClose, TeslaModal } = useTeslaModal();
 
   const openQuote = (service?: string) => {
     setPreselectedService(service);
@@ -113,6 +115,8 @@ export default function Home() {
 
   return (
     <>
+      {showModal && <TeslaModal onClose={handleClose} />}
+      <TeslaBanner visible={showBanner} />
       <PageMeta
         title="Bay Area Electrician & Solar Contractor | Viva Electric & Solar"
         description="Licensed, union-trained electrician serving the SF Bay Area & Central Valley. Solar panels, EV chargers, panel upgrades, battery storage. CA Lic #1147947. Call (510) 710-5745."
