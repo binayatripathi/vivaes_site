@@ -1,0 +1,8 @@
+uploads = []
+generated = []
+
+[[outputs]]
+id = "zbgmGRfRtJ0PmCDLWdjLd"
+uri = "file://bay_area_hotel_prospects.csv"
+type = "table"
+title = "Bay Area Hotel Prospects – Electrical Panel Inspection & Upgrade (50 Properties)"
