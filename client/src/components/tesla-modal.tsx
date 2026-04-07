@@ -3,6 +3,8 @@ import { Link } from "wouter";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { X, Shield, Battery, Zap, Home, Sun, DollarSign, ExternalLink, ChevronRight } from "lucide-react";
+import powerwallHeroImg from "@assets/Screenshot_2026-04-07_at_01.15.12_1775549716549.png";
+import powerwallCardImg from "@assets/Screenshot_2026-04-07_at_01.16.21_1775549783667.png";
 
 const SESSION_KEY = "tesla_modal_dismissed";
 
@@ -43,8 +45,8 @@ function TeslaModal({ onClose }: TeslaModalProps) {
           className="relative min-h-[280px] sm:min-h-[340px] flex flex-col items-center justify-center px-8 py-12 text-center overflow-hidden"
         >
           <img
-            src="/images/pages/battery-wall-unit.png"
-            alt="Tesla Powerwall home battery"
+            src={powerwallHeroImg}
+            alt="Tesla Powerwall 3 installed on exterior of Bay Area home"
             className="absolute inset-0 h-full w-full object-cover opacity-25"
           />
           <div
@@ -110,9 +112,9 @@ function TeslaModal({ onClose }: TeslaModalProps) {
             >
               <div className="relative h-44">
                 <img
-                  src="/images/pages/battery-wall-unit.png"
-                  alt="Tesla Powerwall 3 home battery"
-                  className="h-full w-full object-cover"
+                  src={powerwallCardImg}
+                  alt="Tesla Powerwall 3 home battery unit"
+                  className="h-full w-full object-cover object-center"
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/30 to-transparent" />
                 <div className="absolute bottom-0 left-0 p-4">
@@ -179,7 +181,7 @@ function TeslaModal({ onClose }: TeslaModalProps) {
               </Button>
             </Link>
             <a
-              href="https://www.tesla.com/find-an-installer"
+              href="https://www.tesla.com/powerwall"
               target="_blank"
               rel="noopener noreferrer"
               className="sm:flex-none"
@@ -191,7 +193,7 @@ function TeslaModal({ onClose }: TeslaModalProps) {
                 data-testid="button-tesla-modal-locator"
               >
                 <ExternalLink className="mr-1.5 h-4 w-4" />
-                Tesla Locator
+                Tesla.com
               </Button>
             </a>
           </div>

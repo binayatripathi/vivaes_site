@@ -4,6 +4,8 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { PageMeta } from "@/components/page-meta";
+import powerwallHeroImg from "@assets/Screenshot_2026-04-07_at_01.15.12_1775549716549.png";
+import powerwallProductImg from "@assets/Screenshot_2026-04-07_at_01.16.33_1775549796401.png";
 import {
   Zap,
   Battery,
@@ -84,8 +86,8 @@ export default function TeslaPage() {
         data-testid="section-tesla-hero"
       >
         <img
-          src="/images/pages/battery-wall-unit.png"
-          alt="Tesla Powerwall home battery system"
+          src={powerwallHeroImg}
+          alt="Tesla Powerwall 3 installed on exterior of Bay Area home at night"
           className="absolute inset-0 h-full w-full object-cover object-center"
         />
         <div
@@ -146,7 +148,7 @@ export default function TeslaPage() {
                 </Button>
               </Link>
               <a
-                href="https://www.tesla.com/find-an-installer"
+                href="https://www.tesla.com/powerwall"
                 target="_blank"
                 rel="noopener noreferrer"
               >
@@ -156,7 +158,7 @@ export default function TeslaPage() {
                   className="border-white/30 bg-white/10 text-white backdrop-blur-sm hover:bg-white/20"
                   data-testid="button-tesla-find-installer"
                 >
-                  Find Us on Tesla's Website
+                  View on Tesla.com
                   <ExternalLink className="ml-2 h-4 w-4" />
                 </Button>
               </a>
@@ -303,9 +305,9 @@ export default function TeslaPage() {
             <motion.div variants={fadeUp} className="overflow-hidden rounded-2xl">
               <div className="relative h-64 sm:h-80">
                 <img
-                  src="/images/pages/battery-wall-unit.png"
-                  alt="Tesla Powerwall 3 installed on home"
-                  className="w-full h-full object-cover"
+                  src={powerwallProductImg}
+                  alt="Tesla Powerwall 3 home battery unit"
+                  className="w-full h-full object-cover object-center"
                 />
                 <div
                   className="absolute inset-0"
@@ -402,17 +404,17 @@ export default function TeslaPage() {
                 className="text-3xl font-bold tracking-tight sm:text-4xl"
                 data-testid="text-tesla-find-us-title"
               >
-                Find Us on Tesla's Official Installer Locator
+                Certified by Tesla — Listed as an Official Installer
               </h2>
               <p className="mx-auto max-w-xl text-muted-foreground">
-                Viva Electric & Solar is officially listed on Tesla's installer locator. You can verify
-                our certification directly on Tesla's website — no guesswork needed.
+                Viva Electric & Solar is an officially certified Tesla installer. You can learn more about
+                Tesla Powerwall and Wall Connector directly on Tesla's website.
               </p>
             </motion.div>
 
             <motion.div variants={fadeUp} className="flex flex-wrap gap-4 justify-center">
               <a
-                href="https://www.tesla.com/find-an-installer"
+                href="https://www.tesla.com/powerwall"
                 target="_blank"
                 rel="noopener noreferrer"
                 data-testid="link-tesla-locator"
@@ -421,7 +423,7 @@ export default function TeslaPage() {
                   size="lg"
                   className="bg-[#e31937] hover:bg-[#c41530] text-white border-0"
                 >
-                  Find Us on Tesla's Website
+                  View on Tesla.com
                   <ExternalLink className="ml-2 h-4 w-4" />
                 </Button>
               </a>
