@@ -181,7 +181,7 @@ function TeslaModal({ onClose }: TeslaModalProps) {
               </Button>
             </Link>
             <a
-              href="https://www.tesla.com/support/certified-installers?productType=homecharging"
+              href="https://www.tesla.com/support/certified-installers"
               target="_blank"
               rel="noopener noreferrer"
               className="sm:flex-none"

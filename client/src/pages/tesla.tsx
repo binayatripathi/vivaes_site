@@ -148,7 +148,7 @@ export default function TeslaPage() {
                 </Button>
               </Link>
               <a
-                href="https://www.tesla.com/support/certified-installers?productType=homecharging"
+                href="https://www.tesla.com/support/certified-installers"
                 target="_blank"
                 rel="noopener noreferrer"
               >
@@ -414,7 +414,7 @@ export default function TeslaPage() {
 
             <motion.div variants={fadeUp} className="flex flex-wrap gap-4 justify-center">
               <a
-                href="https://www.tesla.com/support/certified-installers?productType=homecharging"
+                href="https://www.tesla.com/support/certified-installers"
                 target="_blank"
                 rel="noopener noreferrer"
                 data-testid="link-tesla-locator"
