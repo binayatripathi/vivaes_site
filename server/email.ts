@@ -347,10 +347,18 @@ export async function sendInvoiceEmail(data: {
   reference: string;
   description: string;
   amount: number;
+  stripePaymentUrl?: string;
 }) {
   const resend = await getResendClient();
   const fmtAmount = data.amount.toLocaleString("en-US", { style: "currency", currency: "USD", minimumFractionDigits: 2 });
   const invoiceDate = new Date().toLocaleDateString("en-US", { year: "numeric", month: "long", day: "numeric" });
+
+  const stripePayButton = data.stripePaymentUrl ? `
+    <div style="text-align: center; margin: 20px 0;">
+      <a href="${data.stripePaymentUrl}" style="display: inline-block; background: #635bff; color: #ffffff; padding: 14px 32px; border-radius: 8px; text-decoration: none; font-weight: 700; font-size: 16px; letter-spacing: 0.01em;">Pay Online Now</a>
+      <p style="color: #64748b; font-size: 12px; margin: 8px 0 0;">Secure card payment powered by Stripe</p>
+    </div>
+  ` : '';
 
   const zelleSection = `
     <div style="background: #eff6ff; border: 1px solid #bfdbfe; border-radius: 8px; padding: 20px; margin: 20px 0;">
@@ -377,19 +385,23 @@ export async function sendInvoiceEmail(data: {
   const servicesSection = `
     <div style="background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 8px; padding: 20px; margin: 20px 0;">
       <h3 style="margin: 0 0 4px; color: #1e293b; font-size: 16px; font-weight: 700;">Our Services</h3>
-      <p style="color: #64748b; font-size: 13px; margin: 0 0 16px;">We're your full-service electrical and solar partner throughout the Bay Area & Central Valley.</p>
-      <div style="display: grid; gap: 8px;">
-        <div style="display: flex; gap: 8px; align-items: center; flex-wrap: wrap;">
-          <span style="background: #dbeafe; color: #1e40af; padding: 4px 10px; border-radius: 20px; font-size: 12px; font-weight: 600;">Solar &amp; Storage</span>
-          <span style="background: #dbeafe; color: #1e40af; padding: 4px 10px; border-radius: 20px; font-size: 12px; font-weight: 600;">EV Chargers</span>
-          <span style="background: #dbeafe; color: #1e40af; padding: 4px 10px; border-radius: 20px; font-size: 12px; font-weight: 600;">Panel Upgrades</span>
-          <span style="background: #dbeafe; color: #1e40af; padding: 4px 10px; border-radius: 20px; font-size: 12px; font-weight: 600;">Battery Backup</span>
-          <span style="background: #dbeafe; color: #1e40af; padding: 4px 10px; border-radius: 20px; font-size: 12px; font-weight: 600;">General Electrical</span>
-          <span style="background: #dbeafe; color: #1e40af; padding: 4px 10px; border-radius: 20px; font-size: 12px; font-weight: 600;">Commercial</span>
-        </div>
-      </div>
+      <p style="color: #64748b; font-size: 13px; margin: 0 0 16px;">We're your full-service electrical and solar partner throughout the Bay Area &amp; Central Valley. Visit us at <a href="https://vivaes.net" style="color: #2563eb; text-decoration: none; font-weight: 600;">vivaes.net</a>.</p>
+      <table style="width: 100%; border-collapse: collapse;">
+        <tr>
+          <td style="padding: 5px 0; color: #1e293b; font-size: 14px;">&#9654; Solar &amp; Storage</td>
+          <td style="padding: 5px 0; color: #1e293b; font-size: 14px;">&#9654; EV Chargers</td>
+        </tr>
+        <tr>
+          <td style="padding: 5px 0; color: #1e293b; font-size: 14px;">&#9654; Panel Upgrades</td>
+          <td style="padding: 5px 0; color: #1e293b; font-size: 14px;">&#9654; Battery Backup</td>
+        </tr>
+        <tr>
+          <td style="padding: 5px 0; color: #1e293b; font-size: 14px;">&#9654; General Electrical</td>
+          <td style="padding: 5px 0; color: #1e293b; font-size: 14px;">&#9654; Commercial Work</td>
+        </tr>
+      </table>
       <div style="text-align: center; margin: 16px 0 0;">
-        <a href="https://vivaes.net" style="display: inline-block; background: #2563eb; color: #ffffff; padding: 10px 24px; border-radius: 6px; text-decoration: none; font-weight: 600; font-size: 14px;">Explore Our Services</a>
+        <a href="https://vivaes.net" style="display: inline-block; background: #2563eb; color: #ffffff; padding: 10px 24px; border-radius: 6px; text-decoration: none; font-weight: 600; font-size: 14px;">Explore Our Services at vivaes.net</a>
       </div>
     </div>
   `;
@@ -398,8 +410,8 @@ export async function sendInvoiceEmail(data: {
     <div style="font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; max-width: 600px; margin: 0 auto; background: #ffffff; border-radius: 8px; box-shadow: 0 1px 3px rgba(0,0,0,0.1);">
       ${headerHtml('Deposit Invoice')}
       <div style="padding: 24px;">
-        <p style="color: #1e293b; font-size: 16px; margin: 0 0 16px;">Hi ${data.clientName},</p>
-        <p style="color: #475569; font-size: 14px; line-height: 1.6; margin: 0 0 20px;">Please find your deposit invoice details below. To secure your project, kindly submit your payment via Zelle using the information provided.</p>
+        <p style="color: #1e293b; font-size: 16px; margin: 0 0 12px;">Hi ${data.clientName},</p>
+        <p style="color: #475569; font-size: 14px; line-height: 1.6; margin: 0 0 20px;">Thank you for trusting Viva Electrical Solutions with your project — we're excited to work with you! Please find your deposit invoice details below. Submitting your deposit secures your spot on our schedule.</p>
 
         <div style="background: #f0fdf4; border: 1px solid #bbf7d0; border-radius: 8px; padding: 16px; margin: 0 0 20px; text-align: center;">
           <p style="color: #166534; font-size: 28px; font-weight: 700; margin: 0 0 4px;">${fmtAmount}</p>
@@ -414,10 +426,12 @@ export async function sendInvoiceEmail(data: {
           ${data.description ? rowHtml('Description', data.description) : ''}
         </table>
 
+        ${stripePayButton}
         ${zelleSection}
         ${servicesSection}
 
-        <p style="color: #475569; font-size: 14px; margin: 16px 0 0;">If you have any questions, don't hesitate to reach out.<br><strong>The ${BUSINESS_NAME} Team</strong></p>
+        <p style="color: #475569; font-size: 14px; line-height: 1.6; margin: 20px 0 0;">We truly appreciate your business and look forward to delivering outstanding results. If you have any questions at all, please don't hesitate to reach out — we're always happy to help.</p>
+        <p style="color: #1e293b; font-size: 14px; font-weight: 600; margin: 12px 0 0;">Warm regards,<br>The ${BUSINESS_NAME} Team</p>
       </div>
       ${footerHtml()}
     </div>
@@ -439,6 +453,7 @@ export async function sendInvoiceEmail(data: {
           ${rowHtml('Address', data.clientAddress)}
           ${rowHtml('Reference', data.reference)}
           ${data.description ? rowHtml('Description', data.description) : ''}
+          ${data.stripePaymentUrl ? rowHtml('Stripe Payment Link', `<a href="${data.stripePaymentUrl}" style="color: #2563eb;">${data.stripePaymentUrl}</a>`) : ''}
         </table>
       </div>
       ${footerHtml()}

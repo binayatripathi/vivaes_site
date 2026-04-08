@@ -668,6 +668,7 @@ function InvoicesTab() {
     reference: "",
     description: "",
     amount: "",
+    stripePaymentUrl: "",
   });
 
   const mutation = useMutation({
@@ -682,11 +683,12 @@ function InvoicesTab() {
         reference: form.reference,
         description: form.description,
         amount: amountNum,
+        stripePaymentUrl: form.stripePaymentUrl || undefined,
       });
     },
     onSuccess: () => {
       toast({ title: "Invoice sent!", description: "The invoice email has been delivered to the client and the team." });
-      setForm({ clientName: "", clientEmail: "", clientPhone: "", clientAddress: "", reference: "", description: "", amount: "" });
+      setForm({ clientName: "", clientEmail: "", clientPhone: "", clientAddress: "", reference: "", description: "", amount: "", stripePaymentUrl: "" });
     },
     onError: (err: any) => {
       toast({ title: "Failed to send invoice", description: err.message || "Please try again.", variant: "destructive" });
@@ -716,7 +718,7 @@ function InvoicesTab() {
             </div>
             <div>
               <h2 className="text-lg font-semibold">Send Deposit Invoice</h2>
-              <p className="text-sm text-muted-foreground">Fill in the client details and click Send Invoice to email a deposit invoice with Zelle payment instructions.</p>
+              <p className="text-sm text-muted-foreground">Fill in the client details and click Send Invoice to email a deposit invoice with Zelle payment instructions and an optional online payment button.</p>
             </div>
           </div>
 
@@ -810,6 +812,20 @@ function InvoicesTab() {
                 rows={3}
                 data-testid="textarea-invoice-description"
               />
+            </div>
+
+            <div className="space-y-1.5">
+              <Label htmlFor="stripePaymentUrl">Online Payment Link (Stripe) <span className="text-muted-foreground text-xs">(optional)</span></Label>
+              <Input
+                id="stripePaymentUrl"
+                name="stripePaymentUrl"
+                type="url"
+                value={form.stripePaymentUrl}
+                onChange={handleChange}
+                placeholder="https://buy.stripe.com/..."
+                data-testid="input-stripe-payment-url"
+              />
+              <p className="text-xs text-muted-foreground">Paste a Stripe payment link to include a "Pay Online Now" button in the client email.</p>
             </div>
 
             <div className="rounded-lg border border-blue-100 bg-blue-50 p-4 dark:border-blue-900/40 dark:bg-blue-900/10">

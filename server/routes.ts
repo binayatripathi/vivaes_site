@@ -251,6 +251,7 @@ export async function registerRoutes(
     reference: z.string().min(1),
     description: z.string().optional().default(""),
     amount: z.number().min(1),
+    stripePaymentUrl: z.string().url().optional().or(z.literal("")),
   });
 
   app.post("/api/admin/send-invoice", async (req, res) => {
@@ -269,6 +270,7 @@ export async function registerRoutes(
         reference: data.reference,
         description: data.description,
         amount: data.amount,
+        stripePaymentUrl: data.stripePaymentUrl || undefined,
       });
       res.json({ success: true, message: "Invoice sent successfully." });
     } catch (err: any) {
