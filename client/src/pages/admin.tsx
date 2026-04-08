@@ -1,6 +1,7 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useQuery, useMutation } from "@tanstack/react-query";
-import { queryClient, apiRequest } from "@/lib/queryClient";
+import { queryClient } from "@/lib/queryClient";
+import { useLocation } from "wouter";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -37,7 +38,54 @@ import {
   PhoneCall,
   FileText,
   Send,
+  LogOut,
 } from "lucide-react";
+
+function getAdminToken(): string | null {
+  return localStorage.getItem("admin_token");
+}
+
+function clearAdminToken() {
+  localStorage.removeItem("admin_token");
+}
+
+async function adminFetch(url: string, options: RequestInit = {}): Promise<Response> {
+  const token = getAdminToken();
+  const headers: Record<string, string> = {
+    ...(options.headers as Record<string, string> || {}),
+  };
+  if (token) {
+    headers["Authorization"] = `Bearer ${token}`;
+  }
+  const res = await fetch(url, { ...options, headers, credentials: "include" });
+  if (res.status === 401) {
+    clearAdminToken();
+    window.location.href = "/admin/login";
+  }
+  return res;
+}
+
+async function adminApiRequest(method: string, url: string, data?: unknown): Promise<Response> {
+  const token = getAdminToken();
+  const headers: Record<string, string> = {};
+  if (data) headers["Content-Type"] = "application/json";
+  if (token) headers["Authorization"] = `Bearer ${token}`;
+  const res = await fetch(url, {
+    method,
+    headers,
+    body: data ? JSON.stringify(data) : undefined,
+    credentials: "include",
+  });
+  if (res.status === 401) {
+    clearAdminToken();
+    window.location.href = "/admin/login";
+  }
+  if (!res.ok) {
+    const text = (await res.text()) || res.statusText;
+    throw new Error(`${res.status}: ${text}`);
+  }
+  return res;
+}
 
 interface AdminStats {
   totalLeads: number;
@@ -126,7 +174,7 @@ function LeadStatusSelect({ lead }: { lead: Lead }) {
   const { toast } = useToast();
   const mutation = useMutation({
     mutationFn: async (newStatus: string) => {
-      await apiRequest("PATCH", `/api/admin/leads/${lead.leadId}/status`, { status: newStatus });
+      await adminApiRequest("PATCH", `/api/admin/leads/${lead.leadId}/status`, { status: newStatus });
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["/api/admin/leads"] });
@@ -165,7 +213,7 @@ function AppointmentStatusSelect({ appointment }: { appointment: Appointment }) 
   const { toast } = useToast();
   const mutation = useMutation({
     mutationFn: async (newStatus: string) => {
-      await apiRequest("PATCH", `/api/admin/appointments/${appointment.bookingId}/status`, { status: newStatus });
+      await adminApiRequest("PATCH", `/api/admin/appointments/${appointment.bookingId}/status`, { status: newStatus });
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["/api/admin/appointments"] });
@@ -312,7 +360,7 @@ function LeadsTab() {
       const url = statusFilter === "all"
         ? "/api/admin/leads"
         : `/api/admin/leads?status=${statusFilter}`;
-      const res = await fetch(url, { credentials: "include" });
+      const res = await adminFetch(url);
       if (!res.ok) throw new Error("Failed to fetch leads");
       return res.json();
     },
@@ -416,7 +464,7 @@ function AppointmentsTab() {
       const url = statusFilter === "all"
         ? "/api/admin/appointments"
         : `/api/admin/appointments?status=${statusFilter}`;
-      const res = await fetch(url, { credentials: "include" });
+      const res = await adminFetch(url);
       if (!res.ok) throw new Error("Failed to fetch appointments");
       return res.json();
     },
@@ -496,6 +544,11 @@ function AppointmentsTab() {
 function CallLogsTab() {
   const { data: logs, isLoading } = useQuery<CallLog[]>({
     queryKey: ["/api/admin/call-logs"],
+    queryFn: async () => {
+      const res = await adminFetch("/api/admin/call-logs");
+      if (!res.ok) throw new Error("Failed to fetch call logs");
+      return res.json();
+    },
   });
 
   function formatDuration(seconds: number | null) {
@@ -621,7 +674,7 @@ function InvoicesTab() {
     mutationFn: async () => {
       const amountNum = parseFloat(form.amount);
       if (isNaN(amountNum) || amountNum <= 0) throw new Error("Please enter a valid amount");
-      await apiRequest("POST", "/api/admin/send-invoice", {
+      await adminApiRequest("POST", "/api/admin/send-invoice", {
         clientName: form.clientName,
         clientEmail: form.clientEmail,
         clientPhone: form.clientPhone,
@@ -787,15 +840,50 @@ function InvoicesTab() {
 }
 
 export default function AdminPage() {
+  const [, navigate] = useLocation();
+  const token = getAdminToken();
+
+  useEffect(() => {
+    if (!token) {
+      navigate("/admin/login");
+    }
+  }, [token, navigate]);
+
   const { data: stats, isLoading: statsLoading } = useQuery<AdminStats>({
     queryKey: ["/api/admin/stats"],
+    queryFn: async () => {
+      const res = await adminFetch("/api/admin/stats");
+      if (!res.ok) throw new Error("Failed to fetch stats");
+      return res.json();
+    },
+    enabled: !!token,
   });
+
+  if (!token) {
+    return null;
+  }
+
+  function handleLogout() {
+    localStorage.removeItem("admin_token");
+    navigate("/admin/login");
+  }
 
   return (
     <div className="mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:px-8">
-      <div className="mb-6">
-        <h1 className="text-2xl font-bold" data-testid="text-admin-title">Admin Dashboard</h1>
-        <p className="text-sm text-muted-foreground">Manage leads and appointments</p>
+      <div className="mb-6 flex items-start justify-between">
+        <div>
+          <h1 className="text-2xl font-bold" data-testid="text-admin-title">Admin Dashboard</h1>
+          <p className="text-sm text-muted-foreground">Manage leads and appointments</p>
+        </div>
+        <Button
+          variant="outline"
+          size="sm"
+          onClick={handleLogout}
+          data-testid="button-logout"
+        >
+          <LogOut className="mr-2 h-4 w-4" />
+          Log out
+        </Button>
       </div>
 
       <div className="mb-8">

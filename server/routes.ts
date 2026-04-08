@@ -41,6 +41,26 @@ export async function registerRoutes(
     return next();
   }
 
+  app.post("/api/admin/login", (req: any, res: any) => {
+    const { username, password } = req.body || {};
+    const ADMIN_USERNAME = process.env.ADMIN_USERNAME;
+    const ADMIN_PASSWORD = process.env.ADMIN_PASSWORD;
+
+    if (!ADMIN_USERNAME || !ADMIN_PASSWORD) {
+      return res.status(503).json({ error: "Admin credentials not configured" });
+    }
+
+    if (username !== ADMIN_USERNAME || password !== ADMIN_PASSWORD) {
+      return res.status(401).json({ error: "Invalid username or password" });
+    }
+
+    if (!ADMIN_TOKEN) {
+      return res.status(503).json({ error: "Admin token not configured" });
+    }
+
+    return res.json({ token: ADMIN_TOKEN });
+  });
+
   app.use("/api/admin", requireAdmin);
 
   async function forwardToWebhook(type: string, payload: unknown) {
