@@ -1,7 +1,7 @@
 import type { Express } from "express";
 import { createServer, type Server } from "http";
 import { quoteRequestSchema, contactFormSchema, bookingRequestSchema, insuranceLeadSchema, leadStatuses, appointmentStatuses } from "@shared/schema";
-import { sendQuoteNotification, sendContactNotification, sendBookingNotification, sendPaymentNotification, sendCallSummaryNotification } from "./email";
+import { sendQuoteNotification, sendContactNotification, sendBookingNotification, sendPaymentNotification, sendCallSummaryNotification, sendInvoiceEmail } from "./email";
 import { getUncachableStripeClient, getStripePublishableKey } from "./stripeClient";
 import { storage } from "./storage";
 import { z } from "zod";
@@ -26,6 +26,22 @@ export async function registerRoutes(
 ): Promise<Server> {
   const CLAW_WEBHOOK_URL = process.env.VIVA_CLAW_WEBHOOK_URL || "";
   const CLAW_TOKEN = process.env.VIVA_CLAW_TOKEN || "";
+
+  const ADMIN_TOKEN = process.env.VIVA_ADMIN_TOKEN;
+
+  function requireAdmin(req: any, res: any, next: any) {
+    if (!ADMIN_TOKEN) {
+      return next();
+    }
+    const authHeader = req.headers.authorization;
+    const token = authHeader?.startsWith("Bearer ") ? authHeader.slice(7) : null;
+    if (!token || token !== ADMIN_TOKEN) {
+      return res.status(401).json({ error: "Unauthorized" });
+    }
+    return next();
+  }
+
+  app.use("/api/admin", requireAdmin);
 
   async function forwardToWebhook(type: string, payload: unknown) {
     if (!CLAW_WEBHOOK_URL || CLAW_WEBHOOK_URL.includes("example.com")) {
@@ -204,6 +220,40 @@ export async function registerRoutes(
       res.json({ success: true, message: "Booking confirmed. Check your email for details." });
     } catch (err: any) {
       res.status(400).json({ error: err.message || "Invalid request" });
+    }
+  });
+
+  const sendInvoiceSchema = z.object({
+    clientName: z.string().min(1),
+    clientEmail: z.string().email(),
+    clientPhone: z.string().min(7),
+    clientAddress: z.string().min(1),
+    reference: z.string().min(1),
+    description: z.string().optional().default(""),
+    amount: z.number().min(1),
+  });
+
+  app.post("/api/admin/send-invoice", async (req, res) => {
+    let data: any;
+    try {
+      data = sendInvoiceSchema.parse(req.body);
+    } catch (err: any) {
+      return res.status(400).json({ error: err.message || "Invalid request" });
+    }
+    try {
+      await sendInvoiceEmail({
+        clientName: data.clientName,
+        clientEmail: data.clientEmail,
+        clientPhone: data.clientPhone,
+        clientAddress: data.clientAddress,
+        reference: data.reference,
+        description: data.description,
+        amount: data.amount,
+      });
+      res.json({ success: true, message: "Invoice sent successfully." });
+    } catch (err: any) {
+      console.error("[Invoice] Failed to send invoice:", err);
+      res.status(500).json({ error: err.message || "Failed to send invoice" });
     }
   });
 

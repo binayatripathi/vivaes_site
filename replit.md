@@ -28,7 +28,7 @@ Professional website for Viva Electric & Solar Inc. (vivaes.net) - licensed elec
 - `/about` - About page with Roberto's bio, values, stats, service areas, contact form
 - `/payment/success` - Payment success page with session details
 - `/payment/cancel` - Payment cancelled page
-- `/admin` - Admin dashboard (not linked in nav): leads table, appointments table, call logs (expandable with transcript), stats, status management
+- `/admin` - Admin dashboard (not linked in nav): leads table, appointments table, call logs (expandable with transcript), stats, status management, invoice sender (Zelle)
 
 ## Services (11 total)
 1. Solar & Storage
@@ -83,6 +83,7 @@ Professional website for Viva Electric & Solar Inc. (vivaes.net) - licensed elec
 - `PATCH /api/admin/appointments/:id/status` - Update appointment status
 - `GET /api/admin/call-logs` - List recent call logs (up to 100)
 - `GET /api/admin/stats` - Dashboard stats (totalLeads, newLeadsToday, pendingAppointments, completedJobs, totalCalls)
+- `POST /api/admin/send-invoice` - Send deposit invoice email to client (with Zelle payment info) and internal copy to team
 
 ## Stripe Payment Integration
 - Stripe connected via Replit connector (handles API keys securely)

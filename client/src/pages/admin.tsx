@@ -4,6 +4,9 @@ import { queryClient, apiRequest } from "@/lib/queryClient";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Textarea } from "@/components/ui/textarea";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import {
   Select,
@@ -32,6 +35,8 @@ import {
   Clock,
   ChevronDown,
   PhoneCall,
+  FileText,
+  Send,
 } from "lucide-react";
 
 interface AdminStats {
@@ -600,6 +605,187 @@ function CallLogsTab() {
   );
 }
 
+function InvoicesTab() {
+  const { toast } = useToast();
+  const [form, setForm] = useState({
+    clientName: "",
+    clientEmail: "",
+    clientPhone: "",
+    clientAddress: "",
+    reference: "",
+    description: "",
+    amount: "",
+  });
+
+  const mutation = useMutation({
+    mutationFn: async () => {
+      const amountNum = parseFloat(form.amount);
+      if (isNaN(amountNum) || amountNum <= 0) throw new Error("Please enter a valid amount");
+      await apiRequest("POST", "/api/admin/send-invoice", {
+        clientName: form.clientName,
+        clientEmail: form.clientEmail,
+        clientPhone: form.clientPhone,
+        clientAddress: form.clientAddress,
+        reference: form.reference,
+        description: form.description,
+        amount: amountNum,
+      });
+    },
+    onSuccess: () => {
+      toast({ title: "Invoice sent!", description: "The invoice email has been delivered to the client and the team." });
+      setForm({ clientName: "", clientEmail: "", clientPhone: "", clientAddress: "", reference: "", description: "", amount: "" });
+    },
+    onError: (err: any) => {
+      toast({ title: "Failed to send invoice", description: err.message || "Please try again.", variant: "destructive" });
+    },
+  });
+
+  function handleChange(e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) {
+    setForm(prev => ({ ...prev, [e.target.name]: e.target.value }));
+  }
+
+  function handleSubmit(e: React.FormEvent) {
+    e.preventDefault();
+    if (!form.clientName || !form.clientEmail || !form.clientPhone || !form.clientAddress || !form.reference || !form.amount) {
+      toast({ title: "Missing fields", description: "Please fill in all required fields.", variant: "destructive" });
+      return;
+    }
+    mutation.mutate();
+  }
+
+  return (
+    <div className="max-w-2xl">
+      <Card>
+        <CardContent className="p-6">
+          <div className="mb-6 flex items-center gap-3">
+            <div className="rounded-lg bg-blue-100 p-2 text-blue-600 dark:bg-blue-900/40 dark:text-blue-400">
+              <FileText className="h-5 w-5" />
+            </div>
+            <div>
+              <h2 className="text-lg font-semibold">Send Deposit Invoice</h2>
+              <p className="text-sm text-muted-foreground">Fill in the client details and click Send Invoice to email a deposit invoice with Zelle payment instructions.</p>
+            </div>
+          </div>
+
+          <form onSubmit={handleSubmit} className="space-y-4" data-testid="form-invoice">
+            <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
+              <div className="space-y-1.5">
+                <Label htmlFor="clientName">Client Name <span className="text-red-500">*</span></Label>
+                <Input
+                  id="clientName"
+                  name="clientName"
+                  value={form.clientName}
+                  onChange={handleChange}
+                  placeholder="e.g. Gregg A. Erickson"
+                  data-testid="input-client-name"
+                />
+              </div>
+              <div className="space-y-1.5">
+                <Label htmlFor="clientEmail">Client Email <span className="text-red-500">*</span></Label>
+                <Input
+                  id="clientEmail"
+                  name="clientEmail"
+                  type="email"
+                  value={form.clientEmail}
+                  onChange={handleChange}
+                  placeholder="client@example.com"
+                  data-testid="input-client-email"
+                />
+              </div>
+            </div>
+
+            <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
+              <div className="space-y-1.5">
+                <Label htmlFor="clientPhone">Client Phone <span className="text-red-500">*</span></Label>
+                <Input
+                  id="clientPhone"
+                  name="clientPhone"
+                  value={form.clientPhone}
+                  onChange={handleChange}
+                  placeholder="(510) 555-0100"
+                  data-testid="input-client-phone"
+                />
+              </div>
+              <div className="space-y-1.5">
+                <Label htmlFor="amount">Deposit Amount ($) <span className="text-red-500">*</span></Label>
+                <Input
+                  id="amount"
+                  name="amount"
+                  type="number"
+                  min="1"
+                  step="0.01"
+                  value={form.amount}
+                  onChange={handleChange}
+                  placeholder="350.00"
+                  data-testid="input-invoice-amount"
+                />
+              </div>
+            </div>
+
+            <div className="space-y-1.5">
+              <Label htmlFor="clientAddress">Client Address <span className="text-red-500">*</span></Label>
+              <Input
+                id="clientAddress"
+                name="clientAddress"
+                value={form.clientAddress}
+                onChange={handleChange}
+                placeholder="123 Main St, Oakland, CA 94601"
+                data-testid="input-client-address"
+              />
+            </div>
+
+            <div className="space-y-1.5">
+              <Label htmlFor="reference">Invoice Reference <span className="text-red-500">*</span></Label>
+              <Input
+                id="reference"
+                name="reference"
+                value={form.reference}
+                onChange={handleChange}
+                placeholder="e.g. EV Meter Installation Proposal (Phase 1 - Permitting & Submittals)"
+                data-testid="input-invoice-reference"
+              />
+            </div>
+
+            <div className="space-y-1.5">
+              <Label htmlFor="description">Description <span className="text-muted-foreground text-xs">(optional)</span></Label>
+              <Textarea
+                id="description"
+                name="description"
+                value={form.description}
+                onChange={handleChange}
+                placeholder="Additional details or notes for the client..."
+                rows={3}
+                data-testid="textarea-invoice-description"
+              />
+            </div>
+
+            <div className="rounded-lg border border-blue-100 bg-blue-50 p-4 dark:border-blue-900/40 dark:bg-blue-900/10">
+              <p className="text-sm font-medium text-blue-800 dark:text-blue-300">Zelle Payment Info Included</p>
+              <p className="mt-1 text-xs text-blue-600 dark:text-blue-400">The invoice will include Zelle payment options: +1 (510) 706-8246 · +1 (510) 710-5745 · roberto@vivaes.net, plus a showcase of Viva's services.</p>
+            </div>
+
+            <Button
+              type="submit"
+              className="w-full"
+              disabled={mutation.isPending}
+              data-testid="button-send-invoice"
+            >
+              {mutation.isPending ? (
+                "Sending..."
+              ) : (
+                <>
+                  <Send className="mr-2 h-4 w-4" />
+                  Send Invoice
+                </>
+              )}
+            </Button>
+          </form>
+        </CardContent>
+      </Card>
+    </div>
+  );
+}
+
 export default function AdminPage() {
   const { data: stats, isLoading: statsLoading } = useQuery<AdminStats>({
     queryKey: ["/api/admin/stats"],
@@ -630,6 +816,10 @@ export default function AdminPage() {
             <PhoneCall className="mr-2 h-4 w-4" />
             Call Logs
           </TabsTrigger>
+          <TabsTrigger value="invoices" data-testid="tab-invoices">
+            <FileText className="mr-2 h-4 w-4" />
+            Invoices
+          </TabsTrigger>
         </TabsList>
 
         <TabsContent value="leads">
@@ -642,6 +832,10 @@ export default function AdminPage() {
 
         <TabsContent value="call-logs">
           <CallLogsTab />
+        </TabsContent>
+
+        <TabsContent value="invoices">
+          <InvoicesTab />
         </TabsContent>
       </Tabs>
     </div>

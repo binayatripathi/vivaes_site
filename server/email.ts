@@ -339,6 +339,131 @@ export async function sendPaymentNotification(data: {
   }
 }
 
+export async function sendInvoiceEmail(data: {
+  clientName: string;
+  clientEmail: string;
+  clientPhone: string;
+  clientAddress: string;
+  reference: string;
+  description: string;
+  amount: number;
+}) {
+  const resend = await getResendClient();
+  const fmtAmount = data.amount.toLocaleString("en-US", { style: "currency", currency: "USD", minimumFractionDigits: 2 });
+  const invoiceDate = new Date().toLocaleDateString("en-US", { year: "numeric", month: "long", day: "numeric" });
+
+  const zelleSection = `
+    <div style="background: #eff6ff; border: 1px solid #bfdbfe; border-radius: 8px; padding: 20px; margin: 20px 0;">
+      <h3 style="margin: 0 0 12px; color: #1e40af; font-size: 16px; font-weight: 700;">Pay via Zelle</h3>
+      <p style="color: #475569; font-size: 14px; margin: 0 0 12px;">Send your deposit to any of the following Zelle contacts:</p>
+      <table style="width: 100%; border-collapse: collapse;">
+        <tr>
+          <td style="padding: 6px 0; color: #64748b; font-size: 14px; font-weight: 600; width: 80px;">Phone:</td>
+          <td style="padding: 6px 0; color: #1e293b; font-size: 14px;"><a href="tel:+15107068246" style="color: #2563eb; text-decoration: none; font-weight: 600;">+1 (510) 706-8246</a></td>
+        </tr>
+        <tr>
+          <td style="padding: 6px 0; color: #64748b; font-size: 14px; font-weight: 600;">Phone:</td>
+          <td style="padding: 6px 0; color: #1e293b; font-size: 14px;"><a href="tel:+15107105745" style="color: #2563eb; text-decoration: none; font-weight: 600;">+1 (510) 710-5745</a></td>
+        </tr>
+        <tr>
+          <td style="padding: 6px 0; color: #64748b; font-size: 14px; font-weight: 600;">Email:</td>
+          <td style="padding: 6px 0; color: #1e293b; font-size: 14px;"><a href="mailto:roberto@vivaes.net" style="color: #2563eb; text-decoration: none; font-weight: 600;">roberto@vivaes.net</a></td>
+        </tr>
+      </table>
+      <p style="color: #475569; font-size: 13px; margin: 12px 0 0; font-style: italic;">Please include your name and invoice reference in the Zelle memo: <strong>${data.reference}</strong></p>
+    </div>
+  `;
+
+  const servicesSection = `
+    <div style="background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 8px; padding: 20px; margin: 20px 0;">
+      <h3 style="margin: 0 0 4px; color: #1e293b; font-size: 16px; font-weight: 700;">Our Services</h3>
+      <p style="color: #64748b; font-size: 13px; margin: 0 0 16px;">We're your full-service electrical and solar partner throughout the Bay Area & Central Valley.</p>
+      <div style="display: grid; gap: 8px;">
+        <div style="display: flex; gap: 8px; align-items: center; flex-wrap: wrap;">
+          <span style="background: #dbeafe; color: #1e40af; padding: 4px 10px; border-radius: 20px; font-size: 12px; font-weight: 600;">Solar &amp; Storage</span>
+          <span style="background: #dbeafe; color: #1e40af; padding: 4px 10px; border-radius: 20px; font-size: 12px; font-weight: 600;">EV Chargers</span>
+          <span style="background: #dbeafe; color: #1e40af; padding: 4px 10px; border-radius: 20px; font-size: 12px; font-weight: 600;">Panel Upgrades</span>
+          <span style="background: #dbeafe; color: #1e40af; padding: 4px 10px; border-radius: 20px; font-size: 12px; font-weight: 600;">Battery Backup</span>
+          <span style="background: #dbeafe; color: #1e40af; padding: 4px 10px; border-radius: 20px; font-size: 12px; font-weight: 600;">General Electrical</span>
+          <span style="background: #dbeafe; color: #1e40af; padding: 4px 10px; border-radius: 20px; font-size: 12px; font-weight: 600;">Commercial</span>
+        </div>
+      </div>
+      <div style="text-align: center; margin: 16px 0 0;">
+        <a href="https://vivaes.net" style="display: inline-block; background: #2563eb; color: #ffffff; padding: 10px 24px; border-radius: 6px; text-decoration: none; font-weight: 600; font-size: 14px;">Explore Our Services</a>
+      </div>
+    </div>
+  `;
+
+  const clientHtml = `
+    <div style="font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; max-width: 600px; margin: 0 auto; background: #ffffff; border-radius: 8px; box-shadow: 0 1px 3px rgba(0,0,0,0.1);">
+      ${headerHtml('Deposit Invoice')}
+      <div style="padding: 24px;">
+        <p style="color: #1e293b; font-size: 16px; margin: 0 0 16px;">Hi ${data.clientName},</p>
+        <p style="color: #475569; font-size: 14px; line-height: 1.6; margin: 0 0 20px;">Please find your deposit invoice details below. To secure your project, kindly submit your payment via Zelle using the information provided.</p>
+
+        <div style="background: #f0fdf4; border: 1px solid #bbf7d0; border-radius: 8px; padding: 16px; margin: 0 0 20px; text-align: center;">
+          <p style="color: #166534; font-size: 28px; font-weight: 700; margin: 0 0 4px;">${fmtAmount}</p>
+          <p style="color: #15803d; font-size: 14px; margin: 0;">Deposit Due</p>
+        </div>
+
+        <table style="width: 100%; border-collapse: collapse; margin-bottom: 8px;">
+          ${rowHtml('Invoice Date', invoiceDate)}
+          ${rowHtml('Client', data.clientName)}
+          ${rowHtml('Address', data.clientAddress)}
+          ${rowHtml('Reference', data.reference)}
+          ${data.description ? rowHtml('Description', data.description) : ''}
+        </table>
+
+        ${zelleSection}
+        ${servicesSection}
+
+        <p style="color: #475569; font-size: 14px; margin: 16px 0 0;">If you have any questions, don't hesitate to reach out.<br><strong>The ${BUSINESS_NAME} Team</strong></p>
+      </div>
+      ${footerHtml()}
+    </div>
+  `;
+
+  const internalHtml = `
+    <div style="font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; max-width: 600px; margin: 0 auto; background: #ffffff; border-radius: 8px; box-shadow: 0 1px 3px rgba(0,0,0,0.1);">
+      ${headerHtml('Invoice Sent — Internal Copy')}
+      <div style="padding: 24px;">
+        <div style="background: #f0fdf4; border: 1px solid #bbf7d0; border-radius: 8px; padding: 16px; margin: 0 0 16px; text-align: center;">
+          <p style="color: #166534; font-size: 24px; font-weight: 700; margin: 0 0 4px;">${fmtAmount}</p>
+          <p style="color: #15803d; font-size: 14px; margin: 0;">Deposit Invoice Sent to ${data.clientName}</p>
+        </div>
+        <table style="width: 100%; border-collapse: collapse;">
+          ${rowHtml('Invoice Date', invoiceDate)}
+          ${rowHtml('Client', data.clientName)}
+          ${rowHtml('Email', data.clientEmail)}
+          ${rowHtml('Phone', data.clientPhone, true)}
+          ${rowHtml('Address', data.clientAddress)}
+          ${rowHtml('Reference', data.reference)}
+          ${data.description ? rowHtml('Description', data.description) : ''}
+        </table>
+      </div>
+      ${footerHtml()}
+    </div>
+  `;
+
+  await resend.emails.send({
+    from: `${BUSINESS_NAME} <${FROM_EMAIL}>`,
+    replyTo: REPLY_TO_EMAIL,
+    to: data.clientEmail,
+    subject: `Deposit Invoice — ${fmtAmount} — ${data.reference}`,
+    html: clientHtml,
+  });
+
+  await resend.emails.send({
+    from: `${BUSINESS_NAME} <${FROM_EMAIL}>`,
+    replyTo: REPLY_TO_EMAIL,
+    to: NOTIFY_EMAILS,
+    subject: `[Invoice Sent] ${fmtAmount} — ${data.clientName} — ${data.reference}`,
+    html: internalHtml,
+  });
+
+  console.log(`[Email] Invoice sent to ${data.clientEmail} for ${fmtAmount}`);
+}
+
 export async function sendCallSummaryNotification(data: {
   callId: string;
   callerPhone?: string | null;
