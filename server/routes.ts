@@ -279,6 +279,35 @@ export async function registerRoutes(
     }
   });
 
+  const generatePaymentLinkSchema = z.object({
+    amount: z.number().positive(),
+    reference: z.string().min(1),
+  });
+
+  app.post("/api/admin/generate-payment-link", requireAdmin, async (req, res) => {
+    let data: any;
+    try {
+      data = generatePaymentLinkSchema.parse(req.body);
+    } catch (err: any) {
+      return res.status(400).json({ error: err.message || "Invalid request" });
+    }
+    try {
+      const stripe = await getUncachableStripeClient();
+      const price = await stripe.prices.create({
+        currency: "usd",
+        unit_amount: Math.round(data.amount * 100),
+        product_data: { name: data.reference },
+      });
+      const paymentLink = await stripe.paymentLinks.create({
+        line_items: [{ price: price.id, quantity: 1 }],
+      });
+      res.json({ url: paymentLink.url });
+    } catch (err: any) {
+      console.error("[Stripe] Failed to generate payment link:", err);
+      res.status(500).json({ error: err.message || "Failed to generate payment link" });
+    }
+  });
+
   app.get("/api/stripe/publishable-key", async (_req, res) => {
     try {
       const publishableKey = await getStripePublishableKey();

@@ -39,6 +39,8 @@ import {
   FileText,
   Send,
   LogOut,
+  Loader2,
+  LinkIcon,
 } from "lucide-react";
 
 function getAdminToken(): string | null {
@@ -671,6 +673,27 @@ function InvoicesTab() {
     stripePaymentUrl: "",
   });
 
+  const generateLinkMutation = useMutation({
+    mutationFn: async () => {
+      const amountNum = parseFloat(form.amount);
+      if (isNaN(amountNum) || amountNum <= 0) throw new Error("Please enter a valid invoice amount before generating a payment link.");
+      if (!form.reference.trim()) throw new Error("Please enter an invoice reference before generating a payment link.");
+      const res = await adminApiRequest("POST", "/api/admin/generate-payment-link", {
+        amount: amountNum,
+        reference: form.reference.trim(),
+      });
+      const data = await res.json();
+      return data as { url: string };
+    },
+    onSuccess: (data) => {
+      setForm(prev => ({ ...prev, stripePaymentUrl: data.url }));
+      toast({ title: "Payment link generated!", description: "The Stripe payment link has been auto-filled below." });
+    },
+    onError: (err: any) => {
+      toast({ title: "Failed to generate link", description: err.message || "Please try again.", variant: "destructive" });
+    },
+  });
+
   const mutation = useMutation({
     mutationFn: async () => {
       const amountNum = parseFloat(form.amount);
@@ -816,16 +839,38 @@ function InvoicesTab() {
 
             <div className="space-y-1.5">
               <Label htmlFor="stripePaymentUrl">Online Payment Link (Stripe) <span className="text-muted-foreground text-xs">(optional)</span></Label>
-              <Input
-                id="stripePaymentUrl"
-                name="stripePaymentUrl"
-                type="url"
-                value={form.stripePaymentUrl}
-                onChange={handleChange}
-                placeholder="https://buy.stripe.com/..."
-                data-testid="input-stripe-payment-url"
-              />
-              <p className="text-xs text-muted-foreground">Paste a Stripe payment link to include a "Pay Online Now" button in the client email.</p>
+              <div className="flex gap-2">
+                <Input
+                  id="stripePaymentUrl"
+                  name="stripePaymentUrl"
+                  type="url"
+                  value={form.stripePaymentUrl}
+                  onChange={handleChange}
+                  placeholder="https://buy.stripe.com/..."
+                  data-testid="input-stripe-payment-url"
+                  className="flex-1"
+                />
+                <Button
+                  type="button"
+                  variant="outline"
+                  onClick={() => generateLinkMutation.mutate()}
+                  disabled={generateLinkMutation.isPending}
+                  data-testid="button-generate-payment-link"
+                >
+                  {generateLinkMutation.isPending ? (
+                    <>
+                      <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                      Generating...
+                    </>
+                  ) : (
+                    <>
+                      <LinkIcon className="mr-2 h-4 w-4" />
+                      Generate
+                    </>
+                  )}
+                </Button>
+              </div>
+              <p className="text-xs text-muted-foreground">Fill in amount and reference, then click Generate to auto-create a Stripe payment link.</p>
             </div>
 
             <div className="rounded-lg border border-blue-100 bg-blue-50 p-4 dark:border-blue-900/40 dark:bg-blue-900/10">
