@@ -180,8 +180,12 @@ function LeaveReviewForm() {
         body: JSON.stringify({ ...data, photos: uploadedPhotos }),
       });
       if (!res.ok) {
-        const err = await res.json();
-        throw new Error(err.error || "Failed to submit review");
+        let errMsg = "Failed to submit review. Please try again.";
+        try {
+          const err = await res.json();
+          errMsg = err.error || errMsg;
+        } catch {}
+        throw new Error(errMsg);
       }
       return res.json();
     },
@@ -201,12 +205,15 @@ function LeaveReviewForm() {
     Array.from(files).forEach(f => formData.append("photos", f));
     try {
       const res = await fetch("/api/uploads", { method: "POST", body: formData });
+      if (!res.ok) throw new Error("Upload failed");
       const data = await res.json();
       if (data.urls) {
         setUploadedPhotos(prev => [...prev, ...data.urls]);
+      } else {
+        throw new Error("No URLs returned");
       }
     } catch {
-      toast({ title: "Upload failed", variant: "destructive" });
+      toast({ title: "Photo upload failed", description: "Your photo couldn't be uploaded. You can still submit your review without it.", variant: "destructive" });
     } finally {
       setUploading(false);
       if (fileInputRef.current) fileInputRef.current.value = "";
