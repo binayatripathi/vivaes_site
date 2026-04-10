@@ -59,6 +59,9 @@ export async function registerRoutes(
 
   function requireAdmin(req: any, res: any, next: any) {
     if (!ADMIN_TOKEN) {
+      if (process.env.REPLIT_DEPLOYMENT === "1") {
+        return res.status(503).json({ error: "Admin not configured" });
+      }
       return next();
     }
     const authHeader = req.headers.authorization;
@@ -723,7 +726,8 @@ electrician Oakland, electrician Bay Area, solar installer Bay Area, solar insta
       const filters: any = { approved: true };
       if (source && source !== "all") filters.source = source;
       const allReviews = await storage.getReviews(filters);
-      res.json(allReviews);
+      const publicReviews = allReviews.map(({ email, phone, verificationToken, verificationExpiresAt, ...rest }) => rest);
+      res.json(publicReviews);
     } catch (err: any) {
       res.status(500).json({ error: err.message || "Failed to fetch reviews" });
     }

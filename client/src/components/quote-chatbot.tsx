@@ -370,7 +370,9 @@ export function QuoteChatbot({ preselectedService }: { preselectedService?: stri
             serviceType: updatedAnswers.service,
             details: `Property: ${updatedAnswers.propertyType}, Size: ${updatedAnswers.projectSize}, Urgency: ${updatedAnswers.urgency}. ${updatedAnswers.details}`,
           });
-        } catch (e) {}
+        } catch (e) {
+          console.error("[Quote] Failed to save lead:", e);
+        }
 
         setStep("result");
         await addBotMessage("Here's your instant quote!", undefined, "quote-result");

@@ -3,9 +3,11 @@ import { Resend } from 'resend';
 const BUSINESS_NAME = process.env.VIVA_BUSINESS_NAME || "Viva Electric & Solar Inc.";
 const BUSINESS_PHONE = process.env.VIVA_PHONE || "+1 (510) 710-5745";
 const BUSINESS_EMAIL = process.env.VIVA_EMAIL || "roberto@vivaes.net";
-const NOTIFY_EMAILS = ["roberto@vivaes.net", "binayatripathi@gmail.com"];
-const FROM_EMAIL = "hello@storywonderbook.com";
-const REPLY_TO_EMAIL = "roberto@vivaes.net";
+const NOTIFY_EMAILS = process.env.VIVA_NOTIFY_EMAILS
+  ? process.env.VIVA_NOTIFY_EMAILS.split(",").map(e => e.trim())
+  : ["roberto@vivaes.net"];
+const FROM_EMAIL = process.env.VIVA_FROM_EMAIL || "hello@storywonderbook.com";
+const REPLY_TO_EMAIL = process.env.VIVA_EMAIL || "roberto@vivaes.net";
 
 let connectionSettings: any;
 
