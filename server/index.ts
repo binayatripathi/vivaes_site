@@ -6,6 +6,9 @@ import { createServer } from "http";
 import { runMigrations } from 'stripe-replit-sync';
 import { getStripeSync } from "./stripeClient";
 import { WebhookHandlers } from "./webhookHandlers";
+import { storage } from "./storage";
+import path from "path";
+import fs from "fs";
 
 const app = express();
 const httpServer = createServer(app);
@@ -90,6 +93,12 @@ app.use(
 
 app.use(express.urlencoded({ extended: false }));
 
+const uploadsPath = path.resolve("public/uploads");
+if (!fs.existsSync(uploadsPath)) {
+  fs.mkdirSync(uploadsPath, { recursive: true });
+}
+app.use("/uploads", express.static(uploadsPath));
+
 export function log(message: string, source = "express") {
   const formattedTime = new Date().toLocaleTimeString("en-US", {
     hour: "numeric",
@@ -130,6 +139,13 @@ app.use((req, res, next) => {
 (async () => {
   registerVapiRoutes(app);
   await registerRoutes(httpServer, app);
+
+  try {
+    await storage.seedTestimonials();
+    console.log("[DB] Testimonials seeded");
+  } catch (err) {
+    console.error("[DB] Failed to seed testimonials:", err);
+  }
 
   app.use((err: any, _req: Request, res: Response, next: NextFunction) => {
     const status = err.status || err.statusCode || 500;

@@ -24,6 +24,7 @@ import InsuranceCompliancePage from "@/pages/insurance-compliance";
 import ResidentialPage from "@/pages/residential";
 import CommercialPage from "@/pages/commercial";
 import TeslaPage from "@/pages/tesla";
+import ReviewsPage from "@/pages/reviews";
 import NotFound from "@/pages/not-found";
 
 function Router() {
@@ -45,6 +46,7 @@ function Router() {
       <Route path="/residential" component={ResidentialPage} />
       <Route path="/commercial" component={CommercialPage} />
       <Route path="/tesla" component={TeslaPage} />
+      <Route path="/reviews" component={ReviewsPage} />
       <Route component={NotFound} />
     </Switch>
   );

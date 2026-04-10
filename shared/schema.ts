@@ -1,5 +1,5 @@
 import { z } from "zod";
-import { pgTable, serial, text, timestamp, integer } from "drizzle-orm/pg-core";
+import { pgTable, serial, text, timestamp, integer, boolean } from "drizzle-orm/pg-core";
 import { createInsertSchema } from "drizzle-zod";
 
 export const servicesList = [
@@ -501,6 +501,48 @@ export function getRegionByZip(zip: string): string | null {
 export function getRegionByCity(city: string): string | null {
   return cityToRegionMap[city.toLowerCase().trim()] || null;
 }
+
+export const reviewSources = ["google", "angie", "homedepot", "native"] as const;
+export type ReviewSource = (typeof reviewSources)[number];
+
+export const reviews = pgTable("reviews", {
+  id: serial("id").primaryKey(),
+  name: text("name").notNull(),
+  email: text("email"),
+  phone: text("phone"),
+  rating: integer("rating"),
+  comment: text("comment"),
+  photos: text("photos").array(),
+  source: text("source").notNull().default("native"),
+  verified: boolean("verified").notNull().default(false),
+  verificationToken: text("verification_token"),
+  verificationExpiresAt: timestamp("verification_expires_at"),
+  approved: boolean("approved").notNull().default(false),
+  externalLink: text("external_link"),
+  screenshotUrl: text("screenshot_url"),
+  createdAt: timestamp("created_at").defaultNow().notNull(),
+  updatedAt: timestamp("updated_at").defaultNow().notNull(),
+});
+
+export const insertReviewSchema = createInsertSchema(reviews).omit({
+  id: true,
+  createdAt: true,
+  updatedAt: true,
+});
+
+export type InsertReview = z.infer<typeof insertReviewSchema>;
+export type Review = typeof reviews.$inferSelect;
+
+export const submitReviewSchema = z.object({
+  name: z.string().min(2, "Name must be at least 2 characters"),
+  email: z.string().email("Please enter a valid email"),
+  phone: z.string().optional(),
+  rating: z.number().int().min(1).max(5),
+  comment: z.string().min(10, "Please write at least 10 characters"),
+  photos: z.array(z.string()).optional().default([]),
+});
+
+export type SubmitReview = z.infer<typeof submitReviewSchema>;
 
 export const testimonials = [
   {

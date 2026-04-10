@@ -41,7 +41,15 @@ import {
   LogOut,
   Loader2,
   LinkIcon,
+  Star,
+  Trash2,
+  ThumbsUp,
+  ThumbsDown,
+  ExternalLink,
+  Upload,
+  Plus,
 } from "lucide-react";
+import type { Review } from "@shared/schema";
 
 function getAdminToken(): string | null {
   return localStorage.getItem("admin_token");
@@ -900,6 +908,322 @@ function InvoicesTab() {
   );
 }
 
+function StarDisplay({ rating }: { rating: number | null }) {
+  if (!rating) return null;
+  return (
+    <div className="flex gap-0.5">
+      {[1, 2, 3, 4, 5].map((i) => (
+        <Star
+          key={i}
+          className={`h-3.5 w-3.5 ${i <= rating ? "fill-yellow-400 text-yellow-400" : "text-muted-foreground/30"}`}
+        />
+      ))}
+    </div>
+  );
+}
+
+function ReviewsTab() {
+  const { toast } = useToast();
+  const [curatedForm, setCuratedForm] = useState({
+    name: "",
+    source: "google" as "google" | "angie" | "homedepot",
+    externalLink: "",
+    screenshotUrl: "",
+  });
+  const [screenshotUploading, setScreenshotUploading] = useState(false);
+
+  const { data: pendingReviews, isLoading: pendingLoading } = useQuery<Review[]>({
+    queryKey: ["/api/admin/reviews/pending"],
+    queryFn: async () => {
+      const res = await adminFetch("/api/admin/reviews/pending");
+      if (!res.ok) throw new Error("Failed");
+      return res.json();
+    },
+  });
+
+  const { data: allReviews, isLoading: allLoading } = useQuery<Review[]>({
+    queryKey: ["/api/admin/reviews"],
+    queryFn: async () => {
+      const res = await adminFetch("/api/admin/reviews");
+      if (!res.ok) throw new Error("Failed");
+      return res.json();
+    },
+  });
+
+  const approveMutation = useMutation({
+    mutationFn: async (id: number) => {
+      await adminApiRequest("POST", `/api/admin/reviews/approve/${id}`);
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["/api/admin/reviews/pending"] });
+      queryClient.invalidateQueries({ queryKey: ["/api/admin/reviews"] });
+      toast({ title: "Review approved" });
+    },
+    onError: () => toast({ title: "Failed to approve", variant: "destructive" }),
+  });
+
+  const rejectMutation = useMutation({
+    mutationFn: async (id: number) => {
+      await adminApiRequest("POST", `/api/admin/reviews/reject/${id}`);
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["/api/admin/reviews/pending"] });
+      queryClient.invalidateQueries({ queryKey: ["/api/admin/reviews"] });
+      toast({ title: "Review rejected" });
+    },
+    onError: () => toast({ title: "Failed to reject", variant: "destructive" }),
+  });
+
+  const deleteMutation = useMutation({
+    mutationFn: async (id: number) => {
+      await adminApiRequest("DELETE", `/api/admin/reviews/${id}`);
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["/api/admin/reviews"] });
+      toast({ title: "Review deleted" });
+    },
+    onError: () => toast({ title: "Failed to delete", variant: "destructive" }),
+  });
+
+  const curatedMutation = useMutation({
+    mutationFn: async (data: typeof curatedForm) => {
+      await adminApiRequest("POST", "/api/admin/reviews/curated", data);
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["/api/admin/reviews"] });
+      setCuratedForm({ name: "", source: "google", externalLink: "", screenshotUrl: "" });
+      toast({ title: "Curated review added" });
+    },
+    onError: (err: Error) => toast({ title: err.message, variant: "destructive" }),
+  });
+
+  const handleScreenshotUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+    setScreenshotUploading(true);
+    const formData = new FormData();
+    formData.append("photos", file);
+    try {
+      const token = getAdminToken();
+      const res = await fetch("/api/uploads", {
+        method: "POST",
+        body: formData,
+        headers: token ? { Authorization: `Bearer ${token}` } : {},
+      });
+      const data = await res.json();
+      if (data.urls?.[0]) {
+        setCuratedForm(prev => ({ ...prev, screenshotUrl: data.urls[0] }));
+        toast({ title: "Screenshot uploaded" });
+      }
+    } catch {
+      toast({ title: "Upload failed", variant: "destructive" });
+    } finally {
+      setScreenshotUploading(false);
+    }
+  };
+
+  return (
+    <div className="space-y-8">
+      <div>
+        <h3 className="mb-4 text-lg font-semibold" data-testid="text-pending-reviews-title">
+          Pending Approvals
+          {pendingReviews && pendingReviews.length > 0 && (
+            <Badge className="ml-2 bg-orange-100 text-orange-800 dark:bg-orange-900/40 dark:text-orange-300">
+              {pendingReviews.length}
+            </Badge>
+          )}
+        </h3>
+        {pendingLoading ? (
+          <div className="space-y-2">{Array.from({ length: 3 }).map((_, i) => <Skeleton key={i} className="h-20 w-full" />)}</div>
+        ) : !pendingReviews || pendingReviews.length === 0 ? (
+          <Card>
+            <CardContent className="py-8 text-center text-muted-foreground" data-testid="text-no-pending-reviews">
+              No pending reviews
+            </CardContent>
+          </Card>
+        ) : (
+          <div className="space-y-3">
+            {pendingReviews.map((review) => (
+              <Card key={review.id} data-testid={`card-pending-review-${review.id}`}>
+                <CardContent className="flex flex-col gap-3 p-4 sm:flex-row sm:items-start sm:justify-between">
+                  <div className="space-y-1">
+                    <div className="flex items-center gap-2">
+                      <span className="font-semibold" data-testid={`text-pending-review-name-${review.id}`}>{review.name}</span>
+                      <StarDisplay rating={review.rating} />
+                    </div>
+                    <p className="text-sm text-muted-foreground">{review.email}</p>
+                    {review.comment && (
+                      <p className="text-sm" data-testid={`text-pending-review-comment-${review.id}`}>"{review.comment}"</p>
+                    )}
+                    <p className="text-xs text-muted-foreground">{formatDateTime(review.createdAt)}</p>
+                  </div>
+                  <div className="flex gap-2">
+                    <Button
+                      size="sm"
+                      onClick={() => approveMutation.mutate(review.id)}
+                      disabled={approveMutation.isPending}
+                      data-testid={`button-approve-review-${review.id}`}
+                    >
+                      <ThumbsUp className="mr-1 h-3.5 w-3.5" /> Approve
+                    </Button>
+                    <Button
+                      size="sm"
+                      variant="outline"
+                      onClick={() => rejectMutation.mutate(review.id)}
+                      disabled={rejectMutation.isPending}
+                      data-testid={`button-reject-review-${review.id}`}
+                    >
+                      <ThumbsDown className="mr-1 h-3.5 w-3.5" /> Reject
+                    </Button>
+                  </div>
+                </CardContent>
+              </Card>
+            ))}
+          </div>
+        )}
+      </div>
+
+      <div>
+        <h3 className="mb-4 text-lg font-semibold">Add Curated External Review</h3>
+        <Card>
+          <CardContent className="space-y-4 p-5">
+            <div className="grid gap-4 sm:grid-cols-2">
+              <div className="space-y-1.5">
+                <Label htmlFor="curated-name">Reviewer Name *</Label>
+                <Input
+                  id="curated-name"
+                  value={curatedForm.name}
+                  onChange={(e) => setCuratedForm(prev => ({ ...prev, name: e.target.value }))}
+                  placeholder="e.g. John D."
+                  data-testid="input-curated-name"
+                />
+              </div>
+              <div className="space-y-1.5">
+                <Label htmlFor="curated-source">Platform *</Label>
+                <Select
+                  value={curatedForm.source}
+                  onValueChange={(v: "google" | "angie" | "homedepot") => setCuratedForm(prev => ({ ...prev, source: v }))}
+                >
+                  <SelectTrigger id="curated-source" data-testid="select-curated-source">
+                    <SelectValue />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="google">Google</SelectItem>
+                    <SelectItem value="angie">Angie's List</SelectItem>
+                    <SelectItem value="homedepot">Home Depot Pro</SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
+            </div>
+            <div className="space-y-1.5">
+              <Label htmlFor="curated-link">Original Listing URL *</Label>
+              <Input
+                id="curated-link"
+                type="url"
+                value={curatedForm.externalLink}
+                onChange={(e) => setCuratedForm(prev => ({ ...prev, externalLink: e.target.value }))}
+                placeholder="https://www.google.com/maps/place/..."
+                data-testid="input-curated-link"
+              />
+            </div>
+            <div className="space-y-1.5">
+              <Label>Screenshot PNG *</Label>
+              <div className="flex items-center gap-3">
+                <label className="flex cursor-pointer items-center gap-2 rounded-md border px-3 py-2 text-sm hover:bg-accent" data-testid="button-upload-screenshot">
+                  <Upload className="h-4 w-4" />
+                  {screenshotUploading ? "Uploading..." : "Upload Screenshot"}
+                  <input type="file" accept="image/*" className="hidden" onChange={handleScreenshotUpload} disabled={screenshotUploading} />
+                </label>
+                {curatedForm.screenshotUrl && (
+                  <img src={curatedForm.screenshotUrl} alt="Preview" className="h-12 rounded border object-cover" />
+                )}
+              </div>
+            </div>
+            <Button
+              onClick={() => curatedMutation.mutate(curatedForm)}
+              disabled={curatedMutation.isPending || !curatedForm.name || !curatedForm.externalLink || !curatedForm.screenshotUrl}
+              data-testid="button-add-curated-review"
+            >
+              <Plus className="mr-1 h-4 w-4" />
+              {curatedMutation.isPending ? "Adding..." : "Add Review"}
+            </Button>
+          </CardContent>
+        </Card>
+      </div>
+
+      <div>
+        <h3 className="mb-4 text-lg font-semibold">All Reviews</h3>
+        {allLoading ? (
+          <div className="space-y-2">{Array.from({ length: 5 }).map((_, i) => <Skeleton key={i} className="h-16 w-full" />)}</div>
+        ) : !allReviews || allReviews.length === 0 ? (
+          <Card>
+            <CardContent className="py-8 text-center text-muted-foreground">No reviews yet</CardContent>
+          </Card>
+        ) : (
+          <div className="overflow-x-auto">
+            <table className="w-full text-sm" data-testid="table-all-reviews">
+              <thead>
+                <tr className="border-b text-left">
+                  <th className="pb-3 pr-4 font-medium text-muted-foreground">Name</th>
+                  <th className="pb-3 pr-4 font-medium text-muted-foreground">Source</th>
+                  <th className="hidden pb-3 pr-4 font-medium text-muted-foreground md:table-cell">Rating</th>
+                  <th className="hidden pb-3 pr-4 font-medium text-muted-foreground md:table-cell">Status</th>
+                  <th className="pb-3 pr-4 font-medium text-muted-foreground">Date</th>
+                  <th className="pb-3 font-medium text-muted-foreground">Actions</th>
+                </tr>
+              </thead>
+              <tbody>
+                {allReviews.map((review) => (
+                  <tr key={review.id} className="border-b" data-testid={`row-review-${review.id}`}>
+                    <td className="py-3 pr-4 font-medium">{review.name}</td>
+                    <td className="py-3 pr-4">
+                      <Badge variant="outline" className="capitalize">{review.source}</Badge>
+                    </td>
+                    <td className="hidden py-3 pr-4 md:table-cell">
+                      <StarDisplay rating={review.rating} />
+                    </td>
+                    <td className="hidden py-3 pr-4 md:table-cell">
+                      {review.approved ? (
+                        <Badge className="bg-green-100 text-green-800 dark:bg-green-900/40 dark:text-green-300">Approved</Badge>
+                      ) : review.verified ? (
+                        <Badge className="bg-yellow-100 text-yellow-800 dark:bg-yellow-900/40 dark:text-yellow-300">Verified</Badge>
+                      ) : (
+                        <Badge className="bg-gray-100 text-gray-800 dark:bg-gray-900/40 dark:text-gray-300">Unverified</Badge>
+                      )}
+                    </td>
+                    <td className="py-3 pr-4 text-muted-foreground">{formatDate(review.createdAt)}</td>
+                    <td className="py-3">
+                      <div className="flex gap-1">
+                        {review.externalLink && (
+                          <a href={review.externalLink} target="_blank" rel="noreferrer">
+                            <Button size="icon" variant="ghost" className="h-8 w-8" data-testid={`button-external-link-${review.id}`}>
+                              <ExternalLink className="h-4 w-4" />
+                            </Button>
+                          </a>
+                        )}
+                        <Button
+                          size="icon"
+                          variant="ghost"
+                          className="h-8 w-8 text-destructive hover:text-destructive"
+                          onClick={() => deleteMutation.mutate(review.id)}
+                          disabled={deleteMutation.isPending}
+                          data-testid={`button-delete-review-${review.id}`}
+                        >
+                          <Trash2 className="h-4 w-4" />
+                        </Button>
+                      </div>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        )}
+      </div>
+    </div>
+  );
+}
+
 export default function AdminPage() {
   const [, navigate] = useLocation();
   const token = getAdminToken();
@@ -969,6 +1293,10 @@ export default function AdminPage() {
             <FileText className="mr-2 h-4 w-4" />
             Invoices
           </TabsTrigger>
+          <TabsTrigger value="reviews" data-testid="tab-reviews">
+            <Star className="mr-2 h-4 w-4" />
+            Reviews
+          </TabsTrigger>
         </TabsList>
 
         <TabsContent value="leads">
@@ -985,6 +1313,10 @@ export default function AdminPage() {
 
         <TabsContent value="invoices">
           <InvoicesTab />
+        </TabsContent>
+
+        <TabsContent value="reviews">
+          <ReviewsTab />
         </TabsContent>
       </Tabs>
     </div>

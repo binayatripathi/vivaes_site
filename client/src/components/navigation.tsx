@@ -14,6 +14,7 @@ const navLinks = [
   { href: "/solar-storage", label: "Solar & Storage" },
   { href: "/electrification", label: "Electrification" },
   { href: "/insurance-compliance", label: "Insurance Compliance" },
+  { href: "/reviews", label: "Reviews" },
   { href: "/tesla", label: "Tesla Certified", isTesla: true },
   { href: "/booking", label: "Book Now" },
   { href: "/about", label: "About" },

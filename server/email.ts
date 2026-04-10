@@ -560,3 +560,36 @@ export async function sendCallSummaryNotification(data: {
     console.error('[Email] Failed to send call summary:', err);
   }
 }
+
+export async function sendReviewVerificationEmail(data: {
+  name: string;
+  email: string;
+  verificationUrl: string;
+}) {
+  try {
+    const resend = await getResendClient();
+    await resend.emails.send({
+      from: `${BUSINESS_NAME} <${FROM_EMAIL}>`,
+      replyTo: REPLY_TO_EMAIL,
+      to: data.email,
+      subject: `Please verify your review — ${BUSINESS_NAME}`,
+      html: `
+        <div style="font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; max-width: 600px; margin: 0 auto; background: #ffffff; border-radius: 8px; box-shadow: 0 1px 3px rgba(0,0,0,0.1);">
+          ${headerHtml('Verify Your Review')}
+          <div style="padding: 24px;">
+            <p style="color: #1e293b; font-size: 16px; margin: 0 0 16px;">Hi ${data.name},</p>
+            <p style="color: #475569; font-size: 14px; line-height: 1.6; margin: 0 0 16px;">Thank you for sharing your experience with ${BUSINESS_NAME}! Please click the button below to verify your review. Once verified, our team will review it and publish it shortly.</p>
+            <div style="text-align: center; margin: 32px 0;">
+              <a href="${data.verificationUrl}" style="display: inline-block; background: #2563eb; color: #ffffff; padding: 14px 32px; border-radius: 6px; text-decoration: none; font-weight: 700; font-size: 16px;">Verify My Review</a>
+            </div>
+            <p style="color: #94a3b8; font-size: 13px; line-height: 1.6; margin: 0;">If you didn't submit a review, you can safely ignore this email. This link expires in 48 hours.</p>
+          </div>
+          ${footerHtml()}
+        </div>
+      `,
+    });
+    console.log(`[Email] Review verification sent to ${data.email}`);
+  } catch (err) {
+    console.error('[Email] Failed to send review verification:', err);
+  }
+}

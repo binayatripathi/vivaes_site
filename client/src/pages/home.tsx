@@ -1,12 +1,15 @@
 import { useState } from "react";
 import { Link } from "wouter";
 import { motion } from "framer-motion";
+import { useQuery } from "@tanstack/react-query";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
+import { Skeleton } from "@/components/ui/skeleton";
 import { QuoteModal } from "@/components/quote-modal";
 import { VapiCallButton } from "@/components/vapi-call-button";
-import { servicesList, testimonials } from "@shared/schema";
+import { servicesList } from "@shared/schema";
+import type { Review } from "@shared/schema";
 import { PageMeta } from "@/components/page-meta";
 import { useTeslaModal, TeslaBanner } from "@/components/tesla-modal";
 import vivaLogoPath from "@assets/viva-logo.png";
@@ -103,15 +106,26 @@ export default function Home() {
   const [openFaq, setOpenFaq] = useState<number | null>(null);
   const { showModal, showBanner, handleClose, TeslaModal } = useTeslaModal();
 
+  const { data: liveTestimonials } = useQuery<Review[]>({
+    queryKey: ["/api/reviews", "native"],
+    queryFn: async () => {
+      const res = await fetch("/api/reviews?source=native");
+      if (!res.ok) throw new Error("Failed");
+      return res.json();
+    },
+  });
+
+  const testimonials = liveTestimonials && liveTestimonials.length > 0 ? liveTestimonials : [];
+
   const openQuote = (service?: string) => {
     setPreselectedService(service);
     setQuoteOpen(true);
   };
 
   const prevTestimonial = () =>
-    setTestimonialIdx((i) => (i === 0 ? testimonials.length - 1 : i - 1));
+    setTestimonialIdx((i) => (i === 0 ? Math.max(testimonials.length - 1, 0) : i - 1));
   const nextTestimonial = () =>
-    setTestimonialIdx((i) => (i === testimonials.length - 1 ? 0 : i + 1));
+    setTestimonialIdx((i) => (i === Math.max(testimonials.length - 1, 0) ? 0 : i + 1));
 
   return (
     <>
@@ -468,26 +482,32 @@ export default function Home() {
             </motion.div>
 
             <motion.div variants={fadeUp} className="relative mx-auto max-w-3xl">
+              {testimonials.length === 0 ? (
+                <div className="space-y-3">
+                  <Skeleton className="mx-auto h-4 w-24" />
+                  <Skeleton className="h-16 w-full" />
+                  <Skeleton className="mx-auto h-4 w-32" />
+                </div>
+              ) : (
               <div className="overflow-hidden rounded-lg">
                 <div className="flex flex-col items-center px-4 py-8 text-center sm:px-12">
                   <div className="mb-4 flex gap-1">
-                    {Array.from({ length: testimonials[testimonialIdx].rating }).map((_, i) => (
+                    {Array.from({ length: testimonials[Math.min(testimonialIdx, testimonials.length - 1)].rating || 5 }).map((_, i) => (
                       <Star key={i} className="h-5 w-5 fill-yellow-400 text-yellow-400" />
                     ))}
                   </div>
                   <blockquote className="text-lg leading-relaxed text-foreground" data-testid="text-testimonial-content">
-                    "{testimonials[testimonialIdx].content}"
+                    "{testimonials[Math.min(testimonialIdx, testimonials.length - 1)].comment}"
                   </blockquote>
                   <div className="mt-6">
                     <p className="font-semibold" data-testid="text-testimonial-name">
-                      {testimonials[testimonialIdx].name}
-                    </p>
-                    <p className="text-sm text-muted-foreground">
-                      {testimonials[testimonialIdx].role}
+                      {testimonials[Math.min(testimonialIdx, testimonials.length - 1)].name}
                     </p>
                   </div>
                 </div>
               </div>
+              )}
+              {testimonials.length > 0 && (
               <div className="mt-6 flex items-center justify-center gap-4">
                 <Button
                   size="icon"
@@ -517,6 +537,14 @@ export default function Home() {
                 >
                   <ChevronRight className="h-4 w-4" />
                 </Button>
+              </div>
+              )}
+              <div className="mt-6 flex justify-center">
+                <Link href="/reviews">
+                  <Button variant="outline" size="sm" data-testid="link-see-all-reviews">
+                    See all reviews →
+                  </Button>
+                </Link>
               </div>
             </motion.div>
           </motion.div>

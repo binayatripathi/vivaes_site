@@ -1,10 +1,14 @@
 import type { Express } from "express";
 import { createServer, type Server } from "http";
-import { quoteRequestSchema, contactFormSchema, bookingRequestSchema, insuranceLeadSchema, leadStatuses, appointmentStatuses } from "@shared/schema";
-import { sendQuoteNotification, sendContactNotification, sendBookingNotification, sendPaymentNotification, sendCallSummaryNotification, sendInvoiceEmail } from "./email";
+import { quoteRequestSchema, contactFormSchema, bookingRequestSchema, insuranceLeadSchema, leadStatuses, appointmentStatuses, submitReviewSchema } from "@shared/schema";
+import { sendQuoteNotification, sendContactNotification, sendBookingNotification, sendPaymentNotification, sendCallSummaryNotification, sendInvoiceEmail, sendReviewVerificationEmail } from "./email";
 import { getUncachableStripeClient, getStripePublishableKey } from "./stripeClient";
 import { storage } from "./storage";
 import { z } from "zod";
+import multer from "multer";
+import path from "path";
+import fs from "fs";
+import { nanoid } from "nanoid";
 
 const CONSULTATION_FEE = 250;
 
@@ -19,6 +23,30 @@ const checkoutSchema = z.object({
 });
 
 const notifiedSessions = new Set<string>();
+
+const uploadsDir = path.resolve("public/uploads");
+if (!fs.existsSync(uploadsDir)) {
+  fs.mkdirSync(uploadsDir, { recursive: true });
+}
+
+const upload = multer({
+  storage: multer.diskStorage({
+    destination: (_req, _file, cb) => cb(null, uploadsDir),
+    filename: (_req, file, cb) => {
+      const ext = path.extname(file.originalname);
+      cb(null, `${nanoid(16)}${ext}`);
+    },
+  }),
+  limits: { fileSize: 10 * 1024 * 1024 },
+  fileFilter: (_req, file, cb) => {
+    const allowed = [".jpg", ".jpeg", ".png", ".gif", ".webp"];
+    if (allowed.includes(path.extname(file.originalname).toLowerCase())) {
+      cb(null, true);
+    } else {
+      cb(new Error("Only image files are allowed"));
+    }
+  },
+});
 
 export async function registerRoutes(
   httpServer: Server,
@@ -674,6 +702,167 @@ electrician Oakland, electrician Bay Area, solar installer Bay Area, solar insta
     res.type("text/plain").send(
       `User-agent: *\nAllow: /\nDisallow: /admin\nDisallow: /api/\nDisallow: /payment/\n\nSitemap: https://vivaes.net/sitemap.xml`
     );
+  });
+
+  app.post("/api/uploads", upload.array("photos", 10), (req: any, res: any) => {
+    try {
+      const files = req.files as Express.Multer.File[];
+      if (!files || files.length === 0) {
+        return res.status(400).json({ error: "No files uploaded" });
+      }
+      const urls = files.map(f => `/uploads/${f.filename}`);
+      res.json({ urls });
+    } catch (err: any) {
+      res.status(500).json({ error: err.message || "Upload failed" });
+    }
+  });
+
+  app.get("/api/reviews", async (req, res) => {
+    try {
+      const source = req.query.source as string | undefined;
+      const filters: any = { approved: true };
+      if (source && source !== "all") filters.source = source;
+      const allReviews = await storage.getReviews(filters);
+      res.json(allReviews);
+    } catch (err: any) {
+      res.status(500).json({ error: err.message || "Failed to fetch reviews" });
+    }
+  });
+
+  app.post("/api/reviews", async (req, res) => {
+    try {
+      const data = submitReviewSchema.parse(req.body);
+      const token = nanoid(32);
+      const expiresAt = new Date(Date.now() + 48 * 60 * 60 * 1000);
+      const review = await storage.createReview({
+        name: data.name,
+        email: data.email,
+        phone: data.phone || null,
+        rating: data.rating,
+        comment: data.comment,
+        photos: data.photos || [],
+        source: "native",
+        verified: false,
+        verificationToken: token,
+        verificationExpiresAt: expiresAt,
+        approved: false,
+      });
+
+      const baseUrl = process.env.REPLIT_DOMAINS
+        ? `https://${process.env.REPLIT_DOMAINS.split(",")[0]}`
+        : "http://localhost:5000";
+      const verificationUrl = `${baseUrl}/api/reviews/verify/${token}`;
+
+      sendReviewVerificationEmail({
+        name: data.name,
+        email: data.email,
+        verificationUrl,
+      });
+
+      res.json({ success: true, message: "Review submitted! Please check your email to verify your review." });
+    } catch (err: any) {
+      res.status(400).json({ error: err.message || "Invalid request" });
+    }
+  });
+
+  app.get("/api/reviews/verify/:token", async (req, res) => {
+    try {
+      const review = await storage.verifyReview(req.params.token);
+      if (!review) {
+        return res.status(404).send(`
+          <html><body style="font-family:sans-serif;max-width:600px;margin:80px auto;text-align:center;">
+          <h2>Verification link not found or already used.</h2>
+          <p><a href="/">Return to homepage</a></p>
+          </body></html>
+        `);
+      }
+      const safeName = review.name.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;");
+      res.send(`
+        <html><body style="font-family:sans-serif;max-width:600px;margin:80px auto;text-align:center;">
+        <h2 style="color:#2563eb;">Thank you, ${safeName}!</h2>
+        <p>Your review has been verified and is pending approval. It will appear on our reviews page shortly.</p>
+        <p><a href="/reviews" style="color:#2563eb;">See all reviews</a> | <a href="/">Return to homepage</a></p>
+        </body></html>
+      `);
+    } catch (err: any) {
+      res.status(500).json({ error: err.message || "Verification failed" });
+    }
+  });
+
+  app.get("/api/admin/reviews/pending", async (_req, res) => {
+    try {
+      const pending = await storage.getPendingReviews();
+      res.json(pending);
+    } catch (err: any) {
+      res.status(500).json({ error: err.message || "Failed to fetch pending reviews" });
+    }
+  });
+
+  app.get("/api/admin/reviews", async (req, res) => {
+    try {
+      const source = req.query.source as string | undefined;
+      const filters: any = {};
+      if (source && source !== "all") filters.source = source;
+      const allReviews = await storage.getReviews(filters);
+      res.json(allReviews);
+    } catch (err: any) {
+      res.status(500).json({ error: err.message || "Failed to fetch reviews" });
+    }
+  });
+
+  app.post("/api/admin/reviews/approve/:id", async (req, res) => {
+    try {
+      const id = parseInt(req.params.id);
+      const review = await storage.approveReview(id);
+      if (!review) return res.status(404).json({ error: "Review not found" });
+      res.json(review);
+    } catch (err: any) {
+      res.status(500).json({ error: err.message || "Failed to approve review" });
+    }
+  });
+
+  app.delete("/api/admin/reviews/:id", async (req, res) => {
+    try {
+      const id = parseInt(req.params.id);
+      await storage.deleteReview(id);
+      res.json({ success: true });
+    } catch (err: any) {
+      res.status(500).json({ error: err.message || "Failed to delete review" });
+    }
+  });
+
+  app.post("/api/admin/reviews/reject/:id", async (req, res) => {
+    try {
+      const id = parseInt(req.params.id);
+      await storage.rejectReview(id);
+      res.json({ success: true });
+    } catch (err: any) {
+      res.status(500).json({ error: err.message || "Failed to reject review" });
+    }
+  });
+
+  const curatedReviewSchema = z.object({
+    name: z.string().min(1, "Name is required"),
+    source: z.enum(["google", "angie", "homedepot"]),
+    externalLink: z.string().url("Must be a valid URL"),
+    screenshotUrl: z.string().min(1, "Screenshot is required"),
+  });
+
+  app.post("/api/admin/reviews/curated", async (req, res) => {
+    try {
+      const data = curatedReviewSchema.parse(req.body);
+      const review = await storage.createReview({
+        name: data.name,
+        source: data.source,
+        externalLink: data.externalLink,
+        screenshotUrl: data.screenshotUrl,
+        verified: true,
+        approved: true,
+      });
+      res.json(review);
+    } catch (err: any) {
+      res.status(400).json({ error: err.message || "Invalid request" });
+    }
   });
 
   app.get("/sitemap.xml", (_req, res) => {

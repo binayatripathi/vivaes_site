@@ -39,6 +39,7 @@ export function Footer() {
             <div className="flex flex-col gap-2">
               <Link href="/quote" className="text-sm text-muted-foreground transition-colors" data-testid="link-footer-quote">Get a Quote</Link>
               <Link href="/booking" className="text-sm text-muted-foreground transition-colors" data-testid="link-footer-booking">Book Appointment</Link>
+              <Link href="/reviews" className="text-sm text-muted-foreground transition-colors" data-testid="link-footer-reviews">Reviews</Link>
               <Link href="/about" className="text-sm text-muted-foreground transition-colors" data-testid="link-footer-about">About Us</Link>
               <Link href="/about#contact" className="text-sm text-muted-foreground transition-colors" data-testid="link-footer-contact">Contact</Link>
             </div>
