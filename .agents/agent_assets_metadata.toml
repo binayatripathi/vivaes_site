@@ -12,3 +12,15 @@ id = "uxjmEtkUtKJn3eM_yWuiU"
 uri = "file://Bay_Area_Multifamily_Panel_Prospects.csv"
 type = "table"
 title = "Bay Area Multifamily Panel Prospects – 50 Qualified Leads (Final)"
+
+[[outputs]]
+id = "WAzLR75nSItqoGlY7Ro1s"
+uri = "file://bay_area_commercial_solar_50k.csv"
+type = "table"
+title = "Large Buildings >50K sqft (250 prospects)"
+
+[[outputs]]
+id = "ZYsJkqpZMJ8M1YtPZs0Er"
+uri = "file://bay_area_commercial_solar_20k.csv"
+type = "table"
+title = "Mid-Size Buildings 20K-50K sqft (250 prospects)"
