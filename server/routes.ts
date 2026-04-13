@@ -9,6 +9,7 @@ import multer from "multer";
 import path from "path";
 import fs from "fs";
 import { nanoid } from "nanoid";
+import type Stripe from "stripe";
 
 const CONSULTATION_FEE = 250;
 
@@ -22,7 +23,6 @@ const checkoutSchema = z.object({
   description: z.string().optional(),
 });
 
-const notifiedSessions = new Set<string>();
 
 const uploadsDir = path.resolve("public/uploads");
 if (!fs.existsSync(uploadsDir)) {
@@ -413,15 +413,24 @@ export async function registerRoutes(
         customerName: session.metadata?.customerName || '',
       };
 
-      if (session.payment_status === 'paid' && session.customer_email && !notifiedSessions.has(req.params.sessionId)) {
-        notifiedSessions.add(req.params.sessionId);
-        sendPaymentNotification({
-          customerName: session.metadata?.customerName || 'Customer',
+      if (session.payment_status === 'paid' && session.customer_email) {
+        const inserted = await storage.recordNotifiedSession({
+          sessionId: req.params.sessionId,
           customerEmail: session.customer_email,
-          amount: responseData.amountTotal,
-          serviceName: responseData.serviceName,
-          type: responseData.type,
+          customerName: session.metadata?.customerName || null,
+          amount: session.amount_total ?? null,
+          serviceName: responseData.serviceName || null,
+          type: responseData.type || null,
         });
+        if (inserted) {
+          sendPaymentNotification({
+            customerName: session.metadata?.customerName || 'Customer',
+            customerEmail: session.customer_email,
+            amount: responseData.amountTotal,
+            serviceName: responseData.serviceName,
+            type: responseData.type,
+          });
+        }
       }
 
       res.json(responseData);
@@ -609,9 +618,108 @@ export async function registerRoutes(
   app.get("/api/admin/stats", async (_req, res) => {
     try {
       const stats = await storage.getStats();
-      res.json(stats);
+
+      let totalRevenue = 0;
+      try {
+        const stripe = await getUncachableStripeClient();
+        let hasMore = true;
+        let startingAfter: string | undefined = undefined;
+        let fetchCount = 0;
+        while (hasMore && fetchCount < 10) {
+          const page: Stripe.ApiList<Stripe.Checkout.Session> = await stripe.checkout.sessions.list({
+            limit: 100,
+            ...(startingAfter ? { starting_after: startingAfter } : {}),
+          });
+          for (const sess of page.data) {
+            if (sess.payment_status === "paid" && sess.amount_total) {
+              totalRevenue += sess.amount_total;
+            }
+          }
+          hasMore = page.has_more;
+          if (page.data.length > 0) {
+            startingAfter = page.data[page.data.length - 1].id;
+          }
+          fetchCount++;
+        }
+      } catch (stripeErr) {
+        console.error("[Stats] Failed to fetch Stripe revenue, falling back to DB:", stripeErr);
+        totalRevenue = stats.totalRevenue * 100;
+      }
+
+      res.json({ ...stats, totalRevenue: Math.round(totalRevenue / 100) });
     } catch (err: any) {
       res.status(500).json({ error: err.message || "Failed to fetch stats" });
+    }
+  });
+
+  app.get("/api/admin/payments", async (_req, res) => {
+    try {
+      const stripe = await getUncachableStripeClient();
+
+      const [sessions, paymentLinks] = await Promise.all([
+        stripe.checkout.sessions.list({ limit: 100, expand: ["data.line_items"] }),
+        stripe.paymentLinks.list({ limit: 100 }),
+      ]);
+
+      type PaymentRow = {
+        id: string;
+        customerName: string;
+        customerEmail: string;
+        service: string;
+        amount: number;
+        status: string;
+        date: string;
+        type: string;
+        url: string | null;
+      };
+
+      const sessionRows: PaymentRow[] = sessions.data.map((session) => {
+        const lineItemName = session.line_items?.data?.[0]?.description
+          || session.metadata?.serviceName
+          || "Service";
+        const type = session.metadata?.type
+          || (session.payment_link ? "payment-link" : "checkout");
+        return {
+          id: session.id,
+          customerName: session.metadata?.customerName || session.customer_details?.name || "—",
+          customerEmail: session.customer_email || session.customer_details?.email || "—",
+          service: session.metadata?.serviceName || lineItemName,
+          amount: session.amount_total ? session.amount_total / 100 : 0,
+          status: session.payment_status === "paid" ? "paid" : "unpaid",
+          date: new Date(session.created * 1000).toISOString(),
+          type,
+          url: session.url,
+        };
+      });
+
+      const sessionPaymentLinkIds = new Set(
+        sessions.data.map((s) => s.payment_link).filter(Boolean) as string[]
+      );
+
+      const linkRows: PaymentRow[] = paymentLinks.data
+        .filter((link) => !sessionPaymentLinkIds.has(link.id))
+        .map((link) => {
+          const rawCreated = (link as { created?: number }).created;
+          return {
+            id: link.id,
+            customerName: "—",
+            customerEmail: "—",
+            service: "Invoice / Payment Link",
+            amount: 0,
+            status: link.active ? "pending" : "inactive",
+            date: rawCreated ? new Date(rawCreated * 1000).toISOString() : new Date(0).toISOString(),
+            type: "payment-link",
+            url: link.url,
+          };
+        });
+
+      const all = [...sessionRows, ...linkRows];
+      all.sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
+
+      res.json(all.slice(0, 100));
+    } catch (err: any) {
+      console.error("[Stripe] Failed to fetch payments:", err);
+      res.status(500).json({ error: err.message || "Failed to fetch payments" });
     }
   });
 

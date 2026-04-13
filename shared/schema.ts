@@ -544,6 +544,25 @@ export const submitReviewSchema = z.object({
 
 export type SubmitReview = z.infer<typeof submitReviewSchema>;
 
+export const paymentSessions = pgTable("payment_sessions", {
+  id: serial("id").primaryKey(),
+  sessionId: text("session_id").notNull().unique(),
+  customerEmail: text("customer_email"),
+  customerName: text("customer_name"),
+  amount: integer("amount"),
+  serviceName: text("service_name"),
+  type: text("type"),
+  notifiedAt: timestamp("notified_at").defaultNow().notNull(),
+});
+
+export const insertPaymentSessionSchema = createInsertSchema(paymentSessions).omit({
+  id: true,
+  notifiedAt: true,
+});
+
+export type InsertPaymentSession = z.infer<typeof insertPaymentSessionSchema>;
+export type PaymentSession = typeof paymentSessions.$inferSelect;
+
 export const testimonials = [
   {
     id: 1,

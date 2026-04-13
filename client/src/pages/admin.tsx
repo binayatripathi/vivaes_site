@@ -48,6 +48,8 @@ import {
   ExternalLink,
   Upload,
   Plus,
+  CreditCard,
+  DollarSign,
 } from "lucide-react";
 import type { Review } from "@shared/schema";
 
@@ -103,6 +105,19 @@ interface AdminStats {
   pendingAppointments: number;
   completedJobs: number;
   totalCalls: number;
+  totalRevenue: number;
+}
+
+interface PaymentRecord {
+  id: string;
+  customerName: string;
+  customerEmail: string;
+  service: string;
+  amount: number;
+  status: string;
+  date: string;
+  type: string;
+  url: string | null;
 }
 
 const leadStatusColors: Record<string, string> = {
@@ -148,15 +163,16 @@ function formatDateTime(dateStr: string | Date | null) {
 
 function StatsBar({ stats, isLoading }: { stats?: AdminStats; isLoading: boolean }) {
   const items = [
-    { label: "Total Leads", value: stats?.totalLeads ?? 0, icon: Users, color: "text-primary" },
-    { label: "New Today", value: stats?.newLeadsToday ?? 0, icon: UserPlus, color: "text-blue-500" },
-    { label: "Pending Appts", value: stats?.pendingAppointments ?? 0, icon: CalendarDays, color: "text-orange-500" },
-    { label: "Completed", value: stats?.completedJobs ?? 0, icon: CheckCircle, color: "text-green-500" },
-    { label: "Voice Calls", value: stats?.totalCalls ?? 0, icon: PhoneCall, color: "text-purple-500" },
+    { label: "Total Leads", value: stats?.totalLeads ?? 0, icon: Users, color: "text-primary", format: "number" as const },
+    { label: "New Today", value: stats?.newLeadsToday ?? 0, icon: UserPlus, color: "text-blue-500", format: "number" as const },
+    { label: "Pending Appts", value: stats?.pendingAppointments ?? 0, icon: CalendarDays, color: "text-orange-500", format: "number" as const },
+    { label: "Completed", value: stats?.completedJobs ?? 0, icon: CheckCircle, color: "text-green-500", format: "number" as const },
+    { label: "Voice Calls", value: stats?.totalCalls ?? 0, icon: PhoneCall, color: "text-purple-500", format: "number" as const },
+    { label: "Total Revenue", value: stats?.totalRevenue ?? 0, icon: DollarSign, color: "text-emerald-500", format: "currency" as const },
   ];
 
   return (
-    <div className="grid grid-cols-2 gap-3 lg:grid-cols-5">
+    <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-6">
       {items.map((item) => (
         <Card key={item.label} data-testid={`stat-${item.label.toLowerCase().replace(/\s+/g, "-")}`}>
           <CardContent className="flex items-center gap-3 p-4">
@@ -168,7 +184,9 @@ function StatsBar({ stats, isLoading }: { stats?: AdminStats; isLoading: boolean
                 <Skeleton className="h-7 w-12" />
               ) : (
                 <p className="text-2xl font-bold" data-testid={`text-stat-value-${item.label.toLowerCase().replace(/\s+/g, "-")}`}>
-                  {item.value}
+                  {item.format === "currency"
+                    ? `$${item.value.toLocaleString()}`
+                    : item.value}
                 </p>
               )}
               <p className="text-xs text-muted-foreground">{item.label}</p>
@@ -662,6 +680,103 @@ function CallLogsTab() {
               </Card>
             );
           })}
+        </div>
+      )}
+    </div>
+  );
+}
+
+function PaymentsTab() {
+  const { data: payments, isLoading } = useQuery<PaymentRecord[]>({
+    queryKey: ["/api/admin/payments"],
+    queryFn: async () => {
+      const res = await adminFetch("/api/admin/payments");
+      if (!res.ok) throw new Error("Failed to fetch payments");
+      return res.json();
+    },
+  });
+
+  const paymentTypeColors: Record<string, string> = {
+    deposit: "bg-blue-100 text-blue-800 dark:bg-blue-900/40 dark:text-blue-300",
+    consultation: "bg-purple-100 text-purple-800 dark:bg-purple-900/40 dark:text-purple-300",
+    checkout: "bg-blue-100 text-blue-800 dark:bg-blue-900/40 dark:text-blue-300",
+    "payment-link": "bg-orange-100 text-orange-800 dark:bg-orange-900/40 dark:text-orange-300",
+  };
+
+  function getTypeLabel(type: string) {
+    if (type === "deposit") return "Deposit";
+    if (type === "consultation") return "Consultation";
+    if (type === "payment-link") return "Invoice Link";
+    return "Checkout";
+  }
+
+  return (
+    <div className="space-y-4">
+      {isLoading ? (
+        <div className="space-y-2">
+          {Array.from({ length: 5 }).map((_, i) => (
+            <Skeleton key={i} className="h-14 w-full" />
+          ))}
+        </div>
+      ) : !payments || payments.length === 0 ? (
+        <Card>
+          <CardContent className="flex flex-col items-center justify-center py-12">
+            <CreditCard className="mb-3 h-10 w-10 text-muted-foreground" />
+            <p className="text-muted-foreground" data-testid="text-no-payments">No payments found</p>
+            <p className="mt-1 text-xs text-muted-foreground">Stripe checkout sessions and payment links will appear here</p>
+          </CardContent>
+        </Card>
+      ) : (
+        <div className="overflow-x-auto">
+          <table className="w-full text-sm" data-testid="table-payments">
+            <thead>
+              <tr className="border-b text-left">
+                <th className="pb-3 pr-4 font-medium text-muted-foreground">Date</th>
+                <th className="pb-3 pr-4 font-medium text-muted-foreground">Customer</th>
+                <th className="hidden pb-3 pr-4 font-medium text-muted-foreground lg:table-cell">Email</th>
+                <th className="pb-3 pr-4 font-medium text-muted-foreground">Service</th>
+                <th className="pb-3 pr-4 font-medium text-muted-foreground">Amount</th>
+                <th className="hidden pb-3 pr-4 font-medium text-muted-foreground sm:table-cell">Type</th>
+                <th className="pb-3 font-medium text-muted-foreground">Status</th>
+              </tr>
+            </thead>
+            <tbody>
+              {payments.map((payment) => (
+                <tr
+                  key={payment.id}
+                  className="border-b"
+                  data-testid={`row-payment-${payment.id}`}
+                >
+                  <td className="py-3 pr-4 text-muted-foreground">{formatDate(payment.date)}</td>
+                  <td className="py-3 pr-4 font-medium">{payment.customerName}</td>
+                  <td className="hidden py-3 pr-4 lg:table-cell text-muted-foreground">{payment.customerEmail}</td>
+                  <td className="py-3 pr-4">{payment.service}</td>
+                  <td className="py-3 pr-4 font-medium">
+                    {payment.amount > 0 ? `$${payment.amount.toFixed(2)}` : "—"}
+                  </td>
+                  <td className="hidden py-3 pr-4 sm:table-cell">
+                    <Badge className={`no-default-hover-elevate no-default-active-elevate text-xs ${paymentTypeColors[payment.type] || "bg-gray-100 text-gray-800"}`}>
+                      {getTypeLabel(payment.type)}
+                    </Badge>
+                  </td>
+                  <td className="py-3">
+                    <div className="flex items-center gap-2">
+                      <Badge className={`no-default-hover-elevate no-default-active-elevate text-xs ${payment.status === "paid" ? "bg-green-100 text-green-800 dark:bg-green-900/40 dark:text-green-300" : payment.status === "inactive" ? "bg-gray-100 text-gray-800 dark:bg-gray-900/40 dark:text-gray-300" : "bg-yellow-100 text-yellow-800 dark:bg-yellow-900/40 dark:text-yellow-300"}`}>
+                        {payment.status === "paid" ? "Paid" : payment.status === "inactive" ? "Inactive" : "Pending"}
+                      </Badge>
+                      {payment.url && (
+                        <a href={payment.url} target="_blank" rel="noreferrer">
+                          <Button size="icon" variant="ghost" className="h-6 w-6" data-testid={`button-payment-link-${payment.id}`}>
+                            <ExternalLink className="h-3.5 w-3.5" />
+                          </Button>
+                        </a>
+                      )}
+                    </div>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
         </div>
       )}
     </div>
@@ -1289,9 +1404,13 @@ export default function AdminPage() {
             <PhoneCall className="mr-2 h-4 w-4" />
             Call Logs
           </TabsTrigger>
+          <TabsTrigger value="payments" data-testid="tab-payments">
+            <CreditCard className="mr-2 h-4 w-4" />
+            Payments
+          </TabsTrigger>
           <TabsTrigger value="invoices" data-testid="tab-invoices">
             <FileText className="mr-2 h-4 w-4" />
-            Invoices
+            Create Invoice
           </TabsTrigger>
           <TabsTrigger value="reviews" data-testid="tab-reviews">
             <Star className="mr-2 h-4 w-4" />
@@ -1309,6 +1428,10 @@ export default function AdminPage() {
 
         <TabsContent value="call-logs">
           <CallLogsTab />
+        </TabsContent>
+
+        <TabsContent value="payments">
+          <PaymentsTab />
         </TabsContent>
 
         <TabsContent value="invoices">

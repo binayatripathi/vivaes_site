@@ -1,5 +1,5 @@
 import { db } from "./db";
-import { leads, appointments, callLogs, reviews, type Lead, type Appointment, type CallLog, type InsertLead, type InsertAppointment, type InsertCallLog, type InsertReview, type Review } from "@shared/schema";
+import { leads, appointments, callLogs, reviews, paymentSessions, type Lead, type Appointment, type CallLog, type InsertLead, type InsertAppointment, type InsertCallLog, type InsertReview, type Review, type InsertPaymentSession, type PaymentSession } from "@shared/schema";
 import { eq, desc, and, gte, sql, isNull, isNotNull } from "drizzle-orm";
 import { nanoid } from "nanoid";
 
@@ -15,7 +15,7 @@ export interface IStorage {
   createCallLog(data: InsertCallLog): Promise<CallLog>;
   getCallLogs(limit?: number): Promise<CallLog[]>;
   getCallLogById(callId: string): Promise<CallLog | null>;
-  getStats(): Promise<{ totalLeads: number; newLeadsToday: number; pendingAppointments: number; completedJobs: number; totalCalls: number }>;
+  getStats(): Promise<{ totalLeads: number; newLeadsToday: number; pendingAppointments: number; completedJobs: number; totalCalls: number; totalRevenue: number }>;
   createReview(data: InsertReview): Promise<Review>;
   getReviews(filters?: { source?: string; approved?: boolean; verified?: boolean }): Promise<Review[]>;
   getReviewById(id: number): Promise<Review | null>;
@@ -26,6 +26,8 @@ export interface IStorage {
   deleteReview(id: number): Promise<boolean>;
   getPendingReviews(): Promise<Review[]>;
   seedTestimonials(): Promise<void>;
+  hasNotifiedSession(sessionId: string): Promise<boolean>;
+  recordNotifiedSession(data: InsertPaymentSession): Promise<PaymentSession | null>;
 }
 
 export class DatabaseStorage implements IStorage {
@@ -103,7 +105,7 @@ export class DatabaseStorage implements IStorage {
     return log || null;
   }
 
-  async getStats(): Promise<{ totalLeads: number; newLeadsToday: number; pendingAppointments: number; completedJobs: number; totalCalls: number }> {
+  async getStats(): Promise<{ totalLeads: number; newLeadsToday: number; pendingAppointments: number; completedJobs: number; totalCalls: number; totalRevenue: number }> {
     const today = new Date();
     today.setHours(0, 0, 0, 0);
 
@@ -117,13 +119,31 @@ export class DatabaseStorage implements IStorage {
 
     const [callsResult] = await db.select({ count: sql<number>`count(*)` }).from(callLogs);
 
+    const [revenueResult] = await db.select({ totalCents: sql<number>`coalesce(sum(amount), 0)` }).from(paymentSessions);
+
     return {
       totalLeads: Number(totalResult.count),
       newLeadsToday: Number(newTodayResult.count),
       pendingAppointments: Number(pendingResult.count),
       completedJobs: Number(completedResult.count),
       totalCalls: Number(callsResult.count),
+      totalRevenue: Math.round(Number(revenueResult.totalCents) / 100),
     };
+  }
+
+  async hasNotifiedSession(sessionId: string): Promise<boolean> {
+    const [existing] = await db.select({ id: paymentSessions.id }).from(paymentSessions)
+      .where(eq(paymentSessions.sessionId, sessionId))
+      .limit(1);
+    return !!existing;
+  }
+
+  async recordNotifiedSession(data: InsertPaymentSession): Promise<PaymentSession | null> {
+    const [session] = await db.insert(paymentSessions)
+      .values(data)
+      .onConflictDoNothing({ target: paymentSessions.sessionId })
+      .returning();
+    return session || null;
   }
 
   async createReview(data: InsertReview): Promise<Review> {
