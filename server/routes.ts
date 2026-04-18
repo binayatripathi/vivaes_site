@@ -10,6 +10,7 @@ import path from "path";
 import fs from "fs";
 import { nanoid } from "nanoid";
 import type Stripe from "stripe";
+import { Webhook } from "svix";
 
 const CONSULTATION_FEE = 250;
 
@@ -56,6 +57,66 @@ export async function registerRoutes(
   const CLAW_TOKEN = process.env.VIVA_CLAW_TOKEN || "";
 
   const ADMIN_TOKEN = process.env.VIVA_ADMIN_TOKEN;
+
+  app.post("/api/webhooks/resend", async (req, res) => {
+    const signingSecret = process.env.RESEND_WEBHOOK_SIGNING_SECRET;
+    if (!signingSecret) {
+      console.error("[Resend Webhook] RESEND_WEBHOOK_SIGNING_SECRET not set");
+      return res.status(500).json({ error: "Webhook not configured" });
+    }
+
+    const rawBody = (req as any).rawBody;
+    if (!rawBody) {
+      console.error("[Resend Webhook] Missing raw body");
+      return res.status(400).json({ error: "Invalid request" });
+    }
+
+    const svixId = req.header("svix-id");
+    const svixTimestamp = req.header("svix-timestamp");
+    const svixSignature = req.header("svix-signature");
+
+    if (!svixId || !svixTimestamp || !svixSignature) {
+      console.warn("[Resend Webhook] Missing svix headers");
+      return res.status(400).json({ error: "Missing svix headers" });
+    }
+
+    let event: any;
+    try {
+      const wh = new Webhook(signingSecret);
+      event = wh.verify(
+        Buffer.isBuffer(rawBody) ? rawBody.toString("utf8") : String(rawBody),
+        {
+          "svix-id": svixId,
+          "svix-timestamp": svixTimestamp,
+          "svix-signature": svixSignature,
+        },
+      );
+    } catch (err: any) {
+      console.warn("[Resend Webhook] Signature verification failed:", err?.message || err);
+      return res.status(400).json({ error: "Invalid signature" });
+    }
+
+    const eventType = event?.type || "unknown";
+    const emailId = event?.data?.email_id || event?.data?.id;
+    const to = event?.data?.to;
+    const subject = event?.data?.subject;
+
+    if (
+      eventType.startsWith("email.bounced") ||
+      eventType.startsWith("email.complained") ||
+      eventType.startsWith("email.delivery_delayed")
+    ) {
+      console.warn(
+        `[Resend Webhook] ${eventType} - emailId=${emailId} to=${JSON.stringify(to)} subject=${subject}`,
+      );
+    } else {
+      console.log(
+        `[Resend Webhook] ${eventType} - emailId=${emailId} to=${JSON.stringify(to)} subject=${subject}`,
+      );
+    }
+
+    res.status(200).json({ received: true });
+  });
 
   function requireAdmin(req: any, res: any, next: any) {
     if (!ADMIN_TOKEN) {

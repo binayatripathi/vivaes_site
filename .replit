@@ -50,6 +50,7 @@ VIVA_CLAW_TOKEN = "your-claw-token-here"
 VITE_VAPI_PUBLIC_KEY = "58a6b0af-128a-4504-a89a-e67f2bc68dae"
 VITE_VAPI_ASSISTANT_ID = "a4ac24aa-57e0-4c67-a9ce-1136e97e7831"
 VIVA_PHONE = "+1 (510) 710-5745"
+VIVA_FROM_EMAIL = "hello@vivaes.net"
 
 [agent]
 integrations = ["resend:1.0.0", "stripe:2.0.0"]
