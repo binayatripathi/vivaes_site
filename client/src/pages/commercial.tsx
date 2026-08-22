@@ -5,6 +5,8 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { PageMeta } from "@/components/page-meta";
+import { PgeRebateBanner } from "@/components/pge-rebate-banner";
+import { EVITP_LABEL } from "@/lib/certifications";
 import {
   Shield, CheckCircle2, ChevronDown, Phone, Mail, ArrowRight,
   Building2, Clock, Star, Zap, ClipboardCheck, Wrench, Users,
@@ -276,7 +278,7 @@ export default function CommercialPage() {
             </motion.p>
 
             <motion.p variants={fadeUp} className="text-base text-white/70">
-              CA License #1147947 · Union Trained · Fully Insured · Permit & Utility Coordination Included
+              CA License #1147947 · {EVITP_LABEL} · Union Trained · Fully Insured · Permit & Utility Coordination Included
             </motion.p>
 
             <motion.div variants={fadeUp} className="flex flex-wrap gap-3 pt-2">
@@ -309,6 +311,8 @@ export default function CommercialPage() {
           </motion.div>
         </div>
       </section>
+
+      <PgeRebateBanner />
 
       <section className="bg-card py-10" data-testid="section-commercial-stats">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">

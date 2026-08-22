@@ -12,6 +12,7 @@ import { servicesList } from "@shared/schema";
 import type { Review } from "@shared/schema";
 import { PageMeta } from "@/components/page-meta";
 import { useTeslaModal, TeslaBanner } from "@/components/tesla-modal";
+import { PgeRebateBanner } from "@/components/pge-rebate-banner";
 import vivaLogoPath from "@assets/viva-logo.png";
 import heroElectricianPath from "@assets/hero-electrician.png";
 import {
@@ -213,6 +214,8 @@ export default function Home() {
           </motion.div>
         </div>
       </section>
+
+      <PgeRebateBanner />
 
       <section className="bg-background py-16" data-testid="section-audience-chooser">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">

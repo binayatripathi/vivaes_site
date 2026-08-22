@@ -5,6 +5,8 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { PageMeta } from "@/components/page-meta";
+import { PgeRebateBanner } from "@/components/pge-rebate-banner";
+import { EVITP_LABEL } from "@/lib/certifications";
 import {
   Shield, Award, CheckCircle2, ChevronDown, Phone, Mail, ArrowRight,
   AlertTriangle, Star, Zap, CircuitBoard, Sun, Home, Clock, Users,
@@ -23,6 +25,7 @@ const trustBar = [
   { icon: Shield, label: "CA License #1147947" },
   { icon: Award, label: "Union Trained Electricians" },
   { icon: CheckCircle2, label: "Licensed & Insured" },
+  { icon: Zap, label: EVITP_LABEL },
   { icon: Clock, label: "24/7 Available" },
 ];
 
@@ -364,7 +367,7 @@ export default function ResidentialPage() {
 
       <section className="bg-card py-10" data-testid="section-residential-trust">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-          <div className="grid grid-cols-2 gap-4 sm:grid-cols-4">
+          <div className="grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-5">
             {trustBar.map((badge) => {
               const Icon = badge.icon;
               return (
@@ -383,6 +386,8 @@ export default function ResidentialPage() {
           </div>
         </div>
       </section>
+
+      <PgeRebateBanner />
 
       <section className="bg-background py-20" data-testid="section-residential-services">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">

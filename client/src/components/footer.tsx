@@ -38,6 +38,7 @@ export function Footer() {
             <h4 className="text-sm font-semibold">Quick Links</h4>
             <div className="flex flex-col gap-2">
               <Link href="/quote" className="text-sm text-muted-foreground transition-colors" data-testid="link-footer-quote">Get a Quote</Link>
+              <Link href="/pge-ev-rebates" className="text-sm text-muted-foreground transition-colors" data-testid="link-footer-pge-rebates">PG&E EV Rebates</Link>
               <Link href="/booking" className="text-sm text-muted-foreground transition-colors" data-testid="link-footer-booking">Book Appointment</Link>
               <Link href="/reviews" className="text-sm text-muted-foreground transition-colors" data-testid="link-footer-reviews">Reviews</Link>
               <Link href="/about" className="text-sm text-muted-foreground transition-colors" data-testid="link-footer-about">About Us</Link>
