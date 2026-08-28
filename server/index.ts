@@ -7,6 +7,7 @@ import { runMigrations } from 'stripe-replit-sync';
 import { getStripeSync } from "./stripeClient";
 import { WebhookHandlers } from "./webhookHandlers";
 import { storage } from "./storage";
+import { ensureQrScansTable } from "./qr-tracking";
 import path from "path";
 import fs from "fs";
 
@@ -139,6 +140,13 @@ app.use((req, res, next) => {
 (async () => {
   registerVapiRoutes(app);
   await registerRoutes(httpServer, app);
+
+  try {
+    await ensureQrScansTable();
+    console.log("[DB] qr_scans table ready");
+  } catch (err) {
+    console.error("[DB] Failed to ensure qr_scans table:", err);
+  }
 
   try {
     await storage.seedTestimonials();

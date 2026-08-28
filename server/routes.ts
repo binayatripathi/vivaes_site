@@ -4,6 +4,7 @@ import { quoteRequestSchema, contactFormSchema, bookingRequestSchema, insuranceL
 import { sendQuoteNotification, sendContactNotification, sendBookingNotification, sendPaymentNotification, sendCallSummaryNotification, sendInvoiceEmail, sendReviewVerificationEmail } from "./email";
 import { getUncachableStripeClient, getStripePublishableKey } from "./stripeClient";
 import { storage } from "./storage";
+import { recordScan, getScanCounts } from "./qr-tracking";
 import { z } from "zod";
 import multer from "multer";
 import path from "path";
@@ -1035,6 +1036,24 @@ electrician Oakland, electrician Bay Area, solar installer Bay Area, solar insta
       res.json(review);
     } catch (err: any) {
       res.status(400).json({ error: err.message || "Invalid request" });
+    }
+  });
+
+  // Trackable QR redirect — log the scan, then send the visitor to the site.
+  app.get("/s/:slug", async (req, res) => {
+    const slug = (req.params.slug || "unknown").slice(0, 100);
+    // Fire-and-forget: a tracking failure must never block the redirect.
+    recordScan(slug, req.headers["user-agent"]).catch(() => {});
+    res.redirect(302, "/");
+  });
+
+  // Admin read for scan counts (already behind requireAdmin via /api/admin).
+  app.get("/api/admin/qr-scans", async (_req, res) => {
+    try {
+      const counts = await getScanCounts();
+      res.json(counts);
+    } catch (err: any) {
+      res.status(500).json({ error: err.message || "Failed to fetch QR scans" });
     }
   });
 
